@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Operator;
+use App\Models\OperatorPt;
+use App\Models\PerguruanTinggi;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -17,14 +18,22 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        PerguruanTinggi::create([
+            'kode_pt' => '005004',
+            'nama_pt' => 'Politeknik Negeri Bandung',
+            'username' => 'polban1',
+            'password' => Hash::make('pass123'),
         ]);
 
-        Operator::create([
+        OperatorPt::create([
             'username' => 'op1',
             'password' => Hash::make('1234'),
+            'kode_pt' => '005004',
         ]);
     }
 }

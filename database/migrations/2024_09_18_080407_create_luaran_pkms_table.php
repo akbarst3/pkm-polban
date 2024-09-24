@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('luaran_pkms', function (Blueprint $table) {
             $table->id();
             $table->string('nama_luaran', 100);
+            
         });
     }
 

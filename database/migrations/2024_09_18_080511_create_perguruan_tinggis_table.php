@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('perguruan_tinggis', function (Blueprint $table) {
-            $table->string('kode_pt', 6)->primary();
-            $table->string('nama_pt', 255);
-            $table->string('username', 20);
-            $table->string('password', 20);
+            $table->string('kode_pt')->primary();
+            $table->string('nama_pt');
+            $table->string('username' );
+            $table->string('password');
+            $table->timestamps();
         });
     }
 

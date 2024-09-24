@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class PerguruanTinggi extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'kode_pt';
+
+    protected $fillable = [
+        'kode_pt',
+        'nama_pt',
+        'username',
+        'password'
+    ];
 }

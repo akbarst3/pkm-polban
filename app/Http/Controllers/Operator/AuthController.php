@@ -20,12 +20,11 @@ class AuthController extends Controller
         ]);
         if (Auth::guard('operator')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/home');
+            return redirect()->intended('/operator/dashboard');
         }
         return back()->withErrors([
-            'username' => 'username salah.',
-            'password' => 'Password salah',
-        ])->onlyInput('username', 'password');
+            'username' => 'username salah.'
+        ])->onlyInput('username');
     }
 
     public function logout(Request $request)
@@ -33,6 +32,6 @@ class AuthController extends Controller
         Auth::guard('operator')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect('/operator/login');
     }
 }

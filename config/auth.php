@@ -70,7 +70,7 @@ return [
         ],
         'operators' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\Operator::class),
+            'model' => env('AUTH_MODEL', App\Models\OperatorPt::class),
         ],
 
         // 'users' => [

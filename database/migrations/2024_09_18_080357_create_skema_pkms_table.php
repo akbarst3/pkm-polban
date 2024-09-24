@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('skema_pkms', function (Blueprint $table) {
             $table->id();
             $table->string('nama_skema', 255);
+            $table->timestamps();
         });
     }
 
