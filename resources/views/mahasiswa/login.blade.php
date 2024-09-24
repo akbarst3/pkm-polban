@@ -18,18 +18,24 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form id="login-form">
+                    <h1 class="text-center">Login</h1>
+                    <form id="login-form" action="{{ route('mahasiswa.login') }}" method="post">
+                        @csrf
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Username" required>
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Password" required>
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                         </div>
                         <div class="form-group">
                             <label id="math-question"></label>
                             <input type="number" id="math-answer" class="form-control" placeholder="Hasil Penjumlahan" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary btn-block" value="Login">
+                        </div>
                     </form>
 
                     <a href="#" class="d-block mt-3 text-center text-primary">Permintaan akun terakreditasi internasional</a>
@@ -58,6 +64,7 @@
         const answer = parseInt(document.getElementById('math-answer').value, 10);
         if (answer === correctAnswer) {
             alert("Login berhasil!");
+            event.target.submit(); 
         } else {
             alert("Jawaban penjumlahan salah!");
         }
