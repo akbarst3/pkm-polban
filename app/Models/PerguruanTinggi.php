@@ -17,6 +17,7 @@ class PerguruanTinggi extends Authenticatable
         'username',
         'password'
     ];
+<<<<<<< HEAD
 
     protected $casts = [
         'kode_pt' => 'string',
@@ -41,4 +42,6 @@ class PerguruanTinggi extends Authenticatable
         return $this->hasMany(DetailPkm::class, 'kode_pt', 'kode_pt');
     }
     
+=======
+>>>>>>> 73a62b1 (add: login operator)
 }

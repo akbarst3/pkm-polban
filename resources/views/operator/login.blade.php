@@ -75,6 +75,12 @@
                                 <input type="submit" class="btn btn-primary btn-block" value="Login">
                             </div>
                         </form>
+<<<<<<< HEAD
+=======
+
+                        <a href="#" class="d-block mt-3 text-center text-primary">Permintaan akun terakreditasi
+                            internasional</a>
+>>>>>>> 73a62b1 (add: login operator)
                     </div>
                 </div>
             </div>
@@ -86,6 +92,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script>
+<<<<<<< HEAD
         document.addEventListener('DOMContentLoaded', function() {
             (function() {
                 'use strict';
@@ -139,4 +146,30 @@
         })
     </script>
 </body>
+=======
+        let correctAnswer;
+
+        function generateMathQuestion() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            document.getElementById('math-question').innerText = `${num1} + ${num2} = `;
+            correctAnswer = num1 + num2;
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const answer = parseInt(document.getElementById('math-answer').value, 10);
+            if (answer === correctAnswer) {
+                alert("Login berhasil!");
+                event.target.submit();
+            } else {
+                alert("Jawaban penjumlahan salah!");
+            }
+        });
+
+        generateMathQuestion();
+    </script>
+</body>
+
+>>>>>>> 73a62b1 (add: login operator)
 </html>
