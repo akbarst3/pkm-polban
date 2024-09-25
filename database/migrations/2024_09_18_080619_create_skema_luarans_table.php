@@ -16,8 +16,8 @@ return new class extends Migration
             $table->integer('id_luaran');
             $table->primary(['id_skema', 'id_luaran']);
 
-            $table->foreign('id_skema')->references('id_skema')->on('skema_pkms');
-            $table->foreign('id_luaran')->references('id_luaran')->on('luaran_pkms');
+            $table->foreign('id_skema')->references('id')->on('skema_pkms');
+            $table->foreign('id_luaran')->references('id')->on('luaran_pkms');
             $table->timestamps();
         });
     }

@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dosens', function (Blueprint $table) {
-            $table->string('kode_dosen', 20)->primary();
-            $table->string('kode_prodi', 50);
+            $table->string('kode_dosen')->primary();
+            $table->string('kode_prodi');
             $table->string('nama');
-            $table->string('no_hp', 50);
+            $table->string('no_hp');
             $table->string('email');
 
             $table->foreign('kode_prodi')->references('kode_prodi')->on('program_studis');

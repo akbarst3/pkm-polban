@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('skema_pkms', function (Blueprint $table) {
-            $table->id('id_skema')->primary();
+            $table->id();
             $table->string('nama_skema');
             $table->timestamps();
         });

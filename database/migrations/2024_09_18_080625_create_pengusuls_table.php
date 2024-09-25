@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('pengusuls', function (Blueprint $table) {
             $table->string('nim');
-            $table->string('username', 20);
-            $table->string('password', 20);
+            $table->string('username');
+            $table->string('password');
             $table->string('alamat');
-            $table->string('kode_pos', 5);
-            $table->string('no_hp', 50);
-            $table->string('telp_rumah', 50);
+            $table->string('kode_pos');
+            $table->string('no_hp');
+            $table->string('telp_rumah');
             $table->string('email');
             $table->string('no_ktp');
             $table->char('jenis_kelamin', 1);

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('logbook_kegiatans', function (Blueprint $table) {
-            $table->id('id_lbkg')->primary();
+            $table->id();
             $table->integer('id_pkm');
             $table->date('tanggal');
             $table->text('uraian');
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('waktu_pelaksanaan');
             $table->string('bukti');
 
-            $table->foreign('id_pkm')->references('id_pkm')->on('detail_pkms');
+            $table->foreign('id_pkm')->references('id')->on('detail_pkms');
             $table->timestamps();
         });
     }

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detail_pkms', function (Blueprint $table) {
-            $table->id('id_pkm')->primary();
-            $table->integer('id_skema', 4);
+            $table->id();
+            $table->integer('id_skema');
             // $table->string('nim', 20);
             $table->string('judul');
             $table->bigInteger('dana_kemdikbud');
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('lapkem');
             $table->string('lapkhir');
 
-            $table->foreign('id_skema')->references('id_skema')->on('skema_pkms');
+            $table->foreign('id_skema')->references('id')->on('skema_pkms');
             // $table->foreign('nim')->references('nim')->on('mahasiswas');
             $table->timestamps();
         });

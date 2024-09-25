@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('logbook_keuangans', function (Blueprint $table) {
-            $table->id('id_lbkeu')->primary();
+            $table->id();
             $table->integer('id_pkm');
             $table->date('tanggal');
             $table->text('ket_item');
             $table->bigInteger('harga');
             $table->string('bukti');
 
-            $table->foreign('id_pkm')->references('id_pkm')->on('detail_pkms');
+            $table->foreign('id_pkm')->references('id')->on('detail_pkms');
             $table->timestamps();
         });
     }

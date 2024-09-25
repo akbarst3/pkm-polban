@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('program_studis', function (Blueprint $table) {
-            $table->string('kode_prodi', 50)->primary();
-            $table->string('kode_pt', 15);
+            $table->string('kode_prodi')->primary();
+            $table->string('kode_pt');
             $table->string('nama_prodi');
 
             $table->foreign('kode_pt')->references('kode_pt')->on('perguruan_tinggis');
