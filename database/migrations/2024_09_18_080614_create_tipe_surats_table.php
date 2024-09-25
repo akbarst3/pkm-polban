@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tipe_surats', function (Blueprint $table) {
-            $table->id();
-            $table->string('tipe', 1024);
+            $table->id('id_tipe')->primary();
+            $table->string('nama_tipe');
+            $table->timestamps();
         });
     }
 

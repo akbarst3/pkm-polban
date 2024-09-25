@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dosen_pendampings', function (Blueprint $table) {
-            $table->integer('nidn');
+            $table->string('kode_dosen', 20);
             $table->string('username', 20);
             $table->string('password', 20);
-
-            $table->primary('nidn');
+            $table->foreign('kode_dosen')->references('kode_dosen')->on('dosens');
+            $table->timestamps();
         });
     }
 

@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sosial_media', function (Blueprint $table) {
-            $table->id();
-            $table->string('link_sosmed', 1024);
-            $table->integer('pkm_id');
-            $table->integer('tipe_id');
+            $table->id('id_smd')->primary();
+            $table->integer('id_sosmed');
+            $table->integer('id_pkm');
+            $table->string('link_sosmed');
 
-            $table->foreign('pkm_id')->references('id')->on('detail_pkms');
-            $table->foreign('tipe_id')->references('id')->on('tipe_sosmeds');
+            $table->foreign('id_pkm')->references('id_pkm')->on('detail_pkms');
+            $table->foreign('id_sosmed')->references('id_sosmed')->on('tipe_sosmeds');
+            $table->timestamps();
         });
     }
 
