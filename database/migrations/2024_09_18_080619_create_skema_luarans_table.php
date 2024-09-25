@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('skema_luarans', function (Blueprint $table) {
-            $table->integer('skema_id');
-            $table->integer('luaran_id');
-            $table->primary(['skema_id', 'luaran_id']);
+            $table->integer('id_skema');
+            $table->integer('id_luaran');
+            $table->primary(['id_skema', 'id_luaran']);
 
-            $table->foreign('skema_id')->references('id')->on('skema_pkms');
-            $table->foreign('luaran_id')->references('id')->on('luaran_pkms');
+            $table->foreign('id_skema')->references('id_skema')->on('skema_pkms');
+            $table->foreign('id_luaran')->references('id_luaran')->on('luaran_pkms');
+            $table->timestamps();
         });
     }
 

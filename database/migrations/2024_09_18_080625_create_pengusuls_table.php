@@ -12,22 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pengusuls', function (Blueprint $table) {
-            $table->string('mahasiswa_nim', 10);
+            $table->string('nim');
             $table->string('username', 20);
             $table->string('password', 20);
-            $table->string('alamat', 1024);
-            $table->string('kode_pos', 1024);
-            $table->string('no_hp', 15);
-            $table->string('telp_rumah', 15);
+            $table->string('alamat');
+            $table->string('kode_pos', 5);
+            $table->string('no_hp', 50);
+            $table->string('telp_rumah', 50);
             $table->string('email');
             $table->string('no_ktp');
-            $table->char('jenis_kelamin');
+            $table->char('jenis_kelamin', 1);
             $table->date('tanggal_lahir');
             $table->string('tempat_lahir');
-            $table->integer('pkm_id');
-            
-            $table->primary('mahasiswa_nim');
-            $table->foreign('pkm_id')->references('id')->on('detail_pkms');
+    
+            $table->foreign('nim')->references('nim')->on('mahasiswas');
+            $table->timestamps();
         });
     }
 

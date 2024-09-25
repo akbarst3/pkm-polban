@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('surat_pts', function (Blueprint $table) {
-            $table->id();
-            $table->string('file_surat', 1024);
-            $table->integer('tipe_id');
-            $table->string('kode_pt', 6);
+            $table->id('id_surat')->primary();
+            $table->integer('id_tipe');
+            $table->string('kode_pt', 15);
+            $table->string('file_surat');
 
-            $table->foreign('tipe_id')->references('id')->on('tipe_surats');
+            $table->foreign('id_tipe')->references('id_tipe')->on('tipe_surats');
             $table->foreign('kode_pt')->references('kode_pt')->on('perguruan_tinggis');
+            $table->timestamps();
         });
     }
 

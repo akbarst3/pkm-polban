@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('program_studis', function (Blueprint $table) {
-            $table->string('id', 5)->primary();
-            $table->string('nama_prodi', 255);
-            $table->string('kode_pt', 6);
+            $table->string('kode_prodi', 50)->primary();
+            $table->string('kode_pt', 15);
+            $table->string('nama_prodi');
 
             $table->foreign('kode_pt')->references('kode_pt')->on('perguruan_tinggis');
+            $table->timestamps();
         });
     }
 
