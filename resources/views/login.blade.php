@@ -15,7 +15,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
                 <div class="text-center mb-4">
-                    <img src="{{ asset('images/PKMPOLBAN.png') }}" alt="PKM POLBAN" class="img-fluid" style="max-width: 350px;">
+                    <img src="images/PKMPOLBAN.png" alt="PKM POLBAN" class="img-fluid" style="max-width: 350px;">
                 </div>
 
                 <div class="card">
@@ -24,10 +24,12 @@
                         <form id="login-form" action="{{ route('operator.login') }}" method="post">
                             @csrf
                             <div class="form-group">
+                                <label for="username">Username:</label>
                                 <input type="text" class="form-control" id="username" name="username"
                                     placeholder="Username" required>
                             </div>
                             <div class="form-group">
+                                <label for="password">Password:</label>
                                 <input type="password" class="form-control" id="password" name="password"
                                     placeholder="Password" required>
                             </div>
