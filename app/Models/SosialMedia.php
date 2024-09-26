@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SosialMedia extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'id_sosmed',
+        'id_pkm',
+        'link_sosmed',
+    ];
 }

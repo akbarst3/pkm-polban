@@ -8,7 +8,10 @@ use App\Models\User;
 use App\Models\OperatorPt;
 use App\Models\PerguruanTinggi;
 use App\Models\ProgramStudi;
+use App\Models\SkemaLuaran;
 use App\Models\SkemaPkm;
+use App\Models\TipeSosmed;
+use App\Models\TipeSurat;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -107,11 +110,169 @@ class DatabaseSeeder extends Seeder
             'kode_pt' => '005004',
         ]);
         Dosen::create([
-            'nidn' => '2214567',
+            'kode_dosen' => '2214567',
             'nama' => 'Jonner Hutahaean',
             'no_hp' => '089526154777',
             'email' => 'jonner@polban.ac.id',
-            'prodi_id' => '56401',
+            'kode_prodi' => '56401',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '1',
+            'id_luaran' => '1',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '1',
+            'id_luaran' => '2',
+        ]);
+        
+        SkemaLuaran::create([
+            'id_skema' => '1',
+            'id_luaran' => '4',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '1',
+            'id_luaran' => '7',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '2',
+            'id_luaran' => '1',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '2',
+            'id_luaran' => '2',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '2',
+            'id_luaran' => '8',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '2',
+            'id_luaran' => '4',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '3',
+            'id_luaran' => '1',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '3',
+            'id_luaran' => '2',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '3',
+            'id_luaran' => '5',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '3',
+            'id_luaran' => '4',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '4',
+            'id_luaran' => '1',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '4',
+            'id_luaran' => '2',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '4',
+            'id_luaran' => '4',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '4',
+            'id_luaran' => '6',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '5',
+            'id_luaran' => '1',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '5',
+            'id_luaran' => '2',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '5',
+            'id_luaran' => '4',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '5',
+            'id_luaran' => '6',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '6',
+            'id_luaran' => '1',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '6',
+            'id_luaran' => '2',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '6',
+            'id_luaran' => '4',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '6',
+            'id_luaran' => '3',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '7',
+            'id_luaran' => '1',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '7',
+            'id_luaran' => '2',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '7',
+            'id_luaran' => '3',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '7',
+            'id_luaran' => '4',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '8',
+            'id_luaran' => '1',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '8',
+            'id_luaran' => '2',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '8',
+            'id_luaran' => '4',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '8',
+            'id_luaran' => '9',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '9',
+            'id_luaran' => '3',
+        ]);
+        SkemaLuaran::create([
+            'id_skema' => '10',
+            'id_luaran' => '10',
+        ]);
+        TipeSurat::create([
+            'nama_tipe' => 'Berita Acara PKM Skema Pendanaan',
+        ]);
+        TipeSurat::create([
+            'nama_tipe' => 'Surat Komitmen Dana Tambahan',
+        ]);
+        TipeSurat::create([
+            'nama_tipe' => 'Berita Acara PKM Skema Insentif',
+        ]);
+        TipeSosmed::create([
+            'nama_sosmed' => 'Instagram',
+        ]);
+        TipeSosmed::create([
+            'nama_sosmed' => 'Youtube',
+        ]);
+        TipeSosmed::create([
+            'nama_sosmed' => 'Tiktok',
+        ]);
+        TipeSosmed::create([
+            'nama_sosmed' => 'Facebook',
         ]);
     }
 }

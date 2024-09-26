@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Mahasiswa extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'nama',
+        'kode_prodi',
+        'angkatan',
+        'id_pkm',
+    ];
 }
