@@ -13,21 +13,9 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    private function getKodePtOperator()
-    {
-        $op = OperatorPt::all();
-        $kodePtOp = [];
-        foreach ($op as $operator) {
-            $kodePtOp[] = $operator->kode_pt;
-        }
-        return $kodePtOp;
-    }
-
     public function getCountJudul()
     {
-        $kodePtOp = $this->getKodePtOperator();
-        $result = DetailPkm::whereIn('kode_pt', $kodePtOp)
-            ->groupBy('id_skema')
+        return DetailPkm::groupBy('id_skema')
             ->select('id_skema', DetailPkm::raw('count(judul) as total'))
             ->orderBy('id_skema', 'asc')
             ->get()
@@ -38,9 +26,7 @@ class DashboardController extends Controller
 
     public function getCountIdentitas()
     {
-        $kodePtOp = $this->getKodePtOperator();
-        $result = DetailPkm::with('mahasiswas.pengusul')
-            ->whereIn('kode_pt', $kodePtOp)
+        return DetailPkm::with('mahasiswas.pengusul')
             ->orderBy('id_skema', 'asc')
             ->get()
             ->groupBy('id_skema')
@@ -53,43 +39,49 @@ class DashboardController extends Controller
                     'count' => $count,
                 ];
             });
+<<<<<<< HEAD
 
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'count' => 0]]);
+=======
+>>>>>>> e07f314 (add: file DashboardController.php)
     }
 
     public function getCountProposal()
     {
-        $kodePtOp = $this->getKodePtOperator();
-        $result = DetailPkm::whereIn('kode_pt', $kodePtOp)
-            ->groupBy('id_skema')
+        return DetailPkm::groupBy('id_skema')
             ->select('id_skema', DetailPkm::raw('count(proposal) as total'))
             ->orderBy('id_skema', 'asc')
             ->get()
             ->pluck('total', 'id_skema');
+<<<<<<< HEAD
 
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'total' => 0]]);
+=======
+>>>>>>> e07f314 (add: file DashboardController.php)
     }
 
     public function getCountValidasi()
     {
-        $kodePtOp = $this->getKodePtOperator();
-        $val_dospem = DetailPkm::whereIn('kode_pt', $kodePtOp)
-            ->select('id_skema', DetailPkm::raw('SUM(CASE WHEN val_dospem = TRUE THEN 1 ELSE 0 END) as total'))
+        $val_dospem = DetailPkm::select('id_skema', DetailPkm::raw('SUM(CASE WHEN val_dospem = TRUE THEN 1 ELSE 0 END) as total'))
             ->groupBy('id_skema')
             ->orderBy('id_skema', 'asc')
             ->get()
             ->pluck('total', 'id_skema');
 
+<<<<<<< HEAD
         $val_pt = DetailPkm::whereIn('kode_pt', $kodePtOp)
             ->select('id_skema', DetailPkm::raw('SUM(CASE WHEN val_pt = TRUE THEN 1 ELSE 0 END) as total'))
+=======
+        $val_pt = DetailPkm::select('id_skema', DetailPkm::raw('SUM(CASE WHEN val_pt = TRUE THEN 1 ELSE 0 END) as total'))
+>>>>>>> e07f314 (add: file DashboardController.php)
             ->groupBy('id_skema')
             ->orderBy('id_skema', 'asc')
             ->get()
             ->pluck('total', 'id_skema');
 
         return [
-            'val_dospem' => $val_dospem->count() ? $val_dospem : collect([0 => ['id_skema' => 0, 'total' => 0]]),
-            'val_pt' => $val_pt->count() ? $val_pt : collect([0 => ['id_skema' => 0, 'total' => 0]]),
+            'val_dospem' => $val_dospem,
+            'val_pt' => $val_pt,
         ];
     }
 
@@ -104,6 +96,7 @@ class DashboardController extends Controller
             'beritaAcaraPendanaan.mimes' => 'File Berita Acara PKM Skema Pendanaan harus berformat PDF.',
             'beritaAcaraPendanaan.max' => 'File Berita Acara PKM Skema Pendanaan tidak boleh lebih dari 5 MB.',
 
+<<<<<<< HEAD
             'suratKomitmen.required' => 'File Surat Komitmen Dana Tambahan wajib diunggah.',
             'suratKomitmen.mimes' => 'File Surat Komitmen Dana Tambahan harus berformat PDF.',
             'suratKomitmen.max' => 'File Surat Komitmen Dana Tambahan tidak boleh lebih dari 5 MB.',
@@ -177,4 +170,8 @@ class DashboardController extends Controller
         $namaSkema = SkemaPkm::pluck('nama_skema', 'id');
         return view('operator.dashboard', compact('dataPkms', 'perguruanTinggi', 'statusFiles', 'namaSkema'));
     }
+=======
+        return view('operator.index', compact('judulCounts', 'proposalCounts', 'pengisianCounts', 'validasiCounts'));
+    }  
+>>>>>>> e07f314 (add: file DashboardController.php)
 }
