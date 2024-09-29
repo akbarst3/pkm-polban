@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class PerguruanTinggi extends Authenticatable
@@ -17,4 +18,13 @@ class PerguruanTinggi extends Authenticatable
         'username',
         'password'
     ];
+
+    public function prodi(): HasMany
+    {
+        return $this->hasMany(ProgramStudi::class, 'kode_pt');
+    }
+
+    public function operator() : HasMany {
+        return $this->hasMany(OperatorPt::class, 'kode_pt', 'kode_pt');
+    }
 }

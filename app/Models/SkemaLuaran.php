@@ -43,15 +43,4 @@ class SkemaLuaran extends Model
      * Relationships
      */
 
-    // A skema_luaran belongs to a skema_pkm
-    public function skemaPkm()
-    {
-        return $this->belongsTo(SkemaPkm::class, 'id_skema');
-    }
-
-    // A skema_luaran belongs to a luaran_pkm
-    public function luaranPkm()
-    {
-        return $this->belongsTo(LuaranPkm::class, 'id_luaran');
-    }
 }

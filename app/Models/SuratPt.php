@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SuratPt extends Model
 {
@@ -13,4 +14,7 @@ class SuratPt extends Model
         'id_tipe',
         'file_surat',
     ];
+    public function tipe() : BelongsTo {
+        return $this->belongsTo(TipeSurat::class, 'id_tipe', 'id_tipe');
+    }
 }
