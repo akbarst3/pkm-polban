@@ -24,7 +24,12 @@ class PerguruanTinggi extends Authenticatable
         return $this->hasMany(ProgramStudi::class, 'kode_pt');
     }
 
-    public function operator() : HasMany {
+    public function operator(): HasMany
+    {
         return $this->hasMany(OperatorPt::class, 'kode_pt', 'kode_pt');
+    }
+    public function surat(): HasMany
+    {
+        return $this->hasMany(SuratPt::class, 'kode_pt', 'kode_pt');
     }
 }

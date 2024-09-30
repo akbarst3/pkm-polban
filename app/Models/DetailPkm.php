@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -45,7 +46,18 @@ class DetailPkm extends Model
         return $this->hasManyThrough(Pengusul::class, Mahasiswa::class, 'id_pkm', 'nim', 'id_pkm', 'nim');
     }
 
-    public function pengesahan() : HasOne {
+    public function pengesahan(): HasOne
+    {
         return $this->hasOne(Pengesahan::class, 'id_pkm', 'id_pkm');
+    }
+
+    public function sosmed(): HasMany
+    {
+        return $this->hasMany(SosialMedia::class, 'id_pkm', 'id_pkm');
+    }
+
+    public function skema(): BelongsTo
+    {
+        return $this->belongsTo(SkemaPkm::class, 'id_skema', 'id_skema');
     }
 }
