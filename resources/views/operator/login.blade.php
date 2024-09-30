@@ -20,7 +20,6 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="text-center">Login</h1>
                         <form id="login-form" action="{{ route('operator.login') }}" method="post">
                             @csrf
                             <div class="form-group">
@@ -40,9 +39,6 @@
                                 <input type="submit" class="btn btn-primary btn-block" value="Login">
                             </div>
                         </form>
-
-                        <a href="#" class="d-block mt-3 text-center text-primary">Permintaan akun terakreditasi
-                            internasional</a>
                     </div>
                 </div>
             </div>
