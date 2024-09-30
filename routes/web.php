@@ -9,6 +9,9 @@ Route::get('/', function () {
 
 Route::middleware('auth:operator')->group(function () {
     Route::view('/operator/dashboard', 'operator.dashboard');
+    Route::view('/operator/identitasusulan', 'operator.identitasusulan');
+    Route::view('/operator/usulandidanai', 'operator.usulandidanai');
+
 });
 
 require __DIR__.'/auth.php';
