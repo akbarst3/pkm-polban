@@ -14,7 +14,12 @@ class SuratPt extends Model
         'id_tipe',
         'file_surat',
     ];
-    public function tipe() : BelongsTo {
+    public function tipe(): BelongsTo
+    {
         return $this->belongsTo(TipeSurat::class, 'id_tipe', 'id_tipe');
+    }
+    public function pt(): BelongsTo
+    {
+        return $this->belongsTo(PerguruanTinggi::class, 'kode_pt', 'kode_pt');
     }
 }
