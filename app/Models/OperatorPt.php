@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class OperatorPt extends Authenticatable
@@ -20,5 +21,10 @@ class OperatorPt extends Authenticatable
         return [
             'password' => 'hashed',
         ];
+    }
+
+    public function pt(): BelongsTo
+    {
+        return $this->belongsTo(PerguruanTinggi::class, 'kode_pt', 'kode_pt');
     }
 }

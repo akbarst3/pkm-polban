@@ -9,14 +9,9 @@ Route::get('/', function () {
 
 Route::middleware('auth:operator')->group(function () {
     Route::view('/operator/dashboard', 'operator.dashboard');
+    Route::view('/operator/identitasusulan', 'operator.identitasusulan');
+    Route::view('/operator/usulandidanai', 'operator.usulandidanai');
 
-    // Rute untuk menampilkan form input
-    Route::get('/input-mahasiswa', function () {
-        return view('input_mahasiswa');
-    });
-
-    // Rute untuk menyimpan data
-    Route::post('/simpan-mahasiswa', [MahasiswaController::class, 'store'])->name('simpan.mahasiswa');
-    });
+});
 
 require __DIR__.'/auth.php';
