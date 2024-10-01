@@ -32,4 +32,10 @@ class PerguruanTinggi extends Authenticatable
     {
         return $this->hasMany(SuratPt::class, 'kode_pt', 'kode_pt');
     }
+    
+    public function detailPkm(): HasMany
+    {
+        return $this->hasMany(DetailPkm::class, 'kode_pt', 'kode_pt');
+    }
+    
 }

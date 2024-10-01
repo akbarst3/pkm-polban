@@ -10,6 +10,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Pengusul extends Authenticatable
 {
     use HasFactory;
+    // In the DetailPkm model
+    protected $primaryKey = null;
+    // In the DetailPkm model
+    public $incrementing = false;
     protected $fillable = [
         'nim',
         'username',
@@ -26,6 +30,6 @@ class Pengusul extends Authenticatable
     ];
     public function mahasiswa(): BelongsTo
     {
-        return $this->belongsTo(Mahasiswa::class, 'nim', 'nim'); 
+        return $this->belongsTo(Mahasiswa::class, 'nim', 'nim');
     }
 }

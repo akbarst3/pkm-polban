@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Mahasiswa extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'nim';
     protected $fillable = [
+        'nim',
         'nama',
         'kode_prodi',
         'angkatan',

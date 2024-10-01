@@ -1,6 +1,7 @@
 @extends('operator/master')
 
 @section('konten')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <div class="app-content-header">
         <div class="container-fluid">
             <div class="row">
@@ -11,6 +12,16 @@
         </div>
     </div>
     <!--end::App Content Header-->
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        @endif
+    </script>
 
     <div class="container my-4">
         <div class="row justify-content-center">
@@ -22,7 +33,7 @@
                         </div>
                     </div>
 
-                    <form action="/operator/identitasusulan" method="POST">
+                    <form action="{{ route('operator.identitasusulan') }}" method="POST">
 
                         <div class="row">
                             <!-- Kolom Utama -->
@@ -35,7 +46,9 @@
                                     <div class="col-md-9">
                                         <select class="form-select" id="programStudi" name="programStudi">
                                             <option selected>Pilih Program Studi</option>
-                                            <option value="1">Teknik Informatika</option>
+                                            @foreach ($pt_prodi as $item)
+                                                <option value="{{ $item->kode_prodi }}">{{ $item->nama_prodi }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -58,8 +71,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="namaMahasiswa" name="namaMahasiswa"
-                                                placeholder="Masukkan Nama">
+                                            <input type="text" class="form-control" id="namaMahasiswa"
+                                                name="namaMahasiswa" placeholder="Masukkan Nama">
                                         </div>
                                     </div>
                                 </div>
@@ -69,10 +82,7 @@
                                         <p>Tahun Masuk</p>
                                     </div>
                                     <div class="col-md-9">
-                                        <select class="form-select" id="tahunMasuk" name="tahunMasuk">
-                                            <option selected>Tahun Masuk</option>
-                                            <option value="1">2023</option>
-                                        </select>
+                                        <input type="text" class="form-control" name="tahunMasuk" id="">
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +96,8 @@
                                         </div>
                                         <div class="col-md-5">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="usernameMahasiswa" name="usernameMahasiswa" disabled>
+                                                <input type="text" class="form-control" id="usernameMahasiswa"
+                                                    name="usernameMahasiswa" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -96,7 +107,8 @@
                                         </div>
                                         <div class="col-md-5">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="passwordMahasiswa" name="passwordMahasiswa" disabled>
+                                                <input type="text" class="form-control" id="passwordMahasiswa"
+                                                    name="passwordMahasiswa" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -120,7 +132,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="judulProposal" name="judulProposal">
+                                            <input type="text" class="form-control" id="judulProposal"
+                                                name="judulProposal">
                                         </div>
                                     </div>
                                 </div>
@@ -132,7 +145,9 @@
                                     <div class="col-md-9">
                                         <select class="form-select" id="skemaPKM" name="skemaPKM">
                                             <option selected>Skema PKM</option>
-                                            <option value="1">PKM 8 Bidang</option>
+                                            @foreach ($skema as $item)
+                                                <option value="{{ $item->id }}">{{ $item->nama_skema }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -155,8 +170,9 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="input-group">
+                                            @csrf
                                             <input type="text" class="form-control" id="nidn" name="nidn">
-                                            <button class="btn btn-primary">Cari</button>
+                                            <button class="btn btn-primary cari">Cari</button>
                                         </div>
                                     </div>
                                 </div>
@@ -166,8 +182,10 @@
                                         <p>Nama Dosen</p>
                                     </div>
                                     <div class="col-md-9">
+
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="namaDosen" name="namaDosen" disabled>
+                                            <input type="text" class="form-control" id="namaDosen" name="namaDosen"
+                                                disabled placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -178,7 +196,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="programStudiDosen" name="programStudiDosen" disabled>
+                                            <input type="text" class="form-control" id="programStudiDosen"
+                                                name="programStudiDosen" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -189,7 +208,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="noHpDosen" name="noHpDosen" disabled>
+                                            <input type="text" class="form-control" id="noHpDosen" name="noHpDosen"
+                                                disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -200,7 +220,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="emailDosen" name="emailDosen" disabled>
+                                            <input type="text" class="form-control" id="emailDosen" name="emailDosen"
+                                                disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -215,7 +236,8 @@
                                         </div>
                                         <div class="col-md-5">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="usernameDosen" name="usernameDosen" disabled>
+                                                <input type="text" class="form-control" id="usernameDosen"
+                                                    name="usernameDosen" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -226,7 +248,8 @@
                                         </div>
                                         <div class="col-md-5">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="passwordDosen" name="passwordDosen" disabled >
+                                                <input type="text" class="form-control" id="passwordDosen"
+                                                    name="passwordDosen" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -244,6 +267,55 @@
                             </button>
                         </div>
                     </form>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const nidnInput = document.getElementById('nidn');
+                            const cariButton = document.querySelector('.cari');
+                            const namaDosenInput = document.getElementById('namaDosen');
+                            const programStudiDosenInput = document.getElementById('programStudiDosen');
+                            const noHpDosenInput = document.getElementById('noHpDosen');
+                            const emailDosenInput = document.getElementById('emailDosen');
+
+                            nidnInput.addEventListener('input', function() {
+                                namaDosenInput.value = '';
+                                programStudiDosenInput.value = '';
+                                noHpDosenInput.value = '';
+                                emailDosenInput.value = '';
+                            });
+
+                            cariButton.addEventListener('click', function(e) {
+                                e.preventDefault(); // Mencegah form submit
+
+                                const nidn = nidnInput.value;
+
+                                const xhr = new XMLHttpRequest();
+                                xhr.open('POST', "{{ route('operator.dosen') }}", true);
+                                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+
+                                xhr.onload = function() {
+                                    if (xhr.status === 200) {
+                                        const data = JSON.parse(xhr.responseText);
+                                        namaDosenInput.value = data.nama;
+                                        programStudiDosenInput.value = data.program_studi;
+                                        noHpDosenInput.value = data.no_hp;
+                                        emailDosenInput.value = data.email;
+                                    } else {
+                                        if (xhr.status === 404) {
+                                            alert(xhr.responseJSON
+                                            .message); // Menampilkan pesan jika data tidak ditemukan
+                                        } else {
+                                            alert(
+                                            'Terjadi kesalahan, silakan coba lagi.'); // Menampilkan pesan kesalahan umum
+                                        }
+                                    }
+                                };
+
+                                xhr.send('nidn=' + nidn + '&_token={{ csrf_token() }}');
+                            });
+                        });
+                    </script>
 
 
 

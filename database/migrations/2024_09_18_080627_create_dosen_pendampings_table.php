@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('dosen_pendampings', function (Blueprint $table) {
             $table->string('kode_dosen');
-            $table->string('username');
-            $table->string('password');
+            $table->string('username')->nullable();
+            $table->string('password')->nullable();
             $table->foreign('kode_dosen')->references('kode_dosen')->on('dosens');
             $table->timestamps();
         });

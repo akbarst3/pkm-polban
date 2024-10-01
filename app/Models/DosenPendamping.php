@@ -11,8 +11,12 @@ class DosenPendamping extends Authenticatable
 {
     use HasFactory;
     protected $guard = 'dospem';
+    protected $primaryKey = null;
+    // In the DetailPkm model
+    public $incrementing = false;
 
     protected $fillable = [
+        'kode_dosen',
         'username',
         'password',
     ];

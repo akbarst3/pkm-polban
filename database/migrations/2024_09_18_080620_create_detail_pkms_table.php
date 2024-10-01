@@ -17,15 +17,15 @@ return new class extends Migration
             $table->string('kode_pt');
             // $table->string('nim', 20);
             $table->string('judul');
-            $table->bigInteger('dana_kemdikbud');
-            $table->bigInteger('dana_pt');
-            $table->bigInteger('dana_lain');
-            $table->string('instansi_lain');
-            $table->boolean('val_dospem')->default(false);
-            $table->boolean('val_pt')->default(false);
-            $table->string('proposal');
-            $table->string('lapkem');
-            $table->string('lapkhir');
+            $table->bigInteger('dana_kemdikbud')->nullable();
+            $table->bigInteger('dana_pt')->nullable();
+            $table->bigInteger('dana_lain')->nullable();
+            $table->string('instansi_lain')->nullable();
+            $table->boolean('val_dospem')->default(false)->nullable();
+            $table->boolean('val_pt')->default(false)->nullable();
+            $table->string('proposal')->nullable();
+            $table->string('lapkem')->nullable();
+            $table->string('lapkhir')->nullable();
 
             $table->foreign('id_skema')->references('id')->on('skema_pkms');
             $table->foreign('kode_pt')->references('kode_pt')->on('perguruan_tinggis');

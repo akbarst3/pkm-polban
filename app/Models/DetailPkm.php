@@ -13,6 +13,7 @@ class DetailPkm extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'kode_pt',
         'judul',
         'dana_kemdikbud',
         'dana_pt',
@@ -59,5 +60,9 @@ class DetailPkm extends Model
     public function skema(): BelongsTo
     {
         return $this->belongsTo(SkemaPkm::class, 'id_skema', 'id_skema');
+    }
+    public function perguruanTinggi(): BelongsTo
+    {
+        return $this->BelongsTo(SkemaPkm::class, 'kode_pt', 'kode_pt');
     }
 }

@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('pengusuls', function (Blueprint $table) {
             $table->string('nim');
-            $table->string('username');
-            $table->string('password');
-            $table->string('alamat');
-            $table->string('kode_pos');
-            $table->string('no_hp');
-            $table->string('telp_rumah');
-            $table->string('email');
-            $table->string('no_ktp');
-            $table->char('jenis_kelamin', 1);
-            $table->date('tanggal_lahir');
-            $table->string('tempat_lahir');
+            $table->string('username')->nullable();
+            $table->string('password')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('kode_pos')->nullable();
+            $table->string('no_hp')->nullable();
+            $table->string('telp_rumah')->nullable();
+            $table->string('email')->nullable();
+            $table->string('no_ktp')->nullable();
+            $table->char('jenis_kelamin', 1)->nullable();
+            $table->date('tanggal_lahir')->nullable();
+            $table->string('tempat_lahir')->nullable();
     
             $table->foreign('nim')->references('nim')->on('mahasiswas');
             $table->timestamps();

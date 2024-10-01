@@ -169,7 +169,7 @@ class DashboardController extends Controller
             ['validasiCounts' => $this->getCountValidasi()],
         ];
 
-        // dd($dataPkms);
+        // dd($dataPkms); 
         $namaSkema = SkemaPkm::pluck('nama_skema', 'id'); // ambil id_skema juga untuk mapping
         $kode_pt = $this->getKodePtOperator();
         $perguruanTinggi = PerguruanTinggi::where('kode_pt', $kode_pt)->first()->nama_pt;
