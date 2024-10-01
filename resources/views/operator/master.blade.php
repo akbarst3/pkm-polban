@@ -67,8 +67,8 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
-                                    <li class="nav-item"> <a href="/operator/identitasusulan" class="nav-link">
-                                            <p>Identitas Usulan</p>
+                                    <li class="nav-item"> <a href="/operator/usulanBaru" class="nav-link">
+                                            <p>Daftar Usulan</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -80,7 +80,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="./generate/theme.html" class="nav-link"> <i
+                                <a href="/operator/usulanReviewer" class="nav-link"> <i
                                         class="nav-icon bi bi-star-fill"></i>
                                     <p>Usulan Reviewer</p>
                                 </a>

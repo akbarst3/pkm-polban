@@ -16,6 +16,9 @@ Route::middleware('auth:operator')->group(function () {
     Route::post('/operator/dashboard', [DashboardController::class, 'storeFile'])->name('operator.file');
     Route::post('/operator/identitasusulan/find', [UsulanController::class, 'findDosen'])->name('operator.dosen');
     Route::post('/operator/identitasusulan/store', [UsulanController::class, 'storeData'])->name('operator.identitasusulan');
+    Route::view('/operator/usulanBaru', 'operator.usulanBaru');
+    Route::view('/operator/usulanReviewer', 'operator.usulanReviewer');
+    Route::view('/operator/identitasReviewer', 'operator.identitasReviewer');
 });
 
 require __DIR__.'/auth.php';
