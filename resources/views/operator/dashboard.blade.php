@@ -16,7 +16,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h3 class="mb-0">{{ $data }}</h3> <!-- Menggunakan variabel $data -->
+                        <h3 class="mb-0">{{ $perguruanTinggi }}</h3> <!-- Menggunakan variabel $data -->
                     </div>
                 </div>
             </div>
@@ -178,109 +178,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <!-- Tabel Data -->
-                                <td>1</td>
-                                <td>PKM 8 Bidang</td>
-                                <td>PKM Karsa Cipta</td>
-                                <td>{{ $judulCounts[1]['total'] ?? 0 }}</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>PKM 8 Bidang</td>
-                                <td>PKM Karya Inovatif</td>
-                                <td>{{ $judulCounts[2]['total'] ?? 0 }}</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>PKM 8 Bidang</td>
-                                <td>PKM Kewirausahaan</td>
-                                <td>{{ $judulCounts[3]['total'] ?? 0 }}</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>PKM 8 Bidang</td>
-                                <td>PKM Penerapan IPTEK</td>
-                                <td>{{ $judulCounts[4]['total'] ?? 0 }}</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>PKM 8 Bidang</td>
-                                <td>PKM Pengabdian Kepada Masyarakat</td>
-                                <td>{{ $judulCounts[5]['total'] ?? 0 }}</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>PKM 8 Bidang</td>
-                                <td>PKM Riset Eksakta</td>
-                                <td>{{ $judulCounts[6]['total'] ?? 0 }}</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>PKM 8 Bidang</td>
-                                <td>PKM Riset Sosial Humaniora</td>
-                                <td>{{ $judulCounts[7]['total'] ?? 0 }}</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>PKM 8 Bidang</td>
-                                <td>PKM Video Gagasan Konstruktif</td>
-                                <td>{{ $judulCounts[8]['total'] ?? 0 }}</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>9</td>
-                                <td>PKM Artikel Ilmiah</td>
-                                <td>PKM Artikel Ilmiah</td>
-                                <td>{{ $judulCounts[9]['total'] ?? 0 }}</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>10</td>
-                                <td>PKM Gagasan Futuristik Tertulis</td>
-                                <td>PKM Gagasan Futuristik Tertulis</td>
-                                <td>{{ $judulCounts[10]['total'] ?? 0 }}</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-
+                            @foreach ($namaSkema as $idSkema => $skema)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        @if ($loop->iteration == 9 || $loop->iteration == 10)
+                                            PKM {{ $skema }}
+                                        @else
+                                            PKM 8 Bidang
+                                        @endif
+                                    </td>
+                                    <td>PKM {{ $skema }}</td>
+                                    <td>{{ $dataPkms[0]['judulCounts'][$idSkema]['total'] ?? 0 }}</td>
+                                    <td>{{ $dataPkms[1]['proposalCounts'][$idSkema]['total'] ?? 0 }}</td>
+                                    <td>{{ $dataPkms[2]['pengisianCounts'][$idSkema]['count'] ?? 0 }}</td>
+                                    <td>{{ $dataPkms[3]['validasiCounts']['val_dospem'][$idSkema]['total'] ?? 0 }}</td>
+                                    <td>{{ $dataPkms[3]['validasiCounts']['val_pt'][$idSkema]['total'] ?? 0 }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>

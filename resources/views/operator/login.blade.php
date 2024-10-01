@@ -7,6 +7,7 @@
     <title>Login</title>
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="d-flex align-items-center justify-content-center bg-light" style="height: 100vh;">
@@ -15,7 +16,8 @@
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
                 <div class="text-center mb-4">
-                    <img src="{{ asset('images/PKMPOLBAN.png') }}" alt="PKM POLBAN" class="img-fluid" style="max-width: 350px;">
+                    <img src="{{ asset('images/PKMPOLBAN.png') }}" alt="PKM POLBAN" class="img-fluid"
+                        style="max-width: 350px;">
                 </div>
 
                 <div class="card">
@@ -30,10 +32,14 @@
                                 <input type="password" class="form-control" id="password" name="password"
                                     placeholder="Password" required>
                             </div>
-                            <div class="form-group">
-                                <label id="math-question"></label>
-                                <input type="number" id="math-answer" class="form-control"
-                                    placeholder="Hasil Penjumlahan" required>
+                            <div class="row mb-3"> <!-- Menambahkan row untuk setiap file -->
+                                <div class="col-md-4"> <!-- Kolom kiri -->
+                                    <p id="math-question"></p>
+                                </div>
+                                <div class="col-md-8"> <!-- Kolom kanan -->
+                                    <input type="number" id="math-answer" class="form-control"
+                                        placeholder="Hasil Penjumlahan" required>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <input type="submit" class="btn btn-primary btn-block" value="Login">
@@ -60,16 +66,20 @@
         }
 
         document.getElementById('login-form').addEventListener('submit', function(event) {
-            event.preventDefault();
+            event.preventDefault(); // Mencegah form submit secara default
+
             const answer = parseInt(document.getElementById('math-answer').value, 10);
+
             if (answer === correctAnswer) {
-                alert("Login berhasil!");
                 event.target.submit();
             } else {
-                alert("Jawaban penjumlahan salah!");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Jawaban salah!',
+                    text: 'Silakan masukkan hasil penjumlahan yang benar.',
+                });
             }
         });
-
         generateMathQuestion();
     </script>
 

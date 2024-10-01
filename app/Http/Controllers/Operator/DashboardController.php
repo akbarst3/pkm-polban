@@ -6,6 +6,8 @@ use App\Models\DetailPkm;
 use App\Models\OperatorPt;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PerguruanTinggi;
+use App\Models\SkemaPkm;
 use App\Models\SuratPt;
 use Illuminate\Support\Facades\Auth;
 
@@ -157,21 +159,21 @@ class DashboardController extends Controller
         return $statusFiles;
     }
 
-
-    public function getAllCounts()
-    {
-        $judulCounts = $this->getCountJudul();
-        $proposalCounts = $this->getCountProposal();
-        $pengisianCounts = $this->getCountIdentitas();
-        $validasiCounts = $this->getCountValidasi();
-
-        return view('operator.index', compact('judulCounts', 'proposalCounts', 'pengisianCounts', 'validasiCounts'));
-    }
-
     public function index()
     {
         $statusFiles = $this->getDataFile();
-        $data = "politeknik negeri bandung";
-        return view('operator.dashboard', compact('data', 'statusFiles'));
+        $dataPkms = [
+            ['judulCounts' => $this->getCountJudul()],
+            ['proposalCounts' => $this->getCountProposal()],
+            ['pengisianCounts' => $this->getCountIdentitas()],
+            ['validasiCounts' => $this->getCountValidasi()],
+        ];
+
+        // dd($dataPkms);
+        $namaSkema = SkemaPkm::pluck('nama_skema', 'id'); // ambil id_skema juga untuk mapping
+        $kode_pt = $this->getKodePtOperator();
+        $perguruanTinggi = PerguruanTinggi::where('kode_pt', $kode_pt)->first()->nama_pt;
+
+        return view('operator.dashboard', compact('dataPkms', 'perguruanTinggi', 'statusFiles', 'namaSkema'));
     }
 }
