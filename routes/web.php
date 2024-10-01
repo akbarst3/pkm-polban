@@ -12,6 +12,9 @@ Route::middleware('auth:operator')->group(function () {
     Route::view('/operator/identitasusulan', 'operator.identitasusulan');
     Route::view('/operator/usulandidanai', 'operator.usulandidanai');
     Route::post('/operator/dashboard', [DashboardController::class, 'storeFile'])->name('operator.file');
+    Route::view('/operator/usulanBaru', 'operator.usulanBaru');
+    Route::view('/operator/usulanReviewer', 'operator.usulanReviewer');
+    Route::view('/operator/identitasReviewer', 'operator.identitasReviewer');
 });
 
 require __DIR__.'/auth.php';

@@ -39,7 +39,7 @@
                                         <p>Klaster</p>
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="w-75 text-center" style="background-color: #58afdd; color: white;">
+                                        <div class="w-70 text-center" style="background-color: #58afdd; color: white;">
                                             KLASTER 1
                                         </div>
                                     </div>
