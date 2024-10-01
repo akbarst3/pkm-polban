@@ -179,18 +179,106 @@
                         </thead>
                         <tbody>
                         <!-- Tabel Data -->
-                            {{-- foreach ($items as $item) <!-- Sesuaikan variabel items dengan data dari controller -->
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->jenis }}</td>
-                                <td>{{ $item->skema }}</td>
-                                <td>{{ $item->usulan }}</td>
-                                <td>{{ $item->isian_identitas }}</td>
-                                <td>{{ $item->upload_proposal }}</td>
-                                <td>{{ $item->val_dosen }}</td>
-                                <td>{{ $item->val_pimpinan }}</td>
+                                <td>1</td>
+                                <td>PKM 8 Bidang</td>
+                                <td>PKM Karsa Cipta</td>
+                                <td>{{ $judulCounts[1]['total'] ?? 0 }}</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
                             </tr>
-                            @end foreach --}}
+                            <tr>
+                                <td>2</td>
+                                <td>PKM 8 Bidang</td>
+                                <td>PKM Karya Inovatif</td>
+                                <td>{{ $judulCounts[2]['total'] ?? 0 }}</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>PKM 8 Bidang</td>
+                                <td>PKM Kewirausahaan</td>
+                                <td>{{ $judulCounts[3]['total'] ?? 0 }}</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>PKM 8 Bidang</td>
+                                <td>PKM Penerapan IPTEK</td>
+                                <td>{{ $judulCounts[4]['total'] ?? 0 }}</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>PKM 8 Bidang</td>
+                                <td>PKM Pengabdian Kepada Masyarakat</td>
+                                <td>{{ $judulCounts[5]['total'] ?? 0 }}</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>PKM 8 Bidang</td>
+                                <td>PKM Riset Eksakta</td>
+                                <td>{{ $judulCounts[6]['total'] ?? 0 }}</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>PKM 8 Bidang</td>
+                                <td>PKM Riset Sosial Humaniora</td>
+                                <td>{{ $judulCounts[7]['total'] ?? 0 }}</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>PKM 8 Bidang</td>
+                                <td>PKM Video Gagasan Konstruktif</td>
+                                <td>{{ $judulCounts[8]['total'] ?? 0 }}</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>PKM Artikel Ilmiah</td>
+                                <td>PKM Artikel Ilmiah</td>
+                                <td>{{ $judulCounts[9]['total'] ?? 0 }}</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>PKM Gagasan Futuristik Tertulis</td>
+                                <td>PKM Gagasan Futuristik Tertulis</td>
+                                <td>{{ $judulCounts[10]['total'] ?? 0 }}</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+
                         </tbody>
                     </table>
                 </div>
