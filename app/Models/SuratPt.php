@@ -10,7 +10,7 @@ class SuratPt extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id_pt',
+        'kode_pt',
         'id_tipe',
         'file_surat',
     ];

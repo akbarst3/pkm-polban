@@ -30,6 +30,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::guard('operator')->logout();
+        
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/operator/login');

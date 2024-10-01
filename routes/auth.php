@@ -10,9 +10,5 @@ Route::middleware('guest:operator')->group(function () {
 });
 
 Route::middleware('auth:operator')->group(function () {
-    Route::get('/operator/dashboard', function () {
-        return view('operator.dashboard');
-    })->name('operator.dashboard');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('operator.logout');
-    Route::get('/detail-pkms/all', [DashboardController::class, 'getAllCounts'])->name('detail-pkms.all');
+    Route::post('/operator/logout', [AuthController::class, 'logout'])->name('operator.logout');
 });

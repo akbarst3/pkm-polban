@@ -6,6 +6,8 @@ use App\Models\DetailPkm;
 use App\Models\OperatorPt;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\SuratPt;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -28,10 +30,10 @@ class DashboardController extends Controller
             ->orderBy('id_skema', 'asc')
             ->get()
             ->pluck('total', 'id_skema');
-    
+
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'total' => 0]]);
     }
-    
+
     public function getCountIdentitas()
     {
         $kodePtOp = $this->getKodePtOperator();
@@ -49,10 +51,10 @@ class DashboardController extends Controller
                     'count' => $count,
                 ];
             });
-    
+
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'count' => 0]]);
     }
-    
+
     public function getCountProposal()
     {
         $kodePtOp = $this->getKodePtOperator();
@@ -62,10 +64,10 @@ class DashboardController extends Controller
             ->orderBy('id_skema', 'asc')
             ->get()
             ->pluck('total', 'id_skema');
-    
+
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'total' => 0]]);
     }
-    
+
     public function getCountValidasi()
     {
         $kodePtOp = $this->getKodePtOperator();
@@ -75,19 +77,86 @@ class DashboardController extends Controller
             ->orderBy('id_skema', 'asc')
             ->get()
             ->pluck('total', 'id_skema');
-    
+
         $val_pt = DetailPkm::whereIn('kode_pt', $kodePtOp)
             ->select('id_skema', DetailPkm::raw('SUM(CASE WHEN val_pt = TRUE THEN 1 ELSE 0 END) as total'))
             ->groupBy('id_skema')
             ->orderBy('id_skema', 'asc')
             ->get()
             ->pluck('total', 'id_skema');
-    
+
         return [
             'val_dospem' => $val_dospem->count() ? $val_dospem : collect([0 => ['id_skema' => 0, 'total' => 0]]),
             'val_pt' => $val_pt->count() ? $val_pt : collect([0 => ['id_skema' => 0, 'total' => 0]]),
         ];
     }
+
+    public function storeFile(Request $request)
+    {
+        // Validasi input file
+        $request->validate([
+            'beritaAcaraPendanaan' => 'required|mimes:pdf|max:2048',
+            'suratKomitmen' => 'required|mimes:pdf|max:2048',
+            'beritaAcaraInsentif' => 'required|mimes:pdf|max:2048',
+        ]);
+
+        // Ambil kode_pt dari user yang sedang login
+        $kodePt = Auth::user()->kode_pt;
+
+        // Set id_tipe awal
+        $idSurat = 1;
+
+        // Loop untuk menyimpan file
+        foreach (['beritaAcaraPendanaan', 'suratKomitmen', 'beritaAcaraInsentif'] as $fileInput) {
+            if ($request->hasFile($fileInput)) {
+                // Simpan file dan ambil path
+                $filePath = $request->file($fileInput)->store('private/surat_pt');
+
+                // Simpan data ke dalam tabel SuratPt
+                SuratPt::create([
+                    'kode_pt' => $kodePt,
+                    'file_surat' => $filePath,
+                    'id_tipe' => $idSurat,
+                ]);
+
+                // Increment id_tipe
+                $idSurat++;
+            }
+        }
+
+        // Redirect kembali dengan pesan sukses
+        return back()->with('success', 'File berhasil diupload');
+    }
+
+    public function getDataFile()
+    {
+        $kodePt = Auth::user()->kode_pt;
+
+        $statusFiles = [
+            'beritaAcaraPendanaan' => false,
+            'suratKomitmen' => false,
+            'beritaAcaraInsentif' => false,
+        ];
+
+        $suratRecords = SuratPt::where('kode_pt', $kodePt)->get();
+
+        foreach ($suratRecords as $surat) {
+            switch ($surat->id_tipe) {
+                case 1:
+                    $statusFiles['beritaAcaraPendanaan'] = true;
+                    break;
+                case 2:
+                    $statusFiles['suratKomitmen'] = true;
+                    break;
+                case 3:
+                    $statusFiles['beritaAcaraInsentif'] = true;
+                    break;
+            }
+        }
+
+        return $statusFiles;
+    }
+
 
     public function getAllCounts()
     {
@@ -97,5 +166,12 @@ class DashboardController extends Controller
         $validasiCounts = $this->getCountValidasi();
 
         return view('operator.index', compact('judulCounts', 'proposalCounts', 'pengisianCounts', 'validasiCounts'));
+    }
+
+    public function index()
+    {
+        $statusFiles = $this->getDataFile();
+        $data = "politeknik negeri bandung";
+        return view('operator.dashboard', compact('data', 'statusFiles'));
     }
 }
