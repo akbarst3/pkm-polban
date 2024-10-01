@@ -1,0 +1,1 @@
+Route::get('/lecturers/{nidn}', 'LecturerController@show');

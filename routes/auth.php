@@ -13,4 +13,5 @@ Route::middleware('auth:operator')->group(function () {
         return view('operator.dashboard');
     })->name('operator.dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('operator.logout');
+    
 });
