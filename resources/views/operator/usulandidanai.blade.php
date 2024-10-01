@@ -10,8 +10,101 @@
                 </div>
             </div>
         </div>
+
+        <div class="container my-4">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="p-4 bg-white rounded shadow-sm">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5>USULAN DIDANAI</h5>
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <!-- Kolom Utama -->
+                            <div class="col-md-5 mb-4">
+                                <!-- Kolom Kiri Berbasis Baris -->
+                                <div class="row mb-4">
+                                    <div class="col-md-9 text-end">
+                                        <p>Tahun Pelaksanaan</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" id="tahun-pelaksanaan" class="form-control" disabled value="2024">
+                                    </div>
+                                </div>
+        
+                                <div class="row mb-4">
+                                    <div class="col-md-9 text-end">
+                                        <p>Klaster</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="w-75 text-center" style="background-color: #58afdd; color: white;">
+                                            KLASTER 1
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <!-- Kolom Kanan -->
+                            <div class="col-md-6 mb-3">
+                                <div class="row align-items-center">
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <p class="mb-0 text-end">PKM 8 Bidang yang Didanai</p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p>0</p>
+                                        </div>
+                                    </div>
+        
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <p class="mb-0 text-end">PKM Artikel Ilmiah yang Didanai</p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p>0</p>
+                                        </div>
+                                    </div>
+        
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <p class="mb-0 text-end">PKM Gagasan Futuristik yang Didanai</p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p>0</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="col">
+                                <table class="table table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Skema</th>
+                                            <th>Judul</th>
+                                            <th>Nama Ketua</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
+                 
         <!-- Content -->
-        <div class="app-content container">
+        {{-- <div class="app-content container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card mb-4">
@@ -73,5 +166,5 @@
                     </div> <!-- /.card -->
                 </div> <!-- /.col -->
             </div>
-        </div>
+        </div> --}}
 @endsection

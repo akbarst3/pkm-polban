@@ -23,12 +23,20 @@
         </div>
 
         <div class="container my-4">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="p-4 bg-white rounded shadow-sm">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5>REKAP TAHAPAN</h5>
+                            </div>
+                        </div>
             <div class="row">
                 <!-- Kolom Utama -->
                 <div class="col-md-6 mb-3">
                     <!-- Kolom Kiri Berbasis Baris -->
                     <div class="row mb-4">
-                        <div class="col-md-9 text-end fw-bold">
+                        <div class="col-md-9 text-end">
                             <p>Tahun Pelaksanaan</p>
                         </div>
                         <div class="col-md-3">
