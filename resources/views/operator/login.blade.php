@@ -20,6 +20,16 @@
                         style="max-width: 350px;">
                 </div>
 
+                @if (session('timeout_message'))
+                    <script>
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Sesi Berakhir',
+                            text: '{{ session('timeout_message') }}',
+                            confirmButtonColor: '#003c72',
+                        });
+                    </script>
+                @endif
                 <div class="card">
                     <div class="card-body">
                         @if ($errors->has('auth'))
@@ -75,12 +85,6 @@
                                 <input type="submit" class="btn btn-primary btn-block" value="Login">
                             </div>
                         </form>
-<<<<<<< HEAD
-=======
-
-                        <a href="#" class="d-block mt-3 text-center text-primary">Permintaan akun terakreditasi
-                            internasional</a>
->>>>>>> 73a62b1 (add: login operator)
                     </div>
                 </div>
             </div>
@@ -92,6 +96,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script>
+<<<<<<< HEAD
 <<<<<<< HEAD
         document.addEventListener('DOMContentLoaded', function() {
             (function() {
@@ -147,6 +152,46 @@
     </script>
 </body>
 =======
+=======
+        (function() {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms)
+                .forEach(function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        } else {
+                            const answer = parseInt(document.getElementById('math-answer').value, 10);
+                            if (answer !== correctAnswer) {
+                                event.preventDefault();
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Jawaban salah!',
+                                    text: 'Silakan masukkan hasil penjumlahan yang benar.',
+                                    confirmButtonColor: '#003c72',
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                });
+                            }
+                        }
+
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        })();
+
+        document.getElementById('math-answer').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, ''); // Hanya izinkan angka
+        });
+>>>>>>> c7e1417 (feat: error and session handling)
         let correctAnswer;
 
         function generateMathQuestion() {
@@ -156,6 +201,7 @@
             correctAnswer = num1 + num2;
         }
 
+<<<<<<< HEAD
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const answer = parseInt(document.getElementById('math-answer').value, 10);
@@ -167,6 +213,8 @@
             }
         });
 
+=======
+>>>>>>> c7e1417 (feat: error and session handling)
         generateMathQuestion();
     </script>
 </body>
