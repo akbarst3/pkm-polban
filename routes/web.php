@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Operator\DashboardController;
 use App\Http\Controllers\Operator\UsulanController;
+use App\Http\Controllers\Operator\UreviewerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,7 +19,7 @@ Route::middleware('auth:operator')->group(function () {
     Route::post('/operator/identitasusulan/store', [UsulanController::class, 'storeData'])->name('operator.identitasusulan');
     Route::view('/operator/usulanBaru', 'operator.usulanBaru');
     Route::view('/operator/usulanReviewer', 'operator.usulanReviewer');
-    Route::view('/operator/identitasReviewer', 'operator.identitasReviewer');
+    Route::get('/operator/identitasReviewer', [UreviewerController::class, 'index']);
 });
 
 require __DIR__.'/auth.php';

@@ -71,12 +71,7 @@
                                 <label for="">Program Studi</label>
                             </div>
                             <dif class="col-md-4">
-                                <select class="form.control col-md-12" id="">
-                                    <option value="" disabled selected>Pilih Prodi</option>
-                                    <option value="">D3 Teknik Informatika</option>
-                                    <option value="">D4 Teknik Iformatika</option>
-                                    <option value="">S1 Teknik Informatika</option>
-                                </select>
+                                <input type="text" class="form-control" placeholder="Masukkan Program Studi"> 
                             </div>
                         </div>
                     <div class="form-group pt-2">
@@ -86,10 +81,12 @@
                             </div>
                             <dif class="col-md-4">
                                 <select class="form.control col-md-12" id="">
-                                    <option value="" disabled selected>--Pilih Skema--</option>
-                                    <option value="">Karya Inovatif</option>
-                                    <option value="">Kewirausahaan</option>
-                                    <option value="">Kemasyarakatan</option>
+                                    <option value="" selected>--Pilih Skema--</option>
+                                    @foreach ($skema as $item )
+                                    <option value="{{$item->id_skema}}">PKM {{ $item->nama_skema }}</option>
+                                    @endforeach
+                                    
+                                    
                                 </select>
                             </div>
                         </div>
