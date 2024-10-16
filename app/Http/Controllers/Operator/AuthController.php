@@ -10,27 +10,35 @@ class AuthController extends Controller
 {
     public function create()
     {
+        if (Auth::guard('operator')->check()) {
+            return redirect()->route('operator.dashboard');
+        }
         return view('operator.login');
     }
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'username' => ['required'],
-            'password' => ['required'],
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ]);
-        if (Auth::guard('operator')->attempt($credentials)) {
+
+        if (Auth::guard('operator')->attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/operator/dashboard');
+            return redirect()->intended(route('operator.dashboard'));
         }
-        return back()->withErrors([
-            'username' => 'username salah.'
-        ])->onlyInput('username');
+
+        return back()
+            ->withErrors([
+                'auth' => 'Periksa username dan password anda.'
+            ])
+            ->onlyInput('username');
     }
+
 
     public function logout(Request $request)
     {
         Auth::guard('operator')->logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/operator/login');

@@ -20,25 +20,55 @@
                         style="max-width: 350px;">
                 </div>
 
+                @if (session('timeout_message'))
+                    <script>
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Sesi Berakhir',
+                            text: '{{ session('timeout_message') }}',
+                            confirmButtonColor: '#003c72',
+                        });
+                    </script>
+                @endif
                 <div class="card">
                     <div class="card-body">
-                        <form id="login-form" action="{{ route('operator.login') }}" method="post">
+                        @if ($errors->has('auth'))
+                            <script>
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Login Gagal!',
+                                    text: '{{ $errors->first('auth') }}',
+                                    confirmButtonColor: '#003c72',
+                                });
+                            </script>
+                        @endif
+                        <form id="login-form" action="{{ route('operator.login') }}" method="post"
+                            class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
                                 <input type="text" class="form-control" id="username" name="username"
-                                    placeholder="Username" required>
+                                    placeholder="Username" value="{{ old('username') }}" required>
+                                <div class="invalid-feedback">
+                                    Username wajib diisi.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <input type="password" class="form-control" id="password" name="password"
                                     placeholder="Password" required>
+                                <div class="invalid-feedback">
+                                    Password wajib diisi.
+                                </div>
                             </div>
-                            <div class="row mb-3"> <!-- Menambahkan row untuk setiap file -->
-                                <div class="col-md-4"> <!-- Kolom kiri -->
+                            <div class="row mb-3">
+                                <div class="col-md-4">
                                     <p id="math-question"></p>
                                 </div>
-                                <div class="col-md-8"> <!-- Kolom kanan -->
-                                    <input type="number" id="math-answer" class="form-control"
-                                        placeholder="Hasil Penjumlahan" required>
+                                <div class="col-md-8">
+                                    <input type="text" id="math-answer" class="form-control"
+                                        placeholder="Hasil Penjumlahan" inputmode="numeric" required>
+                                    <div class="invalid-feedback">
+                                        Isi hasil penjumlahan.
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -56,6 +86,44 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script>
+        (function() {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms)
+                .forEach(function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        } else {
+                            const answer = parseInt(document.getElementById('math-answer').value, 10);
+                            if (answer !== correctAnswer) {
+                                event.preventDefault();
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Jawaban salah!',
+                                    text: 'Silakan masukkan hasil penjumlahan yang benar.',
+                                    confirmButtonColor: '#003c72',
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                    }
+                                });
+                            }
+                        }
+
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        })();
+
+        document.getElementById('math-answer').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, ''); // Hanya izinkan angka
+        });
         let correctAnswer;
 
         function generateMathQuestion() {
@@ -65,21 +133,6 @@
             correctAnswer = num1 + num2;
         }
 
-        document.getElementById('login-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah form submit secara default
-
-            const answer = parseInt(document.getElementById('math-answer').value, 10);
-
-            if (answer === correctAnswer) {
-                event.target.submit();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Jawaban salah!',
-                    text: 'Silakan masukkan hasil penjumlahan yang benar.',
-                });
-            }
-        });
         generateMathQuestion();
     </script>
 

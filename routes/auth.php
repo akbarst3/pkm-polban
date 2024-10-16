@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Operator\AuthController;
-use App\Http\Controllers\Operator\DashboardController;
 
 Route::middleware('guest:operator')->group(function () {
     Route::get('/operator/login', [AuthController::class, 'create'])->name('operator.login');
