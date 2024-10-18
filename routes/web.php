@@ -23,6 +23,8 @@ Route::middleware(['auth:operator', 'session.timeout'])->group(function () {
     Route::get('/operator/identitas-reviewer', [UreviewerController::class, 'index']);
 });
 
-Route::get('/pengusul/dashboard', [DashboardPengusulController::class, 'index'])->name('pengusul.dashboard');
 
-require __DIR__ . '/auth.php';
+Route::get('/pengusul/dashboard', [DashboardPengusulController::class,'index'])->name('pengusul.dashboard');
+
+require __DIR__.'/auth.php';
+
