@@ -5,6 +5,8 @@ use App\Http\Controllers\Operator\UsulanController;
 use App\Http\Controllers\Operator\DashboardController;
 use App\Http\Controllers\Operator\UreviewerController;
 use App\Http\Controllers\Operator\UsulanBaruController;
+use App\Http\Controllers\Pengusul\PengusulDashboardController;
+use App\Http\Controllers\Pengusul\DashboardPengusulController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,4 +24,7 @@ Route::middleware(['auth:operator', 'session.timeout'])->group(function () {
     Route::get('/operator/identitas-reviewer', [UreviewerController::class, 'index']);
 });
 
-require __DIR__ . '/auth.php';
+
+Route::get('/pengusul/dashboard', [DashboardPengusulController::class,'index'])->name('pengusul.dashboard');
+
+require __DIR__.'/auth.php';
