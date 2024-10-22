@@ -25,8 +25,7 @@ class AuthController extends Controller
 
         if (Auth::guard('operator')->attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-<<<<<<< HEAD
-<<<<<<< HEAD
+
             return redirect()->intended(route('operator.dashboard'));
         }
 
@@ -35,25 +34,8 @@ class AuthController extends Controller
                 'auth' => 'Periksa username dan password anda.'
             ])
             ->onlyInput('username');
-=======
-            return redirect()->intended('/operator/dashboard');
-        }
-        return back()->withErrors([
-            'username' => 'username salah.'
-        ])->onlyInput('username');
->>>>>>> 73a62b1 (add: login operator)
-=======
             return redirect()->intended(route('operator.dashboard'));
         }
-
-        return back()
-            ->withErrors([
-                'auth' => 'Periksa username dan password anda.'
-            ])
-            ->onlyInput('username');
->>>>>>> c7e1417 (feat: error and session handling)
-    }
-
 
     public function logout(Request $request)
     {

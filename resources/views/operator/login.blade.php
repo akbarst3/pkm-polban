@@ -20,16 +20,6 @@
                         style="max-width: 350px;">
                 </div>
 
-                @if (session('timeout_message'))
-                    <script>
-                        Swal.fire({
-                            icon: 'info',
-                            title: 'Sesi Berakhir',
-                            text: '{{ session('timeout_message') }}',
-                            confirmButtonColor: '#003c72',
-                        });
-                    </script>
-                @endif
                 <div class="card">
                     <div class="card-body">
                         @if ($errors->has('auth'))
@@ -98,6 +88,9 @@
     <script>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c39b98f (fix: fixing bug and handling error final)
         document.addEventListener('DOMContentLoaded', function() {
             (function() {
                 'use strict';
@@ -106,6 +99,7 @@
                     .forEach(function(form) {
                         form.addEventListener('submit', function(event) {
                             if (!form.checkValidity()) {
+<<<<<<< HEAD
                                 event.preventDefault();
                                 event.stopPropagation();
                             } else {
@@ -165,42 +159,58 @@
                         } else {
                             const answer = parseInt(document.getElementById('math-answer').value, 10);
                             if (answer !== correctAnswer) {
+=======
+>>>>>>> c39b98f (fix: fixing bug and handling error final)
                                 event.preventDefault();
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Jawaban salah!',
-                                    text: 'Silakan masukkan hasil penjumlahan yang benar.',
-                                    confirmButtonColor: '#003c72',
-                                    timer: 3000,
-                                    timerProgressBar: true,
-                                    showClass: {
-                                        popup: 'animate__animated animate__fadeInDown'
-                                    },
-                                    hideClass: {
-                                        popup: 'animate__animated animate__fadeOutUp'
-                                    }
-                                });
+                                event.stopPropagation();
+                            } else {
+                                const answer = parseInt(document.getElementById('math-answer')
+                                    .value, 10);
+                                if (answer !== correctAnswer) {
+                                    event.preventDefault();
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Jawaban salah!',
+                                        text: 'Silakan masukkan hasil penjumlahan yang benar.',
+                                        confirmButtonColor: '#003c72',
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        showClass: {
+                                            popup: 'animate__animated animate__fadeInDown'
+                                        },
+                                        hideClass: {
+                                            popup: 'animate__animated animate__fadeOutUp'
+                                        }
+                                    });
+                                }
                             }
-                        }
 
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-        })();
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+            })();
 
+<<<<<<< HEAD
         document.getElementById('math-answer').addEventListener('input', function(e) {
             this.value = this.value.replace(/[^0-9]/g, ''); // Hanya izinkan angka
         });
 >>>>>>> c7e1417 (feat: error and session handling)
         let correctAnswer;
+=======
+            document.getElementById('math-answer').addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+            let correctAnswer;
+>>>>>>> c39b98f (fix: fixing bug and handling error final)
 
-        function generateMathQuestion() {
-            const num1 = Math.floor(Math.random() * 10) + 1;
-            const num2 = Math.floor(Math.random() * 10) + 1;
-            document.getElementById('math-question').innerText = `${num1} + ${num2} = `;
-            correctAnswer = num1 + num2;
-        }
+            function generateMathQuestion() {
+                const num1 = Math.floor(Math.random() * 10) + 1;
+                const num2 = Math.floor(Math.random() * 10) + 1;
+                document.getElementById('math-question').innerText = `${num1} + ${num2} = `;
+                correctAnswer = num1 + num2;
+            }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -220,4 +230,10 @@
 </body>
 
 >>>>>>> 73a62b1 (add: login operator)
+=======
+            generateMathQuestion();
+        })
+    </script>
+</body>
+>>>>>>> c39b98f (fix: fixing bug and handling error final)
 </html>

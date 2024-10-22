@@ -5,7 +5,10 @@ use App\Http\Controllers\Operator\UsulanController;
 use App\Http\Controllers\Operator\DashboardController;
 use App\Http\Controllers\Operator\UreviewerController;
 use App\Http\Controllers\Operator\UsulanBaruController;
+<<<<<<< HEAD
 use App\Http\Controllers\Pengusul\DashboardPengusulController;
+=======
+>>>>>>> c39b98f (fix: fixing bug and handling error final)
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,8 +26,12 @@ Route::middleware(['auth:operator', 'session.timeout'])->group(function () {
     Route::get('/operator/identitas-reviewer', [UreviewerController::class, 'index']);
 });
 
+<<<<<<< HEAD
 
 Route::get('/pengusul/dashboard', [DashboardPengusulController::class,'index'])->name('pengusul.dashboard');
 
 require __DIR__.'/auth.php';
 
+=======
+require __DIR__ . '/auth.php';
+>>>>>>> c39b98f (fix: fixing bug and handling error final)
