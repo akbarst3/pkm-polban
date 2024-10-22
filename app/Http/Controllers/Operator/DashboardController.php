@@ -95,53 +95,50 @@ class DashboardController extends Controller
 
     public function storeFile(Request $request)
     {
-        // Validasi input file
         $request->validate([
-            'beritaAcaraPendanaan' => 'required|mimes:pdf|max:2048',
-            'suratKomitmen' => 'required|mimes:pdf|max:2048',
-            'beritaAcaraInsentif' => 'required|mimes:pdf|max:2048',
+            'beritaAcaraPendanaan' => 'required|mimes:pdf|max:5120',
+            'suratKomitmen' => 'required|mimes:pdf|max:5120',
+            'beritaAcaraInsentif' => 'required|mimes:pdf|max:5120',
+        ], [
+            'beritaAcaraPendanaan.required' => 'File Berita Acara PKM Skema Pendanaan wajib diunggah.',
+            'beritaAcaraPendanaan.mimes' => 'File Berita Acara PKM Skema Pendanaan harus berformat PDF.',
+            'beritaAcaraPendanaan.max' => 'File Berita Acara PKM Skema Pendanaan tidak boleh lebih dari 5 MB.',
+
+            'suratKomitmen.required' => 'File Surat Komitmen Dana Tambahan wajib diunggah.',
+            'suratKomitmen.mimes' => 'File Surat Komitmen Dana Tambahan harus berformat PDF.',
+            'suratKomitmen.max' => 'File Surat Komitmen Dana Tambahan tidak boleh lebih dari 5 MB.',
+
+            'beritaAcaraInsentif.required' => 'File Berita Acara PKM Skema Insentif wajib diunggah.',
+            'beritaAcaraInsentif.mimes' => 'File Berita Acara PKM Skema Insentif harus berformat PDF.',
+            'beritaAcaraInsentif.max' => 'File Berita Acara PKM Skema Insentif tidak boleh lebih dari 5 MB.',
         ]);
-
-        // Ambil kode_pt dari user yang sedang login
         $kodePt = Auth::user()->kode_pt;
-
-        // Set id_tipe awal
         $idSurat = 1;
-
-        // Loop untuk menyimpan file
         foreach (['beritaAcaraPendanaan', 'suratKomitmen', 'beritaAcaraInsentif'] as $fileInput) {
             if ($request->hasFile($fileInput)) {
-                // Simpan file dan ambil path
                 $filePath = $request->file($fileInput)->store('private/surat_pt');
 
-                // Simpan data ke dalam tabel SuratPt
                 SuratPt::create([
                     'kode_pt' => $kodePt,
                     'file_surat' => $filePath,
                     'id_tipe' => $idSurat,
                 ]);
-
-                // Increment id_tipe
                 $idSurat++;
             }
-        }
-
-        // Redirect kembali dengan pesan sukses
-        return back()->with('success', 'File berhasil diupload');
+        };
+        return redirect()->back()->with('success', 'File berhasil diupload!');
     }
 
     public function getDataFile()
     {
-        $kodePt = Auth::user()->kode_pt;
-
+        $Pt = $this->getPt();
+        $Pt = $Pt->kode_pt;
         $statusFiles = [
             'beritaAcaraPendanaan' => false,
             'suratKomitmen' => false,
             'beritaAcaraInsentif' => false,
         ];
-
-        $suratRecords = SuratPt::where('kode_pt', $kodePt)->get();
-
+        $suratRecords = SuratPt::where('kode_pt', $Pt)->get();
         foreach ($suratRecords as $surat) {
             switch ($surat->id_tipe) {
                 case 1:
@@ -159,8 +156,16 @@ class DashboardController extends Controller
         return $statusFiles;
     }
 
+    public function getPt()
+    {
+        $kodePt = Auth::user()->kode_pt;
+        $perguruanTinggi = PerguruanTinggi::where('kode_pt', $kodePt)->first();
+        return $perguruanTinggi;
+    }
+
     public function index()
     {
+        $perguruanTinggi = $this->getPt();
         $statusFiles = $this->getDataFile();
         $dataPkms = [
             ['judulCounts' => $this->getCountJudul()],
@@ -169,11 +174,7 @@ class DashboardController extends Controller
             ['validasiCounts' => $this->getCountValidasi()],
         ];
 
-        // dd($dataPkms); 
-        $namaSkema = SkemaPkm::pluck('nama_skema', 'id'); // ambil id_skema juga untuk mapping
-        $kode_pt = $this->getKodePtOperator();
-        $perguruanTinggi = PerguruanTinggi::where('kode_pt', $kode_pt)->first()->nama_pt;
-
+        $namaSkema = SkemaPkm::pluck('nama_skema', 'id');
         return view('operator.dashboard', compact('dataPkms', 'perguruanTinggi', 'statusFiles', 'namaSkema'));
     }
 }

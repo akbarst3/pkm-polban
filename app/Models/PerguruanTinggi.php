@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -17,6 +16,10 @@ class PerguruanTinggi extends Authenticatable
         'nama_pt',
         'username',
         'password'
+    ];
+
+    protected $casts = [
+        'kode_pt' => 'string',
     ];
 
     public function prodi(): HasMany

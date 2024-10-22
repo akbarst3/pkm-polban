@@ -10,11 +10,12 @@ class AuthController extends Controller
 {
     public function create()
     {
-        if (Auth::guard('operator')->check()) {
-            return redirect()->route('operator.dashboard');
-        }
+        // if (Auth::guard('operator')->check()) {
+        //     return redirect()->route('operator.dashboard');
+        // }
         return view('operator.login');
     }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -33,7 +34,6 @@ class AuthController extends Controller
             ])
             ->onlyInput('username');
     }
-
 
     public function logout(Request $request)
     {
