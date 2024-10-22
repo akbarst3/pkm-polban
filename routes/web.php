@@ -7,6 +7,7 @@ use App\Http\Controllers\Operator\UreviewerController;
 use App\Http\Controllers\Operator\UsulanBaruController;
 use App\Http\Controllers\Pengusul\PengusulDashboardController;
 use App\Http\Controllers\Pengusul\DashboardPengusulController;
+use App\Http\Controllers\Operator\UsulanBaruController;
 
 Route::get('/', function () {
     return view('welcome');
