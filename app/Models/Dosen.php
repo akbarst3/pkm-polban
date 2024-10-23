@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Dosen extends Model
@@ -24,5 +25,8 @@ class Dosen extends Model
     public function dospem(): HasOne
     {
         return $this->hasOne(DosenPendamping::class, 'kode_dosen', 'kode_dosen');
+    }
+    public function detailPkm() : HasMany {
+        return $this->hasMany(DetailPkm::class, 'kode_dosen', 'kode_dosen');
     }
 }
