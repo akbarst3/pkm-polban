@@ -26,24 +26,14 @@ class DashboardController extends Controller
     public function getCountJudul()
     {
         $kodePtOp = $this->getKodePtOperator();
-        $result = DetailPkm::whereIn('kode_pt', $kodePtOp)
-            ->groupBy('id_skema')
-            ->select('id_skema', DetailPkm::raw('count(judul) as total'))
-            ->orderBy('id_skema', 'asc')
-            ->get()
-            ->pluck('total', 'id_skema');
+        $result = DetailPkm::whereIn('kode_pt', $kodePtOp)->groupBy('id_skema')->select('id_skema', DetailPkm::raw('count(judul) as total'))->orderBy('id_skema', 'asc')->get()->pluck('total', 'id_skema');
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'total' => 0]]);
     }
     
     public function getCountIdentitas()
     {
         $kodePtOp = $this->getKodePtOperator();
-        $result = DetailPkm::with('mahasiswas.pengusul')
-            ->whereIn('kode_pt', $kodePtOp)
-            ->orderBy('id_skema', 'asc')
-            ->get()
-            ->groupBy('id_skema')
-            ->map(function ($group) {
+        $result = DetailPkm::with('mahasiswas.pengusul')->whereIn('kode_pt', $kodePtOp)->orderBy('id_skema', 'asc')->get()->groupBy('id_skema')->map(function ($group) {
                 $count = $group->sum(function ($detail) {
                     return $detail->mahasiswas ? ($detail->mahasiswas->pengusul ? 1 : 0) : 0;
                 });
@@ -54,7 +44,10 @@ class DashboardController extends Controller
             });
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> c41f2b5 (refactor: refactoring method geCountValidasi at DashboardController)
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'count' => 0]]);
 =======
 >>>>>>> e07f314 (add: file DashboardController.php)
@@ -67,6 +60,7 @@ class DashboardController extends Controller
     public function getCountProposal()
     {
         $kodePtOp = $this->getKodePtOperator();
+<<<<<<< HEAD
         $result = DetailPkm::whereIn('kode_pt', $kodePtOp)
             ->groupBy('id_skema')
             ->select('id_skema', DetailPkm::raw('count(proposal) as total'))
@@ -75,6 +69,9 @@ class DashboardController extends Controller
             ->pluck('total', 'id_skema');
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+        $result = DetailPkm::whereIn('kode_pt', $kodePtOp)->groupBy('id_skema')->select('id_skema', DetailPkm::raw('count(proposal) as total'))->orderBy('id_skema', 'asc')->get()->pluck('total', 'id_skema');
+>>>>>>> c41f2b5 (refactor: refactoring method geCountValidasi at DashboardController)
 
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'total' => 0]]);
 =======
@@ -88,6 +85,7 @@ class DashboardController extends Controller
     public function getCountValidasi()
     {
         $kodePtOp = $this->getKodePtOperator();
+<<<<<<< HEAD
         $val_dospem = DetailPkm::whereIn('kode_pt', $kodePtOp)
             ->select('id_skema', DetailPkm::raw('SUM(CASE WHEN val_dospem = TRUE THEN 1 ELSE 0 END) as total'))
             ->groupBy('id_skema')
@@ -112,6 +110,12 @@ class DashboardController extends Controller
             ->get()
             ->pluck('total', 'id_skema');
     
+=======
+        $val_dospem = DetailPkm::whereIn('kode_pt', $kodePtOp)->select('id_skema', DetailPkm::raw('SUM(CASE WHEN val_dospem = TRUE THEN 1 ELSE 0 END) as total'))->groupBy('id_skema')->orderBy('id_skema', 'asc')->get()->pluck('total', 'id_skema');
+
+        $val_pt = DetailPkm::whereIn('kode_pt', $kodePtOp)->select('id_skema', DetailPkm::raw('SUM(CASE WHEN val_pt = TRUE THEN 1 ELSE 0 END) as total'))->groupBy('id_skema')->orderBy('id_skema', 'asc')->get()->pluck('total', 'id_skema');
+
+>>>>>>> c41f2b5 (refactor: refactoring method geCountValidasi at DashboardController)
         return [
             'val_dospem' => $val_dospem->count() ? $val_dospem : collect([0 => ['id_skema' => 0, 'total' => 0]]),
             'val_pt' => $val_pt->count() ? $val_pt : collect([0 => ['id_skema' => 0, 'total' => 0]]),
