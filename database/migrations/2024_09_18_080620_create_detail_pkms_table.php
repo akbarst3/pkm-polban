@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('id_skema');
             $table->string('kode_pt');
+            $table->string('kode_dosen');
             // $table->string('nim', 20);
             $table->string('judul');
             $table->bigInteger('dana_kemdikbud')->nullable();
@@ -29,6 +30,7 @@ return new class extends Migration
 
             $table->foreign('id_skema')->references('id')->on('skema_pkms');
             $table->foreign('kode_pt')->references('kode_pt')->on('perguruan_tinggis');
+            $table->foreign('kode_dosen')->references('kode_dosen')->on('dosens');
             // $table->foreign('nim')->references('nim')->on('mahasiswas');
             $table->timestamps();
         });
