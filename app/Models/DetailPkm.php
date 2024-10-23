@@ -25,6 +25,7 @@ class DetailPkm extends Model
         'lapkem',
         'lapkhir',
         'id_skema',
+        'kode_dosen',
     ];
 
     public function mahasiswas(): HasOne
@@ -61,8 +62,13 @@ class DetailPkm extends Model
     {
         return $this->belongsTo(SkemaPkm::class, 'id_skema', 'id_skema');
     }
+
     public function perguruanTinggi(): BelongsTo
     {
         return $this->BelongsTo(SkemaPkm::class, 'kode_pt', 'kode_pt');
+    }
+
+    public function dosen() : BelongsTo {
+        return $this->belongsTo(Dosen::class, 'kode_dosen', 'kode_dosen');
     }
 }
