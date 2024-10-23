@@ -70,10 +70,16 @@ class UsulanBaruController extends Controller
             'judulProposal.required' => 'Judul proposal wajib diisi',
         ]);
 
+        $existingMahasiswa = Mahasiswa::where('nim', $request->input('nim'))->first();
+        if ($existingMahasiswa) {
+            return back()->with('error', 'NIM sudah terdaftar dalam database');
+        }
+
         $detailPkm = DetailPkm::create([
             'judul' => $request->input('judulProposal'),
             'id_skema' => $request->input('skemaPKM'),
             'kode_pt' => $kodePtOp,
+            'kode_dosen' => $request->input('nidn'),
         ]);
 
         $mahasiswa = Mahasiswa::create([
@@ -87,33 +93,21 @@ class UsulanBaruController extends Controller
         $username_mahasiswa = $detailPkm->kode_pt . '-' . $mahasiswa->nim;
         $password_mahasiswa = encrypt(mt_rand(1000000, 9999999));
 
-        // $password_mahasiswa1 = decrypt($password_mahasiswa);
-        // $uspas_mahasiswa = [$username_mahasiswa, $password_mahasiswa, $password_mahasiswa1];
-
         Pengusul::create([
             'nim' => $request->input('nim'),
             'username' => $username_mahasiswa,
             'password' => $password_mahasiswa
         ]);
 
-        $response = $this->findDosen($request);
-        $dosen_data = json_decode($response->getContent(), true);
-
-        $username_dosen = $detailPkm->kode_pt . '-' . $dosen_data['nama'];
+        $username_dosen = $detailPkm->kode_pt . '-' . $request->input('nidn');
         $password_dosen = encrypt(mt_rand(1000000, 9999999));
-        // $password_dosen1 = decrypt($password_dosen);
-        // $uspas_dosen = [$username_dosen, $password_dosen, $password_dosen1];
 
         DosenPendamping::create([
             'kode_dosen' => $request->input('nidn'),
             'username' => $username_dosen,
             'password' => $password_dosen
         ]);
-
-        // $nim = '3143524';
-        // $mahasiswa = Mahasiswa::where('nim', $nim)->first();
-
-        // dd($uspas_dosen);
+        
         session()->flash('success', 'Data berhasil disimpan');
         return redirect()->intended(route('operator.usulan.baru'));
     }

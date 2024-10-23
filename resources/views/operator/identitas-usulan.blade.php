@@ -312,6 +312,14 @@
                     this.value = this.value.replace(/[^0-9]/g, '');
                 });
             });
+            @if (session('error'))
+                Swal.fire({
+                    title: 'Error!',
+                    text: "{{ session('error') }}",
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            @endif
         });
     </script>
 @endsection

@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers\Operator;
 
+use App\Models\Dosen;
+use App\Models\Pengusul;
+use App\Models\SkemaPkm;
+use App\Models\DetailPkm;
+use App\Models\Mahasiswa;
+use App\Models\ProgramStudi;
+use App\Models\DosenPendamping;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Operator\DashboardController;
-use Illuminate\Http\Request;
 
 class UsulanController extends Controller
 {
@@ -18,11 +25,15 @@ class UsulanController extends Controller
     {
         $perguruanTinggi = $this->dashboard->getPt();
         $statusFiles = $this->dashboard->getDataFile();
-        return view('operator.usulan-baru', compact('perguruanTinggi', 'statusFiles'));
+        $pengusuls = $this->showPengusul();
+        // dd($pengusuls);
+        return view('operator.usulan-baru', compact('perguruanTinggi', 'statusFiles', 'pengusuls'));
     }
 
     public function viewData($nim)
     {
+        $perguruanTinggi = $this->dashboard->getPt();
+        $statusFiles = $this->dashboard->getDataFile();
         $mahasiswa = Mahasiswa::find($nim);
         $pengusul = Pengusul::where('nim', $nim)->first();
         $pengusul->password = decrypt($pengusul->password);
@@ -44,13 +55,16 @@ class UsulanController extends Controller
             'dosen' => $dosen,
             'namaProdiDosen' => ProgramStudi::where('kode_prodi', $dosen->kode_prodi)->first()->nama_prodi,
         ];
+        // dd($data);
     
-        return view('operator.show-data-pengusul', $data);
+        return view('operator.show-data-pengusul', compact('data', 'perguruanTinggi', 'statusFiles'));
     }
 
     public function showPengusul()
     {
-        $kodePt = Auth::user()->kode_pt;
+        $kodePt = $this->dashboard->getPt();
+        $kodePt = $kodePt->kode_pt;
+        // dd($kodePt);
         $detailPkms = DetailPkm::where('kode_pt', $kodePt)->get(); 
         $pengusuls = Pengusul::whereIn('nim', function($query) use ($detailPkms) {$query->select('nim')->from('mahasiswas')->whereIn('id_pkm', $detailPkms->pluck('id'));})->get();
         foreach ($pengusuls as $pengusul) {
@@ -65,7 +79,8 @@ class UsulanController extends Controller
             $pengusul->nama_skema = $skema->nama_skema;
             $pengusul->jumlah_mahasiswa = Mahasiswa::where('id_pkm', $pengusul->mahasiswa->id_pkm)->count();
         }
-        return view('operator.usulanBaru', compact('pengusuls'));
+        // dd($pengusuls);
+        return $pengusuls;
     }
 
     public function deleteData($nim)
