@@ -7,6 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="public/css/style.css"> <!-- Pastikan jalur benar -->
@@ -97,39 +98,58 @@
                                 <th scope="col">Isian Kosong</th>
                                 <th scope="col">Val. Dosen</th>
                                 <th scope="col">Val. Pimpinan</th>
+                                <th scope="col">Aksi</th>
                             </tr>
                         </thead>
-            
-                        {{-- <tbody>
-                            <tr scope= "row"> </tr>
+                        <tbody>
+                            @foreach ($pengusuls as $index => $pengusul)
                             <tr>
-                                <td scope= "row">1</td>
-                                <td>Restu Akbar <br>231511088 <br> D3 Teknik Informatika</td>
-                                <td>Percobaan oleh admin <br> Pendamping: Bambang - <br>0010117409</td>
-                                <td>PKM-K</td>
-                                <td>Alamat, Email, Anggota masih <br> kurang, Luaran, Dana usulan</td>
-                                <td>-</td>
-                                <td>-</td>
+                                <td>{{ $index + 1 }}</td>
+                                <td>
+                                    {{ $pengusul->nama_mahasiswa }}<br>
+                                    {{ $pengusul->nim }}<br>
+                                    {{ $pengusul->nama_prodi }}
+                                </td>
+                                <td>{{ $pengusul->judul_pkm }}</td>
+                                <td>{{ $pengusul->nama_skema }}</td>
+                                <td>
+                                    @if($pengusul->jumlah_mahasiswa < 3)
+                                        Anggota Kurang <br>
+                                    @endif 
+                                    @if($pengusul->alamat == null)
+                                        Alamat <br>
+                                        Email <br>
+                                        Luaran <br>
+                                        Dana Usulan <br>
+                                    @endif 
+                                </td>
+                                <td>
+                                    @if ($pengusul->mahasiswa->detailPkm->val_dospem == false)
+                                        <i class="bi bi-x-circle-fill text-danger"></i> 
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($pengusul->mahasiswa->detailPkm->val_pt == false)
+                                        <i class="bi bi-x-circle-fill text-danger"></i> 
+                                    @endif
+                                </td>                  
+                                <td>
+                                    <button class="btn btn-primary" onclick="viewData('{{ $pengusul->nim }}')">
+                                        <i class="bi bi-person"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <form action="{{ route('delete.pengusul', $pengusul->nim) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
-                            <tr>
-                                <td scope= "row">2</td>
-                                <td>Akbar Restu<br>2315110001<br>D3 Teknik Informatika</td>
-                                <td>Percobaan oleh admin lagi<br>Pendamping: Bambang - 0010117409</td>
-                                <td>PKM-P</td>
-                                <td>Alamat, Email, Anggota masih kurang, Luaran, Dana usulan</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td scope= "row">3</td>
-                                <td>Melly<br>2315110002<br>D3 Teknik Informatika</td>
-                                <td>Percobaan oleh admin 3<br>Pendamping: Bambang - 0010117409</td>
-                                <td>PKM-T</td>
-                                <td>Alamat, Email, Anggota masih kurang, Luaran, Dana usulan</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                        </tbody> --}}
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>    
             </div>
@@ -140,5 +160,10 @@
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         </body>
+        <script>
+            function viewData(nim) {
+                window.location.href = '/operator/usulanBaru/' + nim;
+            }
+        </script>
     @endsection
 </html>
