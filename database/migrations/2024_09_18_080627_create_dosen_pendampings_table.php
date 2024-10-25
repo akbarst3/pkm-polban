@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dosen_pendampings', function (Blueprint $table) {
-            $table->string('kode_dosen');
-            $table->string('username')->nullable();
-            $table->string('password')->nullable();
+            $table->string('kode_dosen')->unique();
+            $table->string('username');
+            $table->string('password');
             $table->foreign('kode_dosen')->references('kode_dosen')->on('dosens');
             $table->timestamps();
         });

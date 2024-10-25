@@ -86,11 +86,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c39b98f (fix: fixing bug and handling error final)
         document.addEventListener('DOMContentLoaded', function() {
             (function() {
                 'use strict';
@@ -99,7 +94,6 @@
                     .forEach(function(form) {
                         form.addEventListener('submit', function(event) {
                             if (!form.checkValidity()) {
-<<<<<<< HEAD
                                 event.preventDefault();
                                 event.stopPropagation();
                             } else {
@@ -145,95 +139,5 @@
         })
     </script>
 </body>
-=======
-=======
-        (function() {
-            'use strict';
-            var forms = document.querySelectorAll('.needs-validation');
-            Array.prototype.slice.call(forms)
-                .forEach(function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        } else {
-                            const answer = parseInt(document.getElementById('math-answer').value, 10);
-                            if (answer !== correctAnswer) {
-=======
->>>>>>> c39b98f (fix: fixing bug and handling error final)
-                                event.preventDefault();
-                                event.stopPropagation();
-                            } else {
-                                const answer = parseInt(document.getElementById('math-answer')
-                                    .value, 10);
-                                if (answer !== correctAnswer) {
-                                    event.preventDefault();
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Jawaban salah!',
-                                        text: 'Silakan masukkan hasil penjumlahan yang benar.',
-                                        confirmButtonColor: '#003c72',
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        showClass: {
-                                            popup: 'animate__animated animate__fadeInDown'
-                                        },
-                                        hideClass: {
-                                            popup: 'animate__animated animate__fadeOutUp'
-                                        }
-                                    });
-                                }
-                            }
 
-                            form.classList.add('was-validated');
-                        }, false);
-                    });
-            })();
-
-<<<<<<< HEAD
-        document.getElementById('math-answer').addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^0-9]/g, ''); // Hanya izinkan angka
-        });
->>>>>>> c7e1417 (feat: error and session handling)
-        let correctAnswer;
-=======
-            document.getElementById('math-answer').addEventListener('input', function(e) {
-                this.value = this.value.replace(/[^0-9]/g, '');
-            });
-            let correctAnswer;
->>>>>>> c39b98f (fix: fixing bug and handling error final)
-
-            function generateMathQuestion() {
-                const num1 = Math.floor(Math.random() * 10) + 1;
-                const num2 = Math.floor(Math.random() * 10) + 1;
-                document.getElementById('math-question').innerText = `${num1} + ${num2} = `;
-                correctAnswer = num1 + num2;
-            }
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-        document.getElementById('login-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const answer = parseInt(document.getElementById('math-answer').value, 10);
-            if (answer === correctAnswer) {
-                alert("Login berhasil!");
-                event.target.submit();
-            } else {
-                alert("Jawaban penjumlahan salah!");
-            }
-        });
-
-=======
->>>>>>> c7e1417 (feat: error and session handling)
-        generateMathQuestion();
-    </script>
-</body>
-
->>>>>>> 73a62b1 (add: login operator)
-=======
-            generateMathQuestion();
-        })
-    </script>
-</body>
->>>>>>> c39b98f (fix: fixing bug and handling error final)
 </html>

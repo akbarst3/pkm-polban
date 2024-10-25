@@ -28,14 +28,6 @@ Route::middleware(['auth:operator', 'session.timeout'])->group(function () {
     });
 });
 
-<<<<<<< HEAD
-
 Route::get('/pengusul/dashboard', [DashboardPengusulController::class, 'index'])->name('pengusul.dashboard');
 
-<<<<<<< HEAD
-=======
 require __DIR__ . '/auth.php';
->>>>>>> c39b98f (fix: fixing bug and handling error final)
-=======
-require __DIR__ . '/auth.php';
->>>>>>> 9c3741f (refactor: mengubah struktur kode Usulan Baru dan Identitas Usulan)

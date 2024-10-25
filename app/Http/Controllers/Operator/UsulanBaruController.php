@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Operator;
 
-use App\Models\ProgramStudi;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\DetailPkm;
+use Throwable;
 use App\Models\Dosen;
-use App\Models\DosenPendamping;
-use App\Models\Mahasiswa;
 use App\Models\Pengusul;
 use App\Models\SkemaPkm;
+use App\Models\DetailPkm;
+use App\Models\Mahasiswa;
+use App\Models\ProgramStudi;
+use Illuminate\Http\Request;
+use App\Models\DosenPendamping;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
+use App\Http\Controllers\Operator\DashboardController;
 
 class UsulanBaruController extends Controller
 {
@@ -48,7 +52,6 @@ class UsulanBaruController extends Controller
 
     public function storeData(Request $request)
     {
-        $kodePtOp = Auth::user()->kode_pt;
         $request->validate([
             'programStudi' => ['required', 'not_in:0'],
             'nim' => ['required', 'min:9', 'max:13'],
@@ -59,6 +62,7 @@ class UsulanBaruController extends Controller
                     $fail('Judul proposal tidak boleh lebih dari 20 kata.');
                 }
             }],
+            'nidn' => ['required'],
         ], [
             'programStudi.required' => 'Pilih Program Studi',
             'programStudi.not_in' => 'Pilih salah satu Program Studi',
@@ -68,47 +72,69 @@ class UsulanBaruController extends Controller
             'namaMahasiswa.required' => 'Nama mahasiswa wajib diisi',
             'tahunMasuk.required' => 'Tahun masuk wajib diisi',
             'judulProposal.required' => 'Judul proposal wajib diisi',
+            'nidn.required' => 'NIDN',
         ]);
 
-        $existingMahasiswa = Mahasiswa::where('nim', $request->input('nim'))->first();
-        if ($existingMahasiswa) {
-            return back()->with('error', 'NIM sudah terdaftar dalam database');
+        $kodePtOp = Auth::user()->kode_pt;
+
+        try {
+            DB::beginTransaction();
+
+            if (Mahasiswa::where('nim', $request->input('nim'))->exists()) {
+                throw new \Exception('Pengusul dengan NIM tersebut sudah terdaftar');
+            }
+            
+            if (DetailPkm::where('kode_dosen', $request->input('nidn'))->count() == 10) {
+                throw new \Exception('Dosen sudah mendampingi 10 judul PKM');
+            }
+
+            $detailPkm = DetailPkm::create([
+                'judul' => $request->input('judulProposal'),
+                'id_skema' => $request->input('skemaPKM'),
+                'kode_pt' => $kodePtOp,
+                'kode_dosen' => $request->input('nidn'),
+            ]);
+
+            $mahasiswa = Mahasiswa::create([
+                'nim' => $request->input('nim'),
+                'nama' => $request->input('namaMahasiswa'),
+                'angkatan' => $request->input('tahunMasuk'),
+                'kode_prodi' => $request->input('programStudi'),
+                'id_pkm' => $detailPkm->id
+            ]);
+
+            $username_mahasiswa = $kodePtOp . '-' . $mahasiswa->nim;
+            $password_mahasiswa = encrypt(mt_rand(1000000, 9999999));
+
+            Pengusul::create([
+                'nim' => $request->input('nim'),
+                'username' => $username_mahasiswa,
+                'password' => $password_mahasiswa
+            ]);
+
+            $username_dosen = $kodePtOp . '-' . $request->input('nidn');
+            $password_dosen = encrypt(mt_rand(1000000, 9999999));
+
+            $dosenExists = DosenPendamping::where('kode_dosen', $request->input('nidn'))->exists();
+
+            if (!$dosenExists) {
+                DosenPendamping::create([
+                    'kode_dosen' => $request->input('nidn'),
+                    'username' => $username_dosen,
+                    'password' => $password_dosen
+                ]);
+            }
+
+            DB::commit();
+            session()->flash('success', 'Data berhasil disimpan');
+            return redirect()->intended(route('operator.usulan.baru'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            session()->flash('error', $e->getMessage());
+            return redirect()->back()->withInput();
+        } catch (\Throwable) {
+            session()->flash('error', 'Something went wrong');
+            return redirect()->back()->withInput();
         }
-
-        $detailPkm = DetailPkm::create([
-            'judul' => $request->input('judulProposal'),
-            'id_skema' => $request->input('skemaPKM'),
-            'kode_pt' => $kodePtOp,
-            'kode_dosen' => $request->input('nidn'),
-        ]);
-
-        $mahasiswa = Mahasiswa::create([
-            'nim' => $request->input('nim'),
-            'nama' => $request->input('namaMahasiswa'),
-            'angkatan' => $request->input('tahunMasuk'),
-            'kode_prodi' => $request->input('programStudi'),
-            'id_pkm' => $detailPkm->id
-        ]);
-
-        $username_mahasiswa = $detailPkm->kode_pt . '-' . $mahasiswa->nim;
-        $password_mahasiswa = encrypt(mt_rand(1000000, 9999999));
-
-        Pengusul::create([
-            'nim' => $request->input('nim'),
-            'username' => $username_mahasiswa,
-            'password' => $password_mahasiswa
-        ]);
-
-        $username_dosen = $detailPkm->kode_pt . '-' . $request->input('nidn');
-        $password_dosen = encrypt(mt_rand(1000000, 9999999));
-
-        DosenPendamping::create([
-            'kode_dosen' => $request->input('nidn'),
-            'username' => $username_dosen,
-            'password' => $password_dosen
-        ]);
-        
-        session()->flash('success', 'Data berhasil disimpan');
-        return redirect()->intended(route('operator.usulan.baru'));
     }
 }
