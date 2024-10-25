@@ -7,14 +7,11 @@ use App\Models\LuaranPkm;
 use App\Models\User;
 use App\Models\OperatorPt;
 use App\Models\PerguruanTinggi;
-<<<<<<< HEAD
 use App\Models\ProgramStudi;
 use App\Models\SkemaLuaran;
 use App\Models\SkemaPkm;
 use App\Models\TipeSosmed;
 use App\Models\TipeSurat;
-=======
->>>>>>> 73a62b1 (add: login operator)
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -44,7 +41,6 @@ class DatabaseSeeder extends Seeder
             'username' => 'op1',
             'password' => Hash::make('1234'),
             'kode_pt' => '005004',
-<<<<<<< HEAD
         ]);
 
         SkemaPkm::create([
@@ -277,8 +273,6 @@ class DatabaseSeeder extends Seeder
         ]);
         TipeSosmed::create([
             'nama_sosmed' => 'Facebook',
-=======
->>>>>>> 73a62b1 (add: login operator)
         ]);
     }
 }

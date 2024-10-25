@@ -14,6 +14,11 @@
     <link rel="stylesheet" href="public/css/style.css"> <!-- Pastikan jalur benar -->
     <title>Usulan Baru</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .custom-icon {
+            font-size: 1.5rem;
+        }
+    </style>
 </head>
 
 @extends('operator/master')
@@ -25,7 +30,7 @@
             <div class="breadcrumb-container col-12 ml-auto mr-2 p-3">
             </div>
             <div class="table-header col-11  ml-auto mr-5 text-left bg-primary mb-0 ">
-                <p class=" m-0 p-1 text-white">DAFTAR USULAN {{ $perguruanTinggi->nama_pt }}</p>
+                <p class=" m-0 p-1 text-white">DAFTAR USULAN {{ strtoupper($perguruanTinggi->nama_pt) }}</p>
             </div>
 
             @if (session('success'))
@@ -43,75 +48,36 @@
             <div class="container-md col-11 ml-auto mr-5 bg-white pt-2 pb-3 mt-0 ">
                 <!-- Filter Dropdowns -->
                 <div class="table-container">
-                    <div class="row">
-                        <div class="form-group col-md-2">
-                            <label for="tahun">Tahun:</label>
-                            <select class="form-control" id="tahun">
-                                <option value="" disabled selected>Pilih Tahun</option>
-                                <option>2021</option>
-                                <option>2022</option>
-                                <option>2023</option>
-                                <option>2024</option>
+                    <div class="row align-items-end mb-3">
+                        <div class="col-md-4">
+                            <label for="skema-filter">Filter Skema:</label>
+                            <select class="form-control" id="skema-filter" required>
+                                <option value="" selected>--Semua Skema--</option>
+                                @foreach ($skema as $item)
+                                    <option value="{{ $item->nama_skema }}"> {{ $item->nama_skema }}</option>
+                                @endforeach
                             </select>
                         </div>
-                        <div class=" form-group col-md-3">
-                            <label for="skema">Skema:</label>
-                            <select class="form-control" id="skema">
-                                <option value="" disabled selected>--Pilih Skema--</option>
-                                <option>PKM-K</option>
-                                <option>PKM-P</option>
-                                <option>PKM-T</option>
-                                <option>PKM-M</option>
-                            </select>
-                        </div>
-                        <div class=" form group col-md-2">
-                            <label for="angkatan">Tahun Angkatan:</label>
-                            <select class="form-control" id="angkatan">
-                                <option value="" disabled selected>Pilih Angkatan</option>
-                                <option>2020</option>
-                                <option>2021</option>
-                                <option>2022</option>
-                                <option>2023</option>
-                            </select>
-                        </div>
-                        <div class=" form-group col-md-2">
-                            {{-- <label for="jumlahBaris">Jumlah Baris:</label>
-                                <select class="form-control" id="jumlahBaris">
-                                  <option>10</option>
-                                  <option>20</option>
-                                  <option>50</option>
-                                </select> --}}
-                        </div>
-                        <div class=" form-group row col-md-4 ml-1">
-                            <div class="input-group ">
-                                <input type="text" id="search" class="form-control" placeholder="Pencarian...">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" id="search-button">Cari</button>
-                                </div>
-                                <div class="col-md-2">
-                                    <a href="{{ route('operator.identitas.usulan') }}"><button class="btn btn-primary"
-                                            id="add-new">+
-                                            Data Baru</button></a>
-                                </div>
-                            </div>
+
+                        <div class="col-md-8">
+                            <a href="{{ route('operator.identitas.usulan') }}" class="btn btn-primary w-20">+ Data
+                                Baru</a>
                         </div>
                     </div>
 
-
-                    <table class="table table-striped table-bordered table-hover">
+                    <table class="table table-striped table-bordered table-hover" id="data-table">
                         <thead>
                             <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Pengusul</th>
-                                <th scope="col">Judul</th>
-                                <th scope="col">Skema</th>
-                                <th scope="col">Isian Kosong</th>
-                                <th scope="col">Val. Dosen</th>
-                                <th scope="col">Val. Pimpinan</th>
-                                <th scope="col">Aksi</th>
+                                <th class="text-center align-middle" scope="col">No</th>
+                                <th class="text-center align-middle" scope="col">Pengusul</th>
+                                <th class="text-center align-middle" scope="col">Judul</th>
+                                <th class="text-center align-middle w-1" scope="col">Skema</th>
+                                <th class="text-center align-middle" scope="col">Isian Kosong</th>
+                                <th class="text-center align-middle" scope="col">Val. Dosen</th>
+                                <th class="text-center align-middle" scope="col">Val. Pimpinan</th>
+                                <th class="text-center align-middle" scope="col">Aksi</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach ($pengusuls as $index => $pengusul)
                                 <tr>
@@ -125,35 +91,38 @@
                                     <td>{{ $pengusul->nama_skema }}</td>
                                     <td>
                                         @if ($pengusul->jumlah_mahasiswa < 3)
-                                            Anggota Kurang <br>
+                                            Anggota Kurang, <br>
                                         @endif
                                         @if ($pengusul->alamat == null)
-                                            Alamat <br>
-                                            Email <br>
-                                            Luaran <br>
+                                            Alamat, <br>
+                                            Email, <br>
+                                            Luaran, <br>
                                             Dana Usulan <br>
                                         @endif
                                     </td>
                                     <td>
                                         @if ($pengusul->mahasiswa->detailPkm->val_dospem == false)
-                                            <i class="bi bi-x-circle-fill text-danger"></i>
+                                            <i class="d-flex justify-content-center bi bi-x-circle-fill text-danger custom-icon"></i>
+                                        @else
+                                            <i class="d-flex justify-content-center bi bi-check-circle-fill text-success custom-icon"></i>
                                         @endif
                                     </td>
                                     <td>
                                         @if ($pengusul->mahasiswa->detailPkm->val_pt == false)
-                                            <i class="bi bi-x-circle-fill text-danger"></i>
+                                            <i class="d-flex justify-content-center bi bi-x-circle-fill text-danger custom-icon"></i>
+                                        @else
+                                            <i class="d-flex justify-content-center bi bi-check-circle-fill text-success custom-icon"></i>
                                         @endif
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary" onclick="viewData('{{ $pengusul->nim }}')">
+                                        <button class="btn btn-primary mb-2" onclick="viewData('{{ $pengusul->nim }}')">
                                             <i class="bi bi-person"></i>
-                                        </button>
+                                        </button> <br>
                                         <form action="{{ route('delete.pengusul', $pengusul->nim) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                            <button type="button" class="btn btn-danger">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
@@ -161,15 +130,16 @@
                                 </tr>
                             @endforeach
                         </tbody>
-
                     </table>
+
                 </div>
             </div>
 
             <!-- Optional JavaScript -->
             <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-                integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+            <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
             </script>
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
                 integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
@@ -178,10 +148,49 @@
                 integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
             </script>
             <script>
-                function viewData(nim) {
-                    window.location.href = '/operator/usulan-baru/' + nim;
+                function confirmDeletion(event) {
+                    event.preventDefault();
+                    const form = event.target.closest('form');
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#003c72',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
                 }
-            </script>    
+
+                const deleteButtons = document.querySelectorAll('.btn-danger');
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', confirmDeletion);
+                });
+
+                function viewData(nim) {
+                    window.location.href = '/operator/usulan-baru/' + nim
+                }
+
+                $(document).ready(function() {
+                    var table = $('#data-table').DataTable({
+                        language: {
+                            url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json'
+                        }
+                    });
+
+                    $('#skema-filter').on('change', function() {
+                        var selectedSkema = $(this).val();
+                        table.column(3)
+                            .search(selectedSkema)
+                            .draw();
+                    });
+                });
+            </script>
     </body>
 @endsection
 

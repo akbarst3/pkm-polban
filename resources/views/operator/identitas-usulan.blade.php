@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-@extends('operator/master')
+@extends('operator.master')
 
 @section('konten')
     <div class="app-content-header">
@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <div class="container my-4">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="p-4 bg-white rounded shadow-sm">
@@ -44,9 +44,9 @@
                                                 {{ $item->nama_prodi }}</option>
                                         @endforeach
                                     </select>
-                                    <div class="invalid-feedback">
+                                    <small class="invalid-feedback">
                                         Program studi wajib dipilih.
-                                    </div>
+                                    </small>
                                 </div>
                             </div>
 
@@ -58,12 +58,12 @@
                                     <div class="input-group">
                                         <input type="text" class="form-control no-char" id="nim" name="nim"
                                             placeholder="Masukkan NIM" value="{{ old('nim') }}" required>
-                                        <div class="invalid-feedback">
+                                        <small class="invalid-feedback">
                                             NIM wajib diisi.
-                                        </div>
+                                        </small>
                                     </div>
                                     @error('nim')
-                                        <div class="error" style="color: red;">{{ $message }}</div>
+                                        <small class="error text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
                                         </div>
                                     </div>
                                     @error('namaMahasiswa')
-                                        <div style="color: red;">{{ $message }}</div>
+                                        <small class="error text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
@@ -99,9 +99,9 @@
                                             </option>
                                         @endfor
                                     </select>
-                                    <div class="invalid-feedback">
+                                    <small class="invalid-feedback">
                                         Program studi wajib dipilih.
-                                    </div>
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                                         </div>
                                     </div>
                                     @error('judulProposal')
-                                        <div style="color: red;">{{ $message }}</div>
+                                        <small class="error text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
@@ -138,10 +138,9 @@
                                                 {{ $item->nama_skema }}</option>
                                         @endforeach
                                     </select>
-                                    <div class="invalid-feedback">
+                                    <small class="invalid-feedback">
                                         Skema wajib dipilih.
-                                    </div>
-
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -156,11 +155,15 @@
                                     <div class="input-group">
                                         <input type="text" class="form-control no-char" id="nidn" name="nidn"
                                             value="{{ old('nidn') }}" required>
-                                        <div class="invalid-feedback">
+                                        <button type="button" class="btn btn-primary cari"
+                                            style="border-radius: 5px;">Cari</button>
+                                        <small class="invalid-feedback">
                                             NIDN dospem wajib diisi.
-                                        </div>
-                                        <button class="btn btn-primary cari">Cari</button>
+                                        </small>
                                     </div>
+                                    @error('nidn')
+                                        <small class="error text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -170,8 +173,8 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="namaDosen" name="namaDosen"
-                                            disabled required>
+                                        <input type="text" class="form-control" name="namaDosen" id="namaDosen"
+                                            value="{{ old('namaDosen') }}" disabled required>
                                     </div>
                                 </div>
                             </div>
@@ -214,18 +217,24 @@
                         </div>
 
                         <div class="d-flex justify-content-end mt-3">
-                            <a class="btn" href="{{ route('operator.usulan.baru') }}"
-                                style="background-color: #C4C4C4; color: white; width: auto;">
-                                Batal
+                            <a class="btn bg-secondary text-white" href="{{ route('operator.usulan.baru') }}"> Kembali
                             </a>
-                            <button class="btn" type="submit"
-                                style="background-color: #33B864; color: white; width: auto; margin-left: 10px;">
+                            <button class="btn bg-success text-white" type="submit" style="margin-left: 10px;">
                                 Simpan
                             </button>
                         </div>
                     </form>
-
-
+                    @if (session()->has('error'))
+                        <script>
+                            Swal.fire({
+                                title: 'Perhatian!',
+                                text: "{{ session('error') }}",
+                                icon: 'warning',
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#003c72',
+                            });
+                        </script>
+                    @endif
                 </div> <!-- End of container -->
             </div>
         </div>
@@ -242,6 +251,8 @@
             const programStudiDosenInput = document.getElementById('programStudiDosen');
             const noHpDosenInput = document.getElementById('noHpDosen');
             const emailDosenInput = document.getElementById('emailDosen');
+            let isCari = false
+            const form = document.querySelector('.needs-validation')
 
             nidnInput.addEventListener('input', function() {
                 namaDosenInput.value = '';
@@ -289,8 +300,21 @@
                     }
                 };
 
+                isCari = true;
                 xhr.send('nidn=' + nidn + '&_token={{ csrf_token() }}');
             });
+
+            form.addEventListener('submit', function(event) {
+                if (!isCari) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: 'Perhatian!',
+                        text: "Lakukan pencarian dosen terlebih dahulu!",
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
 
             (function() {
                 'use strict'
@@ -312,14 +336,6 @@
                     this.value = this.value.replace(/[^0-9]/g, '');
                 });
             });
-            @if (session('error'))
-                Swal.fire({
-                    title: 'Error!',
-                    text: "{{ session('error') }}",
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            @endif
         });
     </script>
 @endsection
