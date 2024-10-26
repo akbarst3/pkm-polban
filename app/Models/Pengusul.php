@@ -2,22 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class Pengusul extends Authenticatable
 {
-    use HasFactory;
-    // In the DetailPkm model
-    protected $primaryKey = null;
-    // In the DetailPkm model
-    public $incrementing = false;
+    use HasFactory, Notifiable;
+
+    protected $table = 'pengusuls';
+    protected $guard = 'pengusul';
+    
+    protected $primaryKey = 'username';
+    public $incrementing = false; // Karena bukan auto-increment
+    protected $keyType = 'string'; // Karena username bertipe string
+
     protected $fillable = [
         'nim',
         'username',
         'password',
+        'password_plain',
         'alamat',
         'kode_pos',
         'no_hp',
@@ -27,9 +31,29 @@ class Pengusul extends Authenticatable
         'jenis_kelamin',
         'tanggal_lahir',
         'tempat_lahir',
+        // kolom lainnya
     ];
-    public function mahasiswa(): BelongsTo
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    // Override method getAuthIdentifierName jika perlu
+    public function getAuthIdentifierName()
     {
-        return $this->belongsTo(Mahasiswa::class, 'nim', 'nim');
+        return 'username';
+    }
+
+    // Override method getAuthIdentifier jika perlu
+    public function getAuthIdentifier()
+    {
+        return $this->username;
+    }
+
+    // Override method getAuthPassword untuk menyesuaikan nama kolom password
+    public function getAuthPassword()
+    {
+        return $this->password_hashed;
     }
 }

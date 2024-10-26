@@ -35,13 +35,13 @@ class UsulanController extends Controller
         $statusFiles = $this->dashboard->getDataFile();
         $mahasiswa = Mahasiswa::find($nim);
         $pengusul = Pengusul::where('nim', $nim)->first();
-        $pengusul->password = decrypt($pengusul->password);
+        $pengusul->password_plain = decrypt($pengusul->password_plain);
         $prodi = ProgramStudi::where('kode_prodi', $mahasiswa->kode_prodi)->first();
         $pkm = DetailPkm::join('mahasiswas', 'detail_pkms.id', '=', 'mahasiswas.id_pkm')->where('mahasiswas.nim', $nim)->first();
         $dosen = Dosen::where('kode_dosen', $pkm->kode_dosen)->first();
         $dospem = DosenPendamping::where('kode_dosen', $dosen->kode_dosen)->first();
         $dosen->username = $dospem->username;
-        $dosen->password = decrypt($dospem->password);
+        $dosen->password_plain = decrypt($dospem->password_plain);
         $skema = SkemaPkm::where('id', $pkm->id_skema)->first();
         $judulSkema = $skema->nama_skema;
 
@@ -54,7 +54,6 @@ class UsulanController extends Controller
             'dosen' => $dosen,
             'namaProdiDosen' => ProgramStudi::where('kode_prodi', $dosen->kode_prodi)->first()->nama_prodi,
         ];
-
         return view('operator.show-data-pengusul', compact('data', 'perguruanTinggi', 'statusFiles'));
     }
 
@@ -70,6 +69,7 @@ class UsulanController extends Controller
             $mahasiswa = Mahasiswa::where('nim', $pengusul->nim)->first();
             $pengusul->nama_mahasiswa = $mahasiswa->nama;
             $pengusul->angkatan = $mahasiswa->angkatan;
+            dd($pengusul->mahasiswa->kode_prodi);
             $prodi = ProgramStudi::where('kode_prodi', $pengusul->mahasiswa->kode_prodi)->first();
             $pengusul->nama_prodi = $prodi->nama_prodi;
             $pkm = DetailPkm::where('id', $pengusul->mahasiswa->id_pkm)->first();

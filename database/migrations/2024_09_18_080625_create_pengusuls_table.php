@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pengusuls', function (Blueprint $table) {
-            $table->string('nim');
-            $table->string('username')->nullable();
-            $table->string('password')->nullable();
+            $table->string('nim')->unique();
+            $table->string('username')->primary();
+            $table->string('password_plain');
+            $table->string('password');
             $table->string('alamat')->nullable();
             $table->string('kode_pos')->nullable();
             $table->string('no_hp')->nullable();
@@ -24,8 +25,9 @@ return new class extends Migration
             $table->char('jenis_kelamin', 1)->nullable();
             $table->date('tanggal_lahir')->nullable();
             $table->string('tempat_lahir')->nullable();
-    
+            
             $table->foreign('nim')->references('nim')->on('mahasiswas');
+            $table->rememberToken();
             $table->timestamps();
         });
     }

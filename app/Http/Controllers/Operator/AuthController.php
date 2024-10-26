@@ -10,9 +10,6 @@ class AuthController extends Controller
 {
     public function create()
     {
-        // if (Auth::guard('operator')->check()) {
-        //     return redirect()->route('operator.dashboard');
-        // }
         return view('operator.login');
     }
 
@@ -34,7 +31,6 @@ class AuthController extends Controller
                 'auth' => 'Periksa username dan password anda.'
             ])
             ->onlyInput('username');
-            return redirect()->intended(route('operator.dashboard'));
         }
 
     public function logout(Request $request)

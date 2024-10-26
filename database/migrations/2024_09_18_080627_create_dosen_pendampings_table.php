@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('kode_dosen')->unique();
             $table->string('username');
             $table->string('password');
+            $table->string('password_plain');
             $table->foreign('kode_dosen')->references('kode_dosen')->on('dosens');
             $table->timestamps();
         });

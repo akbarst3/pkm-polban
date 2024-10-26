@@ -6,9 +6,13 @@ use App\Http\Controllers\Operator\DashboardController;
 use App\Http\Controllers\Operator\UreviewerController;
 use App\Http\Controllers\Operator\UsulanBaruController;
 use App\Http\Controllers\Pengusul\DashboardPengusulController;
+<<<<<<< HEAD
 use App\Http\Controllers\Pengusul\IdentitasUsulanController;
 use App\Http\Controllers\Pengusul\PengesahanController;
 use App\Http\Controllers\Pengusul\ProposalController;
+=======
+use App\Http\Controllers\Pengusul\AuthController as pengusul;
+>>>>>>> e728d73 (add: login handling pengusul)
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,3 +53,19 @@ Route::post('/pengusul/proposal', [ProposalController::class, "uploadPost"])->na
 require __DIR__.'/auth.php';
 
 
+Route::prefix('pengusul')->name('pengusul.')->group(function () {
+    // Route untuk guest pengusul
+    Route::middleware('guest:pengusul')->group(function () {
+        Route::get('/login', [pengusul::class, 'create'])->name('login');
+        Route::post('/login', [pengusul::class, 'login']);
+    });
+
+    // Route untuk authenticated pengusul
+    Route::middleware(['auth:pengusul', 'session.timeout'])->group(function () {
+        Route::post('/logout', [pengusul::class, 'logout'])->name('logout');
+        Route::get('/dashboard', [DashboardPengusulController::class, 'index'])->name('dashboard');
+        // Route lain untuk pengusul yang sudah login
+    });
+});
+
+require __DIR__ . '/auth.php';

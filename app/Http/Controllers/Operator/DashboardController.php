@@ -29,22 +29,22 @@ class DashboardController extends Controller
         $result = DetailPkm::whereIn('kode_pt', $kodePtOp)->groupBy('id_skema')->select('id_skema', DetailPkm::raw('count(judul) as total'))->orderBy('id_skema', 'asc')->get()->pluck('total', 'id_skema');
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'total' => 0]]);
     }
-    
+
     public function getCountIdentitas()
     {
         $kodePtOp = $this->getKodePtOperator();
         $result = DetailPkm::with('mahasiswas.pengusul')->whereIn('kode_pt', $kodePtOp)->orderBy('id_skema', 'asc')->get()->groupBy('id_skema')->map(function ($group) {
-                $count = $group->sum(function ($detail) {
-                    return $detail->mahasiswas ? ($detail->mahasiswas->pengusul ? 1 : 0) : 0;
-                });
-                return [
-                    'id_skema' => $group->first()->id_skema,
-                    'count' => $count,
-                ];
+            $count = $group->sum(function ($detail) {
+                return $detail->mahasiswas ? ($detail->mahasiswas->pengusul ? 1 : 0) : 0;
             });
+            return [
+                'id_skema' => $group->first()->id_skema,
+                'count' => $count,
+            ];
+        });
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'count' => 0]]);
     }
-    
+
     public function getCountProposal()
     {
         $kodePtOp = $this->getKodePtOperator();
@@ -52,13 +52,13 @@ class DashboardController extends Controller
 
         return $result->count() ? $result : collect([0 => ['id_skema' => 0, 'total' => 0]]);
     }
-    
+
     public function getCountValidasi()
     {
         $kodePtOp = $this->getKodePtOperator();
         $val_dospem = DetailPkm::whereIn('kode_pt', $kodePtOp)->select('id_skema', DetailPkm::raw('SUM(CASE WHEN val_dospem = TRUE THEN 1 ELSE 0 END) as total'))->groupBy('id_skema')->orderBy('id_skema', 'asc')->get()->pluck('total', 'id_skema');
         $val_pt = DetailPkm::whereIn('kode_pt', $kodePtOp)->select('id_skema', DetailPkm::raw('SUM(CASE WHEN val_pt = TRUE THEN 1 ELSE 0 END) as total'))->groupBy('id_skema')->orderBy('id_skema', 'asc')->get()->pluck('total', 'id_skema');
-        
+
         return [
             'val_dospem' => $val_dospem->count() ? $val_dospem : collect([0 => ['id_skema' => 0, 'total' => 0]]),
             'val_pt' => $val_pt->count() ? $val_pt : collect([0 => ['id_skema' => 0, 'total' => 0]]),
@@ -75,7 +75,7 @@ class DashboardController extends Controller
             'beritaAcaraPendanaan.required' => 'File Berita Acara PKM Skema Pendanaan wajib diunggah.',
             'beritaAcaraPendanaan.mimes' => 'File Berita Acara PKM Skema Pendanaan harus berformat PDF.',
             'beritaAcaraPendanaan.max' => 'File Berita Acara PKM Skema Pendanaan tidak boleh lebih dari 5 MB.',
-            
+
             'suratKomitmen.required' => 'File Surat Komitmen Dana Tambahan wajib diunggah.',
             'suratKomitmen.mimes' => 'File Surat Komitmen Dana Tambahan harus berformat PDF.',
             'suratKomitmen.max' => 'File Surat Komitmen Dana Tambahan tidak boleh lebih dari 5 MB.',
@@ -84,7 +84,7 @@ class DashboardController extends Controller
             'beritaAcaraInsentif.mimes' => 'File Berita Acara PKM Skema Insentif harus berformat PDF.',
             'beritaAcaraInsentif.max' => 'File Berita Acara PKM Skema Insentif tidak boleh lebih dari 5 MB.',
         ]);
-        $kodePt = Auth::user()->kode_pt;
+        $kodePt = Auth::guard('operator')->user()->kode_pt;
         $idSurat = 1;
         foreach (['beritaAcaraPendanaan', 'suratKomitmen', 'beritaAcaraInsentif'] as $fileInput) {
             if ($request->hasFile($fileInput)) {
@@ -130,7 +130,7 @@ class DashboardController extends Controller
 
     public function getPt()
     {
-        $kodePt = Auth::user()->kode_pt;
+        $kodePt = Auth::guard('operator')->user()->kode_pt;
         $perguruanTinggi = PerguruanTinggi::where('kode_pt', $kodePt)->first();
         return $perguruanTinggi;
     }

@@ -20,8 +20,7 @@ class CekSurat
     public function handle(Request $request, Closure $next)
     {
 
-        $kodePt = Auth::user()->kode_pt;
-
+        $kodePt = Auth::guard('operator')->user()->kode_pt;
         $dataDoesNotExist = SuratPt::where('kode_pt', $kodePt)->doesntExist();
 
         if ($dataDoesNotExist) {

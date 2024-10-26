@@ -44,6 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'operators',
         ],
+        'pengusul' => [
+            'driver' => 'session',
+            'provider' => 'pengusuls',
+        ],
     ],
 
     /*
@@ -72,6 +76,11 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\OperatorPt::class),
         ],
+        'pengusuls' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\Pengusul::class),
+        ],
+        
 
         // 'users' => [
         //     'driver' => 'database',

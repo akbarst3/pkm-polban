@@ -19,7 +19,7 @@
             <div class="card">
                 <div class="card-body">
                     <h1 class="text-center">Login</h1>
-                    <form id="login-form" action="{{ route('mahasiswa.login') }}" method="post">
+                    <form id="login-form" action="{{ route('pengusul.login') }}" method="post">
                         @csrf
                         <div class="form-group">
                             <label for="username">Username:</label>

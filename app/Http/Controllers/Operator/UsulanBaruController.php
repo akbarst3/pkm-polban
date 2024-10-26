@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\Operator\DashboardController;
+use Illuminate\Support\Facades\Hash;
 
 class UsulanBaruController extends Controller
 {
@@ -52,6 +53,7 @@ class UsulanBaruController extends Controller
 
     public function storeData(Request $request)
     {
+        $kodePtOp = Auth::guard('operator')->user()->kode_pt;
         $request->validate([
             'programStudi' => ['required', 'not_in:0'],
             'nim' => ['required', 'min:9', 'max:13'],
@@ -83,7 +85,7 @@ class UsulanBaruController extends Controller
             if (Mahasiswa::where('nim', $request->input('nim'))->exists()) {
                 throw new \Exception('Pengusul dengan NIM tersebut sudah terdaftar');
             }
-            
+
             if (DetailPkm::where('kode_dosen', $request->input('nidn'))->count() == 10) {
                 throw new \Exception('Dosen sudah mendampingi 10 judul PKM');
             }
@@ -103,25 +105,30 @@ class UsulanBaruController extends Controller
                 'id_pkm' => $detailPkm->id
             ]);
 
-            $username_mahasiswa = $kodePtOp . '-' . $mahasiswa->nim;
-            $password_mahasiswa = encrypt(mt_rand(1000000, 9999999));
+            $usnMhs = strval($kodePtOp) . '-' . $mahasiswa->nim;
+            $pwMhs = mt_rand(1000000, 9999999);
+            $pwMhsPlain = encrypt($pwMhs);
+            $pwMhsHash = Hash::make($pwMhs);
 
             Pengusul::create([
                 'nim' => $request->input('nim'),
-                'username' => $username_mahasiswa,
-                'password' => $password_mahasiswa
+                'username' => $usnMhs,
+                'password' => $pwMhsHash,
+                'password_plain' => $pwMhsPlain
             ]);
-
-            $username_dosen = $kodePtOp . '-' . $request->input('nidn');
-            $password_dosen = encrypt(mt_rand(1000000, 9999999));
+            $usnDosen = $detailPkm->kode_pt . '-' . $request->input('nidn');
+            $pwDosen = mt_rand(1000000, 9999999);
+            $pwDosenPlain = encrypt($pwDosen);
+            $pwDosenHash = Hash::make($pwDosen);
 
             $dosenExists = DosenPendamping::where('kode_dosen', $request->input('nidn'))->exists();
 
             if (!$dosenExists) {
                 DosenPendamping::create([
                     'kode_dosen' => $request->input('nidn'),
-                    'username' => $username_dosen,
-                    'password' => $password_dosen
+                    'username' => $usnDosen,
+                    'password' => $pwDosenHash,
+                    'password_plain' => $pwDosenPlain
                 ]);
             }
 
