@@ -52,6 +52,7 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::post('/login', [AuthPengusul::class, 'login']);
     });
 
+<<<<<<< HEAD
     Route::middleware(['auth:pengusul', 'session.timeout'])->group(function () {
         Route::get('/dashboard', [Pengusul::class, 'createDashboard'])->name('dashboard');
         Route::get('/identitas-usulan', [Pengusul::class, 'showData'])->name('identitas-usulan');
@@ -71,3 +72,12 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');
     });
 });
+=======
+Route::get('/pengusul/dashboard', [DashboardPengusulController::class,'index'])->name('pengusul.dashboard');
+Route::get('/dospem/dashboard', [DashboardDospemController::class,'index'])->name('dospem.dashboard');
+Route::get('/dospem/validasiusulan', [ValidasiUsulanDospemController::class,'index'])->name('dospem.validasiusulan');
+Route::get('/dospem/validasiusulandisetujui', [ValidasiUsulanDisetujuiDospemController::class,'index'])->name('dospem.validasiusulandisetujui');
+
+require __DIR__.'/auth.php';
+
+>>>>>>> a47ffb3 (add: tampilan dospem)
