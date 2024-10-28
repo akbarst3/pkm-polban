@@ -77,6 +77,9 @@ Route::get('/pengusul/dashboard', [DashboardPengusulController::class,'index'])-
 Route::get('/dospem/dashboard', [DashboardDospemController::class,'index'])->name('dospem.dashboard');
 Route::get('/dospem/validasiusulan', [ValidasiUsulanDospemController::class,'index'])->name('dospem.validasiusulan');
 Route::get('/dospem/validasiusulandisetujui', [ValidasiUsulanDisetujuiDospemController::class,'index'])->name('dospem.validasiusulandisetujui');
+Route::get('/dospem/validasikegiatan', [ValidasiKegiatanDospemController::class,'index'])->name('dospem.validasikegiatan');
+Route::get('/dospem/logbookkegiatan', [LogbookKegiatanDospemController::class,'index'])->name('dospem.logbookkegiatan');
+Route::get('/dospem/logbookkeuangan', [LogbookKeuanganDospemController::class,'index'])->name('dospem.logbookkeuangan');
 
 require __DIR__.'/auth.php';
 

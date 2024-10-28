@@ -81,7 +81,7 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item"> <a href="/pengusul/identitasUsulan" class="nav-link">
+                            <li class="nav-item"> <a href="/dospem/validasikegiatan" class="nav-link">
                                     <p>Tabel Kegiatan</p>
                                 </a>
                             </li>
