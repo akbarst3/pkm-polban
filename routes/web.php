@@ -8,6 +8,7 @@ use App\Http\Controllers\Operator\UsulanBaruController;
 use App\Http\Controllers\Pengusul\DashboardPengusulController;
 use App\Http\Controllers\Pengusul\IdentitasUsulanController;
 use App\Http\Controllers\Pengusul\PengesahanController;
+use App\Http\Controllers\Pengusul\ProposalController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,6 +39,12 @@ Route::post('pengusul/identitas-usulan', [IdentitasUsulanController::class, 'sub
 
 Route::post('/pengusul/pengesahan/post', [PengesahanController::class, 'store'])->name('pengusul.pengesahan.store');
 Route::get('/pengusul/pengesahan', [PengesahanController::class, 'index'])->name('pengusul.pengesahan');
+Route::get('/pengusul/proposal', [ProposalController::class, 'upload'])->name("pengusul.proposal");
+Route::post('/pengusul/proposal', [ProposalController::class, "uploadPost"])->name("pengusul.proposal.post");
+
+// Route::get('/pengusul/proposal', [ProposalController::class, 'upload'])->name("pengusul.proposal.upload");
+// Route::post('/pengusul/proposal', [ProposalController::class, "uploadPost"])->name("pengusul.proposal.post");
+// Route::get('/proposal/view/{id}', [ProposalController::class, 'viewFile'])->name('proposal.view');
 
 require __DIR__.'/auth.php';
 
