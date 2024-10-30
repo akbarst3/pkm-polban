@@ -7,6 +7,7 @@ use App\Http\Controllers\Operator\UreviewerController;
 use App\Http\Controllers\Operator\UsulanBaruController;
 use App\Http\Controllers\Pengusul\DashboardPengusulController;
 use App\Http\Controllers\Pengusul\IdentitasUsulanController;
+use App\Http\Controllers\Pengusul\PengesahanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,6 +35,9 @@ Route::middleware(['auth:operator', 'session.timeout'])->group(function () {
 Route::get('/pengusul/dashboard', [DashboardPengusulController::class,'index'])->name('pengusul.dashboard');
 Route::get('pengusul/identitas-usulan', [IdentitasUsulanController::class, 'showIdentitasUsulan'])->name('pengusul.identitas.usulan');
 Route::post('pengusul/identitas-usulan', [IdentitasUsulanController::class, 'submitIdentitasUsulan'])->name('pengusul.identitas.submit');
+
+Route::post('/pengusul/pengesahan/post', [PengesahanController::class, 'store'])->name('pengusul.pengesahan.store');
+Route::get('/pengusul/pengesahan', [PengesahanController::class, 'index'])->name('pengusul.pengesahan');
 
 require __DIR__.'/auth.php';
 

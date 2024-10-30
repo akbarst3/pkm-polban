@@ -26,7 +26,8 @@ class Dosen extends Model
     {
         return $this->hasOne(DosenPendamping::class, 'kode_dosen', 'kode_dosen');
     }
-    public function detailPkm() : HasMany {
+    public function detailPkm(): HasMany
+    {
         return $this->hasMany(DetailPkm::class, 'kode_dosen', 'kode_dosen');
     }
 }

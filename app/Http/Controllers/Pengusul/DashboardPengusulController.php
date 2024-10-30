@@ -16,15 +16,13 @@ class DashboardPengusulController extends Controller
         $Mahasiswa = Mahasiswa::where('nim', $nim)->get();
         //dd($Mahasiswa);
         return $Mahasiswa;
-
-    }      
+    }
 
     public function index()
     {
-    $nim = '231511065';
-    $mahasiswa = Mahasiswa::where('nim', $nim)->first();
+        $nim = '231511065';
+        $mahasiswa = Mahasiswa::where('nim', $nim)->first();
         // dd($mahasiswa);           //                                                          
-    return view('pengusul.dashboard', compact('mahasiswa'));
+        return view('pengusul.dashboard', compact('mahasiswa'));
     }
-
 }

@@ -11,10 +11,10 @@ class Pengesahan extends Model
     use HasFactory;
     protected $fillable = [
         'waktu_pelaksanaan',
-        'kota_pelaksanaan',
+        'kota_pengesahan',
         'nama',
         'jabatan',
-        'nip',
+        'NIP',
         'id_pkm',
     ];
 

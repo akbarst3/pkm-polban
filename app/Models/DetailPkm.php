@@ -60,7 +60,7 @@ class DetailPkm extends Model
 
     public function skema(): BelongsTo
     {
-        return $this->belongsTo(SkemaPkm::class, 'id_skema', 'id_skema');
+        return $this->belongsTo(SkemaPkm::class, 'id_skema', 'id');
     }
 
     public function perguruanTinggi(): BelongsTo
@@ -68,7 +68,8 @@ class DetailPkm extends Model
         return $this->BelongsTo(SkemaPkm::class, 'kode_pt', 'kode_pt');
     }
 
-    public function dosen() : BelongsTo {
+    public function dosen(): BelongsTo
+    {
         return $this->belongsTo(Dosen::class, 'kode_dosen', 'kode_dosen');
     }
 }
