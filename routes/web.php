@@ -1,37 +1,47 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Operator\UsulanController;
-use App\Http\Controllers\Operator\DashboardController;
+
+use App\Http\Controllers\Operator\AuthController as AuthOperator;
+use App\Http\Controllers\Operator\DashboardController as DashboardOperator;
 use App\Http\Controllers\Operator\UreviewerController;
+use App\Http\Controllers\Operator\UsulanController;
 use App\Http\Controllers\Operator\UsulanBaruController;
-use App\Http\Controllers\Pengusul\DashboardPengusulController;
-<<<<<<< HEAD
+
 use App\Http\Controllers\Pengusul\IdentitasUsulanController;
 use App\Http\Controllers\Pengusul\PengesahanController;
 use App\Http\Controllers\Pengusul\ProposalController;
-=======
-use App\Http\Controllers\Pengusul\AuthController as pengusul;
->>>>>>> e728d73 (add: login handling pengusul)
+use App\Http\Controllers\Pengusul\AuthController as AuthPengusul;
+use App\Http\Controllers\Pengusul\PengusulController as Pengusul;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth:operator', 'session.timeout'])->group(function () {
-    Route::get('/operator/dashboard', [DashboardController::class, 'index'])->name('operator.dashboard');
-    Route::post('/operator/dashboard', [DashboardController::class, 'storeFile'])->name('operator.file');
+// Route untuk Operator
+Route::prefix('operator')->name('operator.')->group(function () {
 
-    Route::middleware(['cek.surat'])->group(function () {
-        Route::get('/operator/usulan-baru', [UsulanController::class, 'index'])->name('operator.usulan.baru');
-        Route::get('/operator/usulan-baru/{nim}', [UsulanController::class, 'viewData'])->name('operator.usulan.baru.nim');
-        Route::delete('/operator/usulan-baru/{id}', [UsulanController::class, 'deleteData'])->name('delete.pengusul');
-        Route::get('/operator/identitas-usulan', [UsulanBaruController::class, 'index'])->name('operator.identitas.usulan');
-        Route::post('/operator/identitas-usulan/store', [UsulanBaruController::class, 'storeData'])->name('operator.usulan.baru.store');
-        Route::post('/operator/identitas-usulan/find', [UsulanBaruController::class, 'findDosen'])->name('operator.identitas.usulan.find');
-        Route::view('/operator/usulan-didanai', 'operator.usulan-didanai')->name('operator.usulan-didanai');
-        Route::view('/operator/usulan-reviewer', 'operator.usulanReviewer');
-        Route::get('/operator/identitas-reviewer', [UreviewerController::class, 'index']);
+    Route::middleware(['auth:operator', 'session.timeout'])->group(function () {
+        Route::get('/dashboard', [DashboardOperator::class, 'index'])->name('dashboard');
+        Route::post('/dashboard', [DashboardOperator::class, 'storeFile'])->name('file');
+
+        Route::middleware(['cek.surat'])->group(function () {
+            Route::get('/usulan-baru', [UsulanController::class, 'index'])->name('usulan.baru');
+            Route::get('/usulan-baru/{nim}', [UsulanController::class, 'viewData'])->name('usulan.baru.nim');
+            Route::delete('/usulan-baru/{id}', [UsulanController::class, 'deleteData'])->name('usulan.baru.delete');
+            Route::get('/identitas-usulan', [UsulanBaruController::class, 'index'])->name('identitas.usulan');
+            Route::post('/identitas-usulan/store', [UsulanBaruController::class, 'storeData'])->name('identitas-usulan.store');
+            Route::post('/identitas-usulan/find', [UsulanBaruController::class, 'findDosen'])->name('identitas.usulan.find');
+            Route::view('/usulan-didanai', 'operator.usulan-didanai')->name('usulan.didanai');
+            Route::view('/usulan-reviewer', 'operator.usulanReviewer')->name('usulan.reviewer');
+            Route::get('/identitas-reviewer', [UreviewerController::class, 'index'])->name('identitas.reviewer');
+            Route::post('/logout', [AuthOperator::class, 'logout'])->name('logout');
+        });
+    });
+
+    Route::middleware(['guest:operator'])->group(function () {
+        Route::get('/login', [AuthOperator::class, 'create'])->name('login');
+        Route::post('/login', [AuthOperator::class, 'login']);
     });
 });
 
@@ -53,19 +63,24 @@ Route::post('/pengusul/proposal', [ProposalController::class, "uploadPost"])->na
 require __DIR__.'/auth.php';
 
 
+// Route untuk Pengusul 
 Route::prefix('pengusul')->name('pengusul.')->group(function () {
-    // Route untuk guest pengusul
     Route::middleware('guest:pengusul')->group(function () {
-        Route::get('/login', [pengusul::class, 'create'])->name('login');
-        Route::post('/login', [pengusul::class, 'login']);
+        Route::get('/login', [AuthPengusul::class, 'create'])->name('login');
+        Route::post('/login', [AuthPengusul::class, 'login']);
     });
 
-    // Route untuk authenticated pengusul
     Route::middleware(['auth:pengusul', 'session.timeout'])->group(function () {
-        Route::post('/logout', [pengusul::class, 'logout'])->name('logout');
-        Route::get('/dashboard', [DashboardPengusulController::class, 'index'])->name('dashboard');
-        // Route lain untuk pengusul yang sudah login
+        Route::get('/dashboard', [Pengusul::class, 'index'])->name('dashboard');
+        Route::get('/identitas-usulan', [Pengusul::class, 'showData'])->name('identitas-usulan');
+        Route::get('/edit-usulan', [Pengusul::class, 'showDetail'])->name('edit-usulan');
+        Route::patch('/edit-usulan/edit-mhs/{id}', [Pengusul::class, 'editMhs'])->name('edit-usulan.edit-mhs');
+        Route::patch('/edit-usulan/edit-pkm/{id}', [Pengusul::class, 'editPkm'])->name('edit-usulan.edit-pkm');
+        Route::get('/edit-usulan/tambah-anggota', [Pengusul::class, 'tambahAnggota'])->name('edit-usulan.tambah-anggota');
+        Route::post('/edit-usulan/tambah-anggota', [Pengusul::class, 'storeAnggota']);
+        Route::get('/edit-usulan/edit-anggota/{id}', [Pengusul::class, 'indexAnggota'])->name('edit-usulan.edit-anggota');
+        Route::put('/edit-usulan/edit-anggota/{id}', [Pengusul::class, 'editAnggota']);
+        Route::delete('/edit-usulan/hapus-anggota/{id}', [Pengusul::class, 'hapusAnggota'])->name('edit-usulan.hapus-anggota');
+        Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');
     });
 });
-
-require __DIR__ . '/auth.php';

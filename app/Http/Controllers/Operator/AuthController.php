@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Operator;
 
+use App\Models\OperatorPt;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -20,9 +21,11 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (Auth::guard('operator')->attempt($credentials, $request->filled('remember'))) {
+        $user = OperatorPt::where('username', $credentials['username'])->first();
+        if (Auth::guard('operator')->attempt($credentials, $request->boolean('remember'))) {
+            Auth::guard('operator')->login($user, $request->boolean('remember'));
             $request->session()->regenerate();
-
+            $request->session()->put('auth.guard', 'operator');
             return redirect()->intended(route('operator.dashboard'));
         }
 
@@ -31,7 +34,7 @@ class AuthController extends Controller
                 'auth' => 'Periksa username dan password anda.'
             ])
             ->onlyInput('username');
-        }
+    }
 
     public function logout(Request $request)
     {

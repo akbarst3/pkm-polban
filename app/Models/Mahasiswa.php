@@ -18,6 +18,11 @@ class Mahasiswa extends Model
         'angkatan',
         'id_pkm',
     ];
+
+    protected $casts = [
+        'kode_prodi' => 'string'
+    ];
+
     public function detailPkm(): BelongsTo
     {
         return $this->belongsTo(DetailPkm::class, 'id_pkm', 'id');
@@ -25,11 +30,15 @@ class Mahasiswa extends Model
 
     public function pengusul(): HasOne
     {
-        return $this->hasOne(Pengusul::class, 'nim', 'nim'); 
+        return $this->hasOne(Pengusul::class, 'nim', 'nim');
     }
 
     public function prodi(): BelongsTo
     {
-        return $this->belongsTo(ProgramStudi::class, 'kode_prodi', 'kode_prodi'); 
+        return $this->belongsTo(
+            ProgramStudi::class,
+            'kode_prodi',
+            'kode_prodi'
+        );
     }
 }

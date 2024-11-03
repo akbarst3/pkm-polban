@@ -26,7 +26,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="p-4 bg-white rounded shadow-sm">
-                    <form action="{{ route('operator.usulan.baru.store') }}" method="POST" class="needs-validation"
+                    <form action="{{ route('operator.identitas-usulan.store') }}" method="POST" class="needs-validation"
                         novalidate style="max-width: 70%; margin: 0;">
                         @csrf
                         <div class="mb-4">

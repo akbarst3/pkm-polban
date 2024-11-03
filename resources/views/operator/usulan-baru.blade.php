@@ -85,7 +85,8 @@
                                     <td>
                                         {{ $pengusul->nama_mahasiswa }}<br>
                                         {{ $pengusul->nim }}<br>
-                                        {{ $pengusul->nama_prodi }}
+                                        {{ $pengusul->nama_prodi }} ({{ $pengusul->kode_prodi }})<br>
+                                        Angkatan {{ $pengusul->angkatan }}
                                     </td>
                                     <td>{{ $pengusul->judul_pkm }}</td>
                                     <td>{{ $pengusul->nama_skema }}</td>
@@ -101,24 +102,28 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($pengusul->mahasiswa->detailPkm->val_dospem == false)
-                                            <i class="d-flex justify-content-center bi bi-x-circle-fill text-danger custom-icon"></i>
+                                        @if (!$pengusul->val_dospem)
+                                            <i
+                                                class="d-flex justify-content-center bi bi-x-circle-fill text-danger custom-icon"></i>
                                         @else
-                                            <i class="d-flex justify-content-center bi bi-check-circle-fill text-success custom-icon"></i>
+                                            <i
+                                                class="d-flex justify-content-center bi bi-check-circle-fill text-success custom-icon"></i>
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($pengusul->mahasiswa->detailPkm->val_pt == false)
-                                            <i class="d-flex justify-content-center bi bi-x-circle-fill text-danger custom-icon"></i>
+                                        @if (!$pengusul->val_pt)
+                                            <i
+                                                class="d-flex justify-content-center bi bi-x-circle-fill text-danger custom-icon"></i>
                                         @else
-                                            <i class="d-flex justify-content-center bi bi-check-circle-fill text-success custom-icon"></i>
+                                            <i
+                                                class="d-flex justify-content-center bi bi-check-circle-fill text-success custom-icon"></i>
                                         @endif
                                     </td>
                                     <td>
                                         <button class="btn btn-primary mb-2" onclick="viewData('{{ $pengusul->nim }}')">
                                             <i class="bi bi-person"></i>
                                         </button> <br>
-                                        <form action="{{ route('delete.pengusul', $pengusul->nim) }}" method="POST"
+                                        <form action="{{ route('operator.usulan.baru.delete', $pengusul->nim) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
                                             @method('DELETE')

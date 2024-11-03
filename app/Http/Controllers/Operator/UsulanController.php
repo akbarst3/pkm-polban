@@ -62,22 +62,31 @@ class UsulanController extends Controller
         $kodePt = $this->dashboard->getPt();
         $kodePt = $kodePt->kode_pt;
         $detailPkms = DetailPkm::where('kode_pt', $kodePt)->get();
+
         $pengusuls = Pengusul::whereIn('nim', function ($query) use ($detailPkms) {
             $query->select('nim')->from('mahasiswas')->whereIn('id_pkm', $detailPkms->pluck('id'));
         })->get();
+
         foreach ($pengusuls as $pengusul) {
             $mahasiswa = Mahasiswa::where('nim', $pengusul->nim)->first();
             $pengusul->nama_mahasiswa = $mahasiswa->nama;
             $pengusul->angkatan = $mahasiswa->angkatan;
-            dd($pengusul->mahasiswa->kode_prodi);
-            $prodi = ProgramStudi::where('kode_prodi', $pengusul->mahasiswa->kode_prodi)->first();
+            $pengusul->kode_prodi = $mahasiswa->kode_prodi;
+
+            $prodi = ProgramStudi::where('kode_prodi', $mahasiswa->kode_prodi)->first();
             $pengusul->nama_prodi = $prodi->nama_prodi;
-            $pkm = DetailPkm::where('id', $pengusul->mahasiswa->id_pkm)->first();
+
+            $pkm = DetailPkm::where('id', $mahasiswa->id_pkm)->first();
             $pengusul->judul_pkm = $pkm->judul;
+            $pengusul->val_dospem = $pkm->val_dospem; // Tambahkan ini
+            $pengusul->val_pt = $pkm->val_pt; // Tambahkan ini
+
             $skema = SkemaPkm::where('id', $pkm->id_skema)->first();
             $pengusul->nama_skema = $skema->nama_skema;
-            $pengusul->jumlah_mahasiswa = Mahasiswa::where('id_pkm', $pengusul->mahasiswa->id_pkm)->count();
+
+            $pengusul->jumlah_mahasiswa = Mahasiswa::where('id_pkm', $mahasiswa->id_pkm)->count();
         }
+
         return $pengusuls;
     }
 

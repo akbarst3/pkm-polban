@@ -74,11 +74,9 @@ class UsulanBaruController extends Controller
             'namaMahasiswa.required' => 'Nama mahasiswa wajib diisi',
             'tahunMasuk.required' => 'Tahun masuk wajib diisi',
             'judulProposal.required' => 'Judul proposal wajib diisi',
-            'nidn.required' => 'NIDN',
+            'nidn.required' => 'NIDN perlu diisi',
         ]);
-
-        $kodePtOp = Auth::user()->kode_pt;
-
+        
         try {
             DB::beginTransaction();
 

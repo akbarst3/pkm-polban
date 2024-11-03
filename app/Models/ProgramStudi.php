@@ -10,7 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ProgramStudi extends Model
 {
     use HasFactory;
+    protected $table = 'program_studis';
     protected $primaryKey = 'kode_prodi';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $casts = [
+        'kode_prodi' => 'string'
+    ];
 
     public function pt(): BelongsTo
     {

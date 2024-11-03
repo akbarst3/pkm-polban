@@ -75,7 +75,7 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('operator.usulan-didanai') }}" class="nav-link"> <i
+                                <a href="{{ route('operator.usulan.didanai') }}" class="nav-link"> <i
                                         class="nav-icon bi bi-file-earmark"></i>
                                     <p>Usulan Didanai</p>
                                 </a>

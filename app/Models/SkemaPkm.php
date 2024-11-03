@@ -12,7 +12,8 @@ class SkemaPkm extends Model
     use HasFactory;
     public function skemaluaran(): BelongsToMany
     {
-        return $this->belongsToMany(LuaranPkm::class, 'skema_luaran', 'id_skema', 'id_luaran');
+        return $this->belongsToMany(LuaranPkm::class, 'skema_luarans', 'id_skema', 'id_luaran')
+            ->withPivot('created_at', 'updated_at');
     }
     public function detailPkm(): HasMany
     {
