@@ -124,7 +124,6 @@ class DashboardController extends Controller
                     break;
             }
         }
-
         return $statusFiles;
     }
 

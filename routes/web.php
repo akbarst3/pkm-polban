@@ -45,42 +45,29 @@ Route::prefix('operator')->name('operator.')->group(function () {
     });
 });
 
-
-
-// Route::get('/pengusul/dashboard', [DashboardPengusulController::class,'index'])->name('pengusul.dashboard');
-Route::get('pengusul/identitas-usulan', [IdentitasUsulanController::class, 'showIdentitasUsulan'])->name('pengusul.identitas.usulan');
-Route::post('pengusul/identitas-usulan', [IdentitasUsulanController::class, 'submitIdentitasUsulan'])->name('pengusul.identitas.submit');
-
-Route::get('/pengusul/proposal', [ProposalController::class, 'upload'])->name("pengusul.proposal");
-Route::post('/pengusul/proposal', [ProposalController::class, "uploadPost"])->name("pengusul.proposal.post");
-
-// Route::get('/pengusul/proposal', [ProposalController::class, 'upload'])->name("pengusul.proposal.upload");
-// Route::post('/pengusul/proposal', [ProposalController::class, "uploadPost"])->name("pengusul.proposal.post");
-// Route::get('/proposal/view/{id}', [ProposalController::class, 'viewFile'])->name('proposal.view');
-
-// require __DIR__.'/auth.php';
-
-
 // Route untuk Pengusul 
 Route::prefix('pengusul')->name('pengusul.')->group(function () {
     Route::middleware('guest:pengusul')->group(function () {
         Route::get('/login', [AuthPengusul::class, 'create'])->name('login');
         Route::post('/login', [AuthPengusul::class, 'login']);
     });
-    
+
     Route::middleware(['auth:pengusul', 'session.timeout'])->group(function () {
-        Route::get('/dashboard', [Pengusul::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [Pengusul::class, 'createDashboard'])->name('dashboard');
         Route::get('/identitas-usulan', [Pengusul::class, 'showData'])->name('identitas-usulan');
         Route::get('/edit-usulan', [Pengusul::class, 'showDetail'])->name('edit-usulan');
         Route::patch('/edit-usulan/edit-mhs/{id}', [Pengusul::class, 'editMhs'])->name('edit-usulan.edit-mhs');
-        Route::post('pengesahan/post', [PengesahanController::class, 'store'])->name('pengesahan.store');
-        Route::get('/pengesahan', [PengesahanController::class, 'index'])->name('pengesahan');
+        Route::get('/identitas-usulan/pengesahan', [Pengusul::class, 'createPengesahan'])->name('identitas-usulan.pengesahan');
+        Route::post('/identitas-usulan/pengesahan', [Pengusul::class, 'storePengesahan']);
         Route::patch('/edit-usulan/edit-pkm/{id}', [Pengusul::class, 'editPkm'])->name('edit-usulan.edit-pkm');
         Route::get('/edit-usulan/tambah-anggota', [Pengusul::class, 'tambahAnggota'])->name('edit-usulan.tambah-anggota');
         Route::post('/edit-usulan/tambah-anggota', [Pengusul::class, 'storeAnggota']);
-        Route::get('/edit-usulan/edit-anggota/{id}', [Pengusul::class, 'indexAnggota'])->name('edit-usulan.edit-anggota');
+        Route::get('/edit-usulan/edit-anggota/{id}', [Pengusul::class, 'createEditAnggota'])->name('edit-usulan.edit-anggota');
         Route::put('/edit-usulan/edit-anggota/{id}', [Pengusul::class, 'editAnggota']);
-        Route::delete('/edit-usulan/hapus-anggota/{id}', [Pengusul::class, 'hapusAnggota'])->name('edit-usulan.hapus-anggota');
+        Route::delete('/edit-usulan/hapus-anggota/{id}', [Pengusul::class, 'destroyAnggota'])->name('edit-usulan.hapus-anggota');
+        Route::get('/identitas-usulan/proposal', [Pengusul::class, 'createProposal'])->name("identitas-usulan.proposal");
+        Route::patch('/identitas-usulan/proposal', [Pengusul::class, "storeProposal"]);
+        Route::get('/pengusul/identitas-usulan/download-proposal', [Pengusul::class, 'downloadProposal'])->name('identitas-usulan.download-proposal');
         Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');
     });
 });

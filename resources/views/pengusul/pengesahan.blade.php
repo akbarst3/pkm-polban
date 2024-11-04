@@ -101,7 +101,7 @@
                 });
             </script>
         @endif
-        <form action="{{ route('pengusul.pengesahan.store') }}" method="POST">
+        <form action="{{ route('pengusul.identitas-usulan.pengesahan') }}" method="POST">
             @csrf
             <div class="letter-container">
                 <div class="letter-header">
@@ -333,13 +333,10 @@
                     </div>
                 </div>
 
-                <!-- Buttons -->
                 <div class="mt-4 d-flex justify-content-end gap-2">
+                    <a href="{{ route('pengusul.identitas-usulan') }}" class="btn btn-secondary">Kembali</a>
                     @if ($viewData['pengesahan'] == null)
-                        <a href="{{ route('pengusul.identitas-usulan') }}" class="btn btn-secondary">Kembali</a>
                         <button type="submit" class="btn btn-primary">Simpan</button>
-                    @else
-                        <a href="{{ route('pengusul.identitas-usulan') }}" class="btn btn-secondary">Kembali</a>
                     @endif
                 </div>
             </div>
