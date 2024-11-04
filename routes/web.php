@@ -47,12 +47,10 @@ Route::prefix('operator')->name('operator.')->group(function () {
 
 
 
-Route::get('/pengusul/dashboard', [DashboardPengusulController::class,'index'])->name('pengusul.dashboard');
+// Route::get('/pengusul/dashboard', [DashboardPengusulController::class,'index'])->name('pengusul.dashboard');
 Route::get('pengusul/identitas-usulan', [IdentitasUsulanController::class, 'showIdentitasUsulan'])->name('pengusul.identitas.usulan');
 Route::post('pengusul/identitas-usulan', [IdentitasUsulanController::class, 'submitIdentitasUsulan'])->name('pengusul.identitas.submit');
 
-Route::post('/pengusul/pengesahan/post', [PengesahanController::class, 'store'])->name('pengusul.pengesahan.store');
-Route::get('/pengusul/pengesahan', [PengesahanController::class, 'index'])->name('pengusul.pengesahan');
 Route::get('/pengusul/proposal', [ProposalController::class, 'upload'])->name("pengusul.proposal");
 Route::post('/pengusul/proposal', [ProposalController::class, "uploadPost"])->name("pengusul.proposal.post");
 
@@ -60,7 +58,7 @@ Route::post('/pengusul/proposal', [ProposalController::class, "uploadPost"])->na
 // Route::post('/pengusul/proposal', [ProposalController::class, "uploadPost"])->name("pengusul.proposal.post");
 // Route::get('/proposal/view/{id}', [ProposalController::class, 'viewFile'])->name('proposal.view');
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';
 
 
 // Route untuk Pengusul 
@@ -69,12 +67,14 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::get('/login', [AuthPengusul::class, 'create'])->name('login');
         Route::post('/login', [AuthPengusul::class, 'login']);
     });
-
+    
     Route::middleware(['auth:pengusul', 'session.timeout'])->group(function () {
         Route::get('/dashboard', [Pengusul::class, 'index'])->name('dashboard');
         Route::get('/identitas-usulan', [Pengusul::class, 'showData'])->name('identitas-usulan');
         Route::get('/edit-usulan', [Pengusul::class, 'showDetail'])->name('edit-usulan');
         Route::patch('/edit-usulan/edit-mhs/{id}', [Pengusul::class, 'editMhs'])->name('edit-usulan.edit-mhs');
+        Route::post('pengesahan/post', [PengesahanController::class, 'store'])->name('pengesahan.store');
+        Route::get('/pengesahan', [PengesahanController::class, 'index'])->name('pengesahan');
         Route::patch('/edit-usulan/edit-pkm/{id}', [Pengusul::class, 'editPkm'])->name('edit-usulan.edit-pkm');
         Route::get('/edit-usulan/tambah-anggota', [Pengusul::class, 'tambahAnggota'])->name('edit-usulan.tambah-anggota');
         Route::post('/edit-usulan/tambah-anggota', [Pengusul::class, 'storeAnggota']);

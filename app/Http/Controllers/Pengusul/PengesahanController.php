@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Pengusul;
 use App\Models\Pengusul;
 use App\Models\DetailPkm;
 use App\Models\Mahasiswa;
+use App\Models\Pengesahan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Pengesahan;
+use Illuminate\Support\Facades\Auth;
 
 class PengesahanController extends Controller
 {
@@ -20,7 +21,6 @@ class PengesahanController extends Controller
 
         return [
             'pengusul' => $pengusul,
-            'mahasiswa' => $mahasiswa,
             'detailPkm' => $detailPkm,
             'pengesahan' => $pengesahan
         ];
@@ -29,10 +29,14 @@ class PengesahanController extends Controller
     public function index()
     {
         try {
-            // $nim = Auth::user()->nim;
-            $nim = '231511065';
-
+            $nim = Auth::guard('pengusul')->user()->nim;
+            $data1 = new PengusulController();
+            
+            ['mahasiswa' => $mahasiswa, 'perguruanTinggi' => $perguruanTinggi, 'pkm' => $pkm] = $data1->getData();
             $data = $this->getPengusulData($nim);
+            $data['mahasiswa'] = $mahasiswa;
+            $data['perguruanTinggi'] = $perguruanTinggi;
+            $data['pkm'] = $pkm;
 
             $viewData = [
                 'judulPkm' => $data['pengusul']->mahasiswa->detailPkm->judul,
@@ -54,9 +58,9 @@ class PengesahanController extends Controller
                 'danaLain' => $data['pengusul']->mahasiswa->detailPkm->dana_lain,
                 'pengesahan' => $data['pengesahan']
             ];
-
-            return view('pengusul.identitas-usulan', compact('viewData'));
+            return view('pengusul.pengesahan', ['data' => $data, 'viewData' => $viewData, 'title' => 'Dashboard Pengusul']);
         } catch (\Exception $e) {
+            dd($data['pengusul']->mahasiswa);
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
@@ -64,8 +68,7 @@ class PengesahanController extends Controller
     public function store(Request $request)
     {
         try {
-            // $nim = Auth::user()->nim;
-            $nim = '231511065';
+            $nim = Auth::guard('pengusul')->user()->nim;
 
             $data = $this->getPengusulData($nim);
             $request->validate([
@@ -75,27 +78,16 @@ class PengesahanController extends Controller
                 'jabatan' => 'required',
                 'NIP' => 'required',
             ]);
+            Pengesahan::create([
+                'id_pkm' => $data['detailPkm']->id,
+                'kota_pengesahan' => $request->kota_pengesahan,
+                'waktu_pelaksanaan' => $request->waktu_pelaksanaan,
+                'nama' => $request->nama_pengesahan,
+                'jabatan' => $request->jabatan,
+                'NIP' => $request->NIP,
+            ]);
 
-            if ($data['pengesahan'] != null) {
-                $data['pengesahan']->update([
-                    'kota_pengesahan' => $request->kota_pengesahan,
-                    'waktu_pelaksanaan' => $request->waktu_pelaksanaan,
-                    'nama' => $request->nama_pengesahan,
-                    'jabatan' => $request->jabatan,
-                    'NIP' => $request->NIP,
-                ]);
-            } else {
-                Pengesahan::create([
-                    'id_pkm' => $data['detailPkm']->id,
-                    'kota_pengesahan' => $request->kota_pengesahan,
-                    'waktu_pelaksanaan' => $request->waktu_pelaksanaan,
-                    'nama' => $request->nama_pengesahan,
-                    'jabatan' => $request->jabatan,
-                    'NIP' => $request->NIP,
-                ]);
-            }
-
-            return redirect()->route('pengusul.pengesahan')->with('success', 'Data Pengesahan berhasil disimpan');
+            return back()->with('success', 'Data Pengesahan berhasil disimpan');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }

@@ -36,7 +36,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="">
+                                    <a href="{{ route('pengusul.pengesahan') }}">
                                         <button class="btn btn-outline-secondary">
                                             <img src="{{ asset('icons/print-icon.png') }}" alt="Print" width="20">
                                         </button>
