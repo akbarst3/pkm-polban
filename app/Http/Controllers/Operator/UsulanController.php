@@ -62,11 +62,9 @@ class UsulanController extends Controller
         $kodePt = $this->dashboard->getPt();
         $kodePt = $kodePt->kode_pt;
         $detailPkms = DetailPkm::where('kode_pt', $kodePt)->get();
-
         $pengusuls = Pengusul::whereIn('nim', function ($query) use ($detailPkms) {
             $query->select('nim')->from('mahasiswas')->whereIn('id_pkm', $detailPkms->pluck('id'));
         })->get();
-
         foreach ($pengusuls as $pengusul) {
             $mahasiswa = Mahasiswa::where('nim', $pengusul->nim)->first();
             $pengusul->nama_mahasiswa = $mahasiswa->nama;
@@ -86,7 +84,6 @@ class UsulanController extends Controller
 
             $pengusul->jumlah_mahasiswa = Mahasiswa::where('id_pkm', $mahasiswa->id_pkm)->count();
         }
-
         return $pengusuls;
     }
 

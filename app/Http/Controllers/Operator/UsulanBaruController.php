@@ -83,7 +83,6 @@ class UsulanBaruController extends Controller
             if (Mahasiswa::where('nim', $request->input('nim'))->exists()) {
                 throw new \Exception('Pengusul dengan NIM tersebut sudah terdaftar');
             }
-
             if (DetailPkm::where('kode_dosen', $request->input('nidn'))->count() == 10) {
                 throw new \Exception('Dosen sudah mendampingi 10 judul PKM');
             }
