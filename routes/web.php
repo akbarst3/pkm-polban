@@ -13,6 +13,7 @@ use App\Http\Controllers\Pengusul\PengesahanController;
 use App\Http\Controllers\Pengusul\ProposalController;
 use App\Http\Controllers\Pengusul\AuthController as AuthPengusul;
 use App\Http\Controllers\Pengusul\PengusulController as Pengusul;
+use App\Http\Controllers\Pimpinan\PimpinanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -71,3 +72,9 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');
     });
 });
+
+Route::get('/pimpinan/dashboard', [PimpinanController::class, 'index'])->name('pimpinan.dashboard');
+Route::get('/pimpinan/validasi', [PimpinanController::class, 'showData'])->name('pimpinan.validasi');
+Route::post('/validasi-pimpinan', [PimpinanController::class, 'validasi'])->name('validasi.pimpinan');
+Route::post('/validasi-pimpinan-all', [PimpinanController::class, 'validasiAll'])->name('validasi.pimpinan.all');
+Route::post('/validasi-pimpinan-reset', [PimpinanController::class, 'resetValidasi'])->name('validasi.pimpinan.reset');
