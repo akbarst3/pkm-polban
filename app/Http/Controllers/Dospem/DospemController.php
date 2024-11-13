@@ -10,16 +10,17 @@ use App\Models\ProgramStudi;
 use Illuminate\Http\Request;
 use App\Models\PerguruanTinggi;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DospemController extends Controller
 {
     protected function getData()
     {
-        $allProdi = ProgramStudi::all();
-        $first = $allProdi->first();
-        $perguruanTinggi = PerguruanTinggi::where('kode_pt', $first->kode_pt)->first();
+        $dosen = Dosen::findOrFail(Auth::guard('dospem')->user()->kode_dosen);
+        $prodi = ProgramStudi::findOrFail($dosen->kode_prodi);
+        $perguruanTinggi = PerguruanTinggi::findOrFail($prodi->kode_pt);
         return [
-            'prodi' => $first,
+            'dosen' => $dosen,
             'perguruanTinggi' => $perguruanTinggi
         ];
     }
@@ -27,7 +28,7 @@ class DospemController extends Controller
     public function index()
     {
         $data = $this->getData();
-        return view('dospem/dashboard', ['data' => $data, 'title' => 'Dashboard Dosen Pendamping']);
+        return view('dospem.dashboard', ['data' => $data, 'title' => 'Dashboard Dosen Pendamping']);
     }
 
     public function showData()
@@ -85,7 +86,7 @@ class DospemController extends Controller
         ]);
         $message = $request->val_dospem ? 'Usulan disetujui.' : 'Usulan ditolak.';
         session()->flash('success', $message);
-        return redirect()->back();
+        return redirect()->intended(route('dosen-pendamping.proposal'));
     }
 
     public function validasiUsulanDisetujui(DetailPkm $pkm)

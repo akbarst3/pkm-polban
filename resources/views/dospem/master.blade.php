@@ -66,7 +66,7 @@
         <!-- Sidebar -->
         <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="light">
             <div class="sidebar-brand">
-                <a href="{{ route('pengusul.dashboard') }}">
+                <a href="{{ route('dosen-pendamping.dashboard') }}">
                     <img src="{{ asset('images/PKMPOLBAN.png') }}" alt="PKM POLBAN" class="img-fluid"
                         style="max-width: 120px;">
                 </a>
@@ -74,8 +74,7 @@
 
             <div class="sidebar-wrapper">
                 <div class="sidebar-info text-center p-3">
-                    {{-- <h5>{{ strtoupper(Auth::guard('dospem')->user()->nama ?? $data['dosen']->nama) }}</h5> --}}
-                    <h5>Tes</h5> 
+                    <h5>{{ $data['dosen']->nama }}</h5> 
                     <p>Dosen Perguruan Tinggi</p>
                     <p>[{{ $data['perguruanTinggi']->kode_pt }}] {{ $data['perguruanTinggi']->nama_pt }}</p>
                 </div>
@@ -85,8 +84,8 @@
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ route('dospem.dashboard') }}"
-                                class="nav-link {{ Request::is('dospem/dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('dosen-pendamping.dashboard') }}"
+                                class="nav-link {{ Request::is('dosen-pendamping/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-house"></i>
                                 <p>Beranda</p>
                             </a>
@@ -102,7 +101,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('dospem.proposal') }}" class="nav-link">
+                                    <a href="{{ route('dosen-pendamping.proposal') }}" class="nav-link">
                                         <i class="bi bi-stack"></i>
                                         <p>Proposal</p>
                                     </a>
@@ -111,22 +110,22 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('dospem.dashboard') }}"
-                                class="nav-link {{ Request::is('dospem/dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('dosen-pendamping.dashboard') }}"
+                                class="nav-link">
                                 <i class="nav-icon bi bi-calendar"></i>
                                 <p>Validasi Kegiatan</p>
                             </a>
                         </li>
 
-                        {{-- <li class="nav-item">
-                            <form action="{{ route('pengusul.logout') }}" method="post">
+                        <li class="nav-item">
+                            <form action="{{ route('dosen-pendamping.logout') }}" method="post">
                                 @csrf
                                 <button type="submit" class="nav-link">
                                     <i class="nav-icon bi bi-box-arrow-left"></i>
                                     <p>Logout</p>
                                 </button>
                             </form>
-                        </li> --}}
+                        </li>
                     </ul>
                 </nav>
 

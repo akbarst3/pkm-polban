@@ -61,16 +61,9 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="d-flex">
-                                        <a href="{{ route('validasi-usulan-disetujui', ['pkm' => $pkms[$index]->id]) }}"
-                                            class="btn btn-success btn-sm me-1">
-                                            <i class="bi bi-check-circle"></i>
-                                        </a>
-                                        <a href="{{ route('validasi-usulan-disetujui', ['pkm' => $pkms[$index]->id]) }}"
-                                            class="btn btn-danger btn-sm me-1">
-                                            <i class="bi bi-x-circle"></i>
-                                        </a>
-                                    </div>
+                                    <a href="{{ route('dosen-pendamping.validasi-usulan-disetujui', ['pkm' => $pkms[$index]->id]) }}"
+                                        class="btn btn-primary btn-sm me-1">
+                                        <i class="bi bi-hand-index-thumb"></i> </a>
                                 </td>
                             </tr>
                         @endforeach

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Dospem\DospemController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Operator\AuthController as AuthOperator;
@@ -18,7 +17,7 @@ use App\Http\Controllers\Pimpinan\PimpinanController as Pimpinan;
 
 
 use App\Http\Controllers\Dospem\AuthController as AuthDospem;
-// use App\Http\Controllers\Dospem\PimpinanController as Dospem;
+use App\Http\Controllers\Dospem\DospemController as Dospem;
 
 Route::get('/', function () {
     return view('welcome');
@@ -77,6 +76,23 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');
         Route::get('/pelaksanaan/dashboard-pelaksanaan', [Pelaksanaan::class, 'createDashboard'])->name('dashboard-pelaksanaan');
 
+    });
+});
+
+// Route untuk Dospem
+Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function() {
+    
+    Route::middleware('guest:dospem')->group(function () {
+        Route::get('/login', [AuthDospem::class, 'create'])->name('login');
+        Route::post('/login', [AuthDospem::class, 'login']);
+    });
+    
+    Route::middleware(['auth:dospem', 'session.timeout'])->group(function () {
+        Route::get('/dashboard', [Dospem::class, 'index'])->name('dashboard');
+        Route::get('/proposal', [Dospem::class, 'showData'])->name('proposal');
+        Route::post('/validate', [Dospem::class, 'validate'])->name('validate');
+        Route::get('/validasi-usulan-disetujui/{pkm}', [Dospem::class, 'validasiUsulanDisetujui'])->name('validasi-usulan-disetujui');
+        Route::post('/logout', [AuthDospem::class, 'logout'])->name('logout');
     });
 });
 

@@ -28,7 +28,12 @@ class SessionTimeout
                         Auth::guard($guard)->logout();
                         $request->session()->invalidate();
                         $request->session()->regenerateToken();
-
+                        if($guard == 'pimpinan') {
+                            $guard = 'perguruan-tinggi';
+                        }
+                        if($guard == 'dospem') {
+                            $guard = 'dosen-pendamping';
+                        }
                         return redirect()->route($guard . '.login')
                             ->with('timeout_message', 'Sesi Anda telah berakhir. Silakan login kembali.');
                     }

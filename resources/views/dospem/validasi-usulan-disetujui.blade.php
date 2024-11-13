@@ -59,8 +59,8 @@
             <!-- Aksi Tombol -->
             <div class="row mt-4">
                 <div class="col-4 text-end">
-                    <a href="{{ route('dospem.proposal') }}" class="btn btn-outline-secondary">Kembali</a>
-                    <form action="{{ route('dospem.validate') }}" method="POST" class="d-inline">
+                    <a href="{{ route('dosen-pendamping.proposal') }}" class="btn btn-outline-secondary">Kembali</a>
+                    <form action="{{ route('dosen-pendamping.validate') }}" method="POST" class="d-inline">
                         @csrf
                         <input type="hidden" name="pkm_id" value="{{ $pkm_id }}">
                         <button type="submit" name="val_dospem" value="1"
