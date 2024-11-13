@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dospem\DospemController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Operator\AuthController as AuthOperator;
