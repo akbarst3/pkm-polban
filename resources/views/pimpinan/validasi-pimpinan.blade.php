@@ -1,5 +1,4 @@
 @extends('pimpinan/master')
-
 @section('konten')
     <div class="container my-4">
         <h5>Data Usulan Proposal PKM</h5>
@@ -12,17 +11,17 @@
 
         <!-- Approve/Reject/Reset Buttons -->
         <div class="mb-3 d-flex">
-            <form action="{{ route('validasi.pimpinan.all') }}" method="POST">
+            <form action="{{ route('perguruan-tinggi.validasi-pimpinan-all') }}" method="POST">
                 @csrf
-                <input type="hidden" name="val_pt" value="1">
+                <input type="hidden" name="val_pt" value=1>
                 <button type="submit" class="btn btn-success me-2">Setujui semua</button>
             </form>
-            <form action="{{ route('validasi.pimpinan.all') }}" method="POST">
+            <form action="{{ route('perguruan-tinggi.validasi-pimpinan-all') }}" method="POST">
                 @csrf
                 <input type="hidden" name="val_pt" value="0">
                 <button type="submit" class="btn btn-danger me-2">Tolak Semua</button>
             </form>
-            <form action="{{ route('validasi.pimpinan.reset') }}" method="POST">
+            <form action="{{ route('perguruan-tinggi.validasi-pimpinan-reset') }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-primary">Reset Semua</button>
             </form>
@@ -53,7 +52,7 @@
                                 <td>{{ $pengusul->nama }}</td>
                                 <td>
                                     {{ $pkms[$index]->judul ?? 'Judul tidak tersedia' }}<br>
-                                    <small>Pendamping: {{ $dospems[$index] ?? 'Belum ditentukan' }}</small>
+                                    <p>Pendamping: {{ $dospems[$index] ?? 'Belum ditentukan' }}</p>
                                 </td>
                                 <td>{{ $skemas[$index] ?? 'Tidak ada skema' }}</td>
                                 <td>{{ $dospems[$index] ?? 'Tidak ada dosen' }}</td>
@@ -68,22 +67,24 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <form action="{{ route('validasi.pimpinan') }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <input type="hidden" name="pkm_id" value="{{ $pkms[$index]->id }}">
-                                        <input type="hidden" name="val_pt" value="1">
-                                        <button type="submit" class="btn btn-success btn-sm">
-                                            <i class="bi bi-check-circle"></i>
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('validasi.pimpinan') }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <input type="hidden" name="pkm_id" value="{{ $pkms[$index]->id }}">
-                                        <input type="hidden" name="val_pt" value="0">
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </form>
+                                    <div class="d-flex justify-content-between">
+                                        <form action="" method="POST" class="mx-1">
+                                            @csrf
+                                            <input type="hidden" name="pkm_id" value="{{ $pkms[$index]->id }}">
+                                            <input type="hidden" name="val_pt" value="1">
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                <i class="bi bi-check-circle"></i>
+                                            </button>
+                                        </form>
+                                        <form action="" method="POST" class="mx-1">
+                                            @csrf
+                                            <input type="hidden" name="pkm_id" value="{{ $pkms[$index]->id }}">
+                                            <input type="hidden" name="val_pt" value="0">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="bi bi-x-circle"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

@@ -19,6 +19,10 @@ class RedirectIfAuthenticated
                     return redirect()->route('pengusul.dashboard');
                 } else if ($guard === 'operator') {
                     return redirect()->route('operator.dashboard');
+                } else if ($guard === 'pimpinan') {
+                    return redirect()->route('perguruan-tinggi.dashboard');
+                } else if ($guard === 'dospem') {
+                    return redirect()->route('dosen-pendamping.dashboard');
                 }
                 return redirect('/home');
             }

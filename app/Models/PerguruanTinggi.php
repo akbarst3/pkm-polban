@@ -9,8 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class PerguruanTinggi extends Authenticatable
 {
     use HasFactory;
+    protected $guard = 'pimpinan';
+    protected $table = 'perguruan_tinggis';
     protected $primaryKey = 'kode_pt';
-
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'kode_pt',
         'nama_pt',

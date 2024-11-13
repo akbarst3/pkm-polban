@@ -8,12 +8,14 @@ use App\Http\Controllers\Operator\UreviewerController;
 use App\Http\Controllers\Operator\UsulanController;
 use App\Http\Controllers\Operator\UsulanBaruController;
 
-use App\Http\Controllers\Pengusul\IdentitasUsulanController;
-use App\Http\Controllers\Pengusul\PengesahanController;
-use App\Http\Controllers\Pengusul\ProposalController;
 use App\Http\Controllers\Pengusul\AuthController as AuthPengusul;
 use App\Http\Controllers\Pengusul\PengusulController as Pengusul;
-use App\Http\Controllers\Pimpinan\PimpinanController;
+
+use App\Http\Controllers\Pimpinan\AuthController as AuthPimpinan;
+use App\Http\Controllers\Pimpinan\PimpinanController as Pimpinan;
+
+use App\Http\Controllers\Dospem\AuthController as AuthDospem;
+// use App\Http\Controllers\Dospem\PimpinanController as Dospem;
 
 Route::get('/', function () {
     return view('welcome');
@@ -73,8 +75,33 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
     });
 });
 
-Route::get('/pimpinan/dashboard', [PimpinanController::class, 'index'])->name('pimpinan.dashboard');
-Route::get('/pimpinan/validasi', [PimpinanController::class, 'showData'])->name('pimpinan.validasi');
-Route::post('/validasi-pimpinan', [PimpinanController::class, 'validasi'])->name('validasi.pimpinan');
-Route::post('/validasi-pimpinan-all', [PimpinanController::class, 'validasiAll'])->name('validasi.pimpinan.all');
-Route::post('/validasi-pimpinan-reset', [PimpinanController::class, 'resetValidasi'])->name('validasi.pimpinan.reset');
+// Route untuk Pimpinan
+Route::prefix('perguruan-tinggi')->name('perguruan-tinggi.')->group(function() {
+    
+    Route::middleware('guest:pimpinan')->group(function () {
+        Route::get('/login', [AuthPimpinan::class, 'create'])->name('login');
+        Route::post('/login', [AuthPimpinan::class, 'login']);
+    });
+    
+    Route::middleware(['auth:pimpinan', 'session.timeout'])->group(function () {
+        Route::get('/dashboard', [Pimpinan::class, 'index'])->name('dashboard');
+        Route::get('/validasi', [Pimpinan::class, 'showData'])->name('validasi');
+        Route::post('/validasi', [Pimpinan::class, 'validasi']);
+        Route::post('/validasi-pimpinan-all', [Pimpinan::class, 'validasiAll'])->name('validasi-pimpinan-all');
+        Route::post('/validasi-pimpinan-reset', [Pimpinan::class, 'resetValidasi'])->name('validasi-pimpinan-reset');
+        Route::post('/logout', [AuthPimpinan::class, 'logout'])->name('logout');
+    });
+});
+
+// Route untuk Dospem
+Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function() {
+    
+    Route::middleware('guest:pimpinan')->group(function () {
+        Route::get('/login', [AuthDospem::class, 'create'])->name('login');
+        Route::post('/login', [AuthDospem::class, 'login']);
+    });
+    
+    Route::middleware(['auth:pimpinan', 'session.timeout'])->group(function () {
+        Route::post('/logout', [AuthDospem::class, 'logout'])->name('logout');
+    });
+});

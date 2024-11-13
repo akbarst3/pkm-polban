@@ -15,8 +15,8 @@ class Pengusul extends Authenticatable
     protected $guard = 'pengusul';
     
     protected $primaryKey = 'username';
-    public $incrementing = false; // Karena bukan auto-increment
-    protected $keyType = 'string'; // Karena username bertipe string
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'nim',
@@ -32,7 +32,6 @@ class Pengusul extends Authenticatable
         'jenis_kelamin',
         'tanggal_lahir',
         'tempat_lahir',
-        // kolom lainnya
     ];
 
     protected $hidden = [
@@ -40,19 +39,16 @@ class Pengusul extends Authenticatable
         'remember_token',
     ];
 
-    // Override method getAuthIdentifierName jika perlu
     public function getAuthIdentifierName()
     {
         return 'username';
     }
 
-    // Override method getAuthIdentifier jika perlu
     public function getAuthIdentifier()
     {
         return $this->username;
     }
 
-    // Override method getAuthPassword untuk menyesuaikan nama kolom password
     public function getAuthPassword()
     {
         return $this->password_hashed;

@@ -66,7 +66,7 @@
         <!-- Sidebar -->
         <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="light">
             <div class="sidebar-brand">
-                <a href="{{ route('pimpinan.dashboard') }}">
+                <a href="{{ route('perguruan-tinggi.dashboard') }}">
                     <img src="{{ asset('images/PKMPOLBAN.png') }}" alt="PKM POLBAN" class="img-fluid"
                         style="max-width: 120px;">
                 </a>
@@ -84,8 +84,8 @@
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ route('pimpinan.dashboard') }}"
-                                class="nav-link {{ Request::is('pimpinan/dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('perguruan-tinggi.dashboard') }}"
+                                class="nav-link {{ Request::is('perguruan-tinggi/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-house"></i>
                                 <p>Beranda</p>
                             </a>
@@ -101,40 +101,22 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('pimpinan.validasi') }}" class="nav-link">
+                                    <a href="{{ route('perguruan-tinggi.validasi') }}" class="nav-link">
                                         <i class="bi bi-layers"></i>
                                         <p>Proposal</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-
                         <li class="nav-item">
-                            <a href="{{ route('pimpinan.dashboard') }}"
-                                class="nav-link {{ Request::is('pimpinan/dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon bi bi-calendar"></i>
-                                <p>Validasi Kegiatan</p>
-                            </a>
-                        </li>
-
-                        {{-- <li class="nav-item">
-                            <a href="/pengusul/pelaksanaanKegiatan"
-                                class="nav-link {{ Request::is('pengusul/pelaksanaanKegiatan*') ? 'active' : '' }}"
-                                @if (!$data['pkm']->val_pt) style="pointer-events: none; opacity: 0.6;" @endif>
-                                <i class="nav-icon bi bi-file-earmark"></i>
-                                <p>Pelaksanaan Kegiatan</p>
-                            </a>
-                        </li> --}}
-
-                        {{-- <li class="nav-item">
-                            <form action="{{ route('pimpinan.logout') }}" method="post">
+                            <form action="{{ route('perguruan-tinggi.logout') }}" method="post">
                                 @csrf
                                 <button type="submit" class="nav-link">
                                     <i class="nav-icon bi bi-box-arrow-left"></i>
                                     <p>Logout</p>
                                 </button>
                             </form>
-                        </li> --}}
+                        </li>
                     </ul>
                 </nav>
 

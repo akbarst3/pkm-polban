@@ -16,25 +16,24 @@ class Authenticate
             if (!Auth::guard($currentGuard)->check()) {
                 throw new \Exception('Unauthenticated');
             }
-            $user = Auth::guard($currentGuard)->user();
-            if ($currentGuard === 'operator' && empty($user->kode_pt)) {
-                Auth::guard($currentGuard)->logout();
-                throw new \Exception('Invalid operator data');
-            }
             return $next($request);
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Unauthenticated.'], 401);
             }
-
             if ($request->is('operator/*')) {
                 return redirect()->route('operator.login');
             }
             if ($request->is('pengusul/*')) {
                 return redirect()->route('pengusul.login');
             }
-
-            return redirect()->route('login');
+            if ($request->is('perguruan-tinggi/*')) {
+                return redirect()->route(route: 'perguruan-tinggi.login');
+            }
+            if ($request->is('dosen-pendamping/*')) {
+                return redirect()->route('dosen-pendamping.login');
+            }
+            return redirect()->route('home');
         }
     }
 
@@ -45,6 +44,12 @@ class Authenticate
         }
         if ($request->is('pengusul/*')) {
             return 'pengusul';
+        }
+        if ($request->is('perguruan-tinggi/*')) {
+            return 'pimpinan';
+        }
+        if ($request->is('dosen-pendamping/*')) {
+            return 'dospem';
         }
         return 'web';
     }

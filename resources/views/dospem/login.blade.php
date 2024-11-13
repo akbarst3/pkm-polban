@@ -1,3 +1,4 @@
+</html>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,7 +43,7 @@
                                 });
                             </script>
                         @endif
-                        <form id="login-form" action="{{ route('pengusul.login') }}" method="post"
+                        <form id="login-form" action="{{ route('dosen-pendamping.login') }}" method="post"
                             class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
@@ -139,3 +140,5 @@
         })
     </script>
 </body>
+
+</html>

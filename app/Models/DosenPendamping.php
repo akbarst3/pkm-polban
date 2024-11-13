@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -11,7 +10,7 @@ class DosenPendamping extends Authenticatable
 {
     use HasFactory;
     protected $guard = 'dospem';
-    protected $primaryKey = null;
+    protected $primaryKey = 'kode_dosen';
     public $incrementing = false;
 
     protected $fillable = [

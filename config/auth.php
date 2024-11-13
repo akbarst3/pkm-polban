@@ -48,6 +48,14 @@ return [
             'driver' => 'session',
             'provider' => 'pengusuls',
         ],
+        'pimpinan' => [
+            'driver' => 'session',
+            'provider' => 'pimpinans',
+        ],
+        'dospem' => [
+            'driver' => 'session',
+            'provider' => 'dospems',
+        ]
     ],
 
     /*
@@ -79,6 +87,14 @@ return [
         'pengusuls' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\Pengusul::class),
+        ],
+        'pimpinans' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\PerguruanTinggi::class),
+        ],
+        'dospems' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\DosenPendamping::class),
         ],
         
 
