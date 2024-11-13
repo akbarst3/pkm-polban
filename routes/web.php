@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dospem\DospemController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Operator\AuthController as AuthOperator;
@@ -52,7 +53,6 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::post('/login', [AuthPengusul::class, 'login']);
     });
 
-<<<<<<< HEAD
     Route::middleware(['auth:pengusul', 'session.timeout'])->group(function () {
         Route::get('/dashboard', [Pengusul::class, 'createDashboard'])->name('dashboard');
         Route::get('/identitas-usulan', [Pengusul::class, 'showData'])->name('identitas-usulan');
@@ -72,15 +72,8 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');
     });
 });
-=======
-Route::get('/pengusul/dashboard', [DashboardPengusulController::class,'index'])->name('pengusul.dashboard');
-Route::get('/dospem/dashboard', [DashboardDospemController::class,'index'])->name('dospem.dashboard');
-Route::get('/dospem/validasiusulan', [ValidasiUsulanDospemController::class,'index'])->name('dospem.validasiusulan');
-Route::get('/dospem/validasiusulandisetujui', [ValidasiUsulanDisetujuiDospemController::class,'index'])->name('dospem.validasiusulandisetujui');
-Route::get('/dospem/validasikegiatan', [ValidasiKegiatanDospemController::class,'index'])->name('dospem.validasikegiatan');
-Route::get('/dospem/logbookkegiatan', [LogbookKegiatanDospemController::class,'index'])->name('dospem.logbookkegiatan');
-Route::get('/dospem/logbookkeuangan', [LogbookKeuanganDospemController::class,'index'])->name('dospem.logbookkeuangan');
 
-require __DIR__.'/auth.php';
-
->>>>>>> a47ffb3 (add: tampilan dospem)
+Route::get('/dospem/dashboard', [DospemController::class, 'index'])->name('dospem.dashboard');
+Route::get('/dospem/proposal', [DospemController::class, 'showData'])->name('dospem.proposal');
+Route::post('/dospem/validate', [DospemController::class, 'validate'])->name('dospem.validate');
+Route::get('/validasi-usulan-disetujui/{pkm}', [DospemController::class, 'validasiUsulanDisetujui'])->name('validasi-usulan-disetujui');
