@@ -11,9 +11,11 @@ use App\Http\Controllers\Operator\UsulanBaruController;
 
 use App\Http\Controllers\Pengusul\AuthController as AuthPengusul;
 use App\Http\Controllers\Pengusul\PengusulController as Pengusul;
+use App\Http\Controllers\Pengusul\PelaksanaanController as Pelaksanaan;
 
 use App\Http\Controllers\Pimpinan\AuthController as AuthPimpinan;
 use App\Http\Controllers\Pimpinan\PimpinanController as Pimpinan;
+
 
 use App\Http\Controllers\Dospem\AuthController as AuthDospem;
 // use App\Http\Controllers\Dospem\PimpinanController as Dospem;
@@ -49,7 +51,7 @@ Route::prefix('operator')->name('operator.')->group(function () {
     });
 });
 
-// Route untuk Pengusul 
+// Route untuk Pengusul
 Route::prefix('pengusul')->name('pengusul.')->group(function () {
     Route::middleware('guest:pengusul')->group(function () {
         Route::get('/login', [AuthPengusul::class, 'create'])->name('login');
@@ -73,17 +75,19 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::patch('/identitas-usulan/proposal', [Pengusul::class, "storeProposal"]);
         Route::get('/pengusul/identitas-usulan/download-proposal', [Pengusul::class, 'downloadProposal'])->name('identitas-usulan.download-proposal');
         Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');
+        Route::get('/pelaksanaan/dashboard-pelaksanaan', [Pelaksanaan::class, 'createDashboard'])->name('dashboard-pelaksanaan');
+
     });
 });
 
 // Route untuk Pimpinan
 Route::prefix('perguruan-tinggi')->name('perguruan-tinggi.')->group(function() {
-    
+
     Route::middleware('guest:pimpinan')->group(function () {
         Route::get('/login', [AuthPimpinan::class, 'create'])->name('login');
         Route::post('/login', [AuthPimpinan::class, 'login']);
     });
-    
+
     Route::middleware(['auth:pimpinan', 'session.timeout'])->group(function () {
         Route::get('/dashboard', [Pimpinan::class, 'index'])->name('dashboard');
         Route::get('/validasi', [Pimpinan::class, 'showData'])->name('validasi');
@@ -96,12 +100,12 @@ Route::prefix('perguruan-tinggi')->name('perguruan-tinggi.')->group(function() {
 
 // Route untuk Dospem
 Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function() {
-    
+
     Route::middleware('guest:pimpinan')->group(function () {
         Route::get('/login', [AuthDospem::class, 'create'])->name('login');
         Route::post('/login', [AuthDospem::class, 'login']);
     });
-    
+
     Route::middleware(['auth:pimpinan', 'session.timeout'])->group(function () {
         Route::post('/logout', [AuthDospem::class, 'logout'])->name('logout');
     });

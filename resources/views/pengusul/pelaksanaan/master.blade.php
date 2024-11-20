@@ -73,10 +73,8 @@
             </div>
 
             <div class="sidebar-wrapper">
-                <div class="sidebar-info text-center p-3">
-                    <h5>{{ strtoupper(Auth::guard('pengusul')->user()->nama ?? $data['mahasiswa']->nama) }}</h5>
-                    <p>Pengusul - Mahasiswa</p>
-                    <p>[{{ $data['perguruanTinggi']->kode_pt }}] {{ $data['perguruanTinggi']->nama_pt }}</p>
+                <div class="sidebar-info text-center p-1">
+
                 </div>
 
                 <!-- Navigation Menu -->
@@ -84,7 +82,7 @@
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ route('pengusul.dashboard') }}"
+                            <a href="{{ route('pengusul.dashboard-pelaksanaan') }}"
                                 class="nav-link {{ Request::is('pengusul/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-house"></i>
                                 <p>Beranda</p>
@@ -94,58 +92,90 @@
                         <li class="nav-item">
                             <a href="#"
                                 class="nav-link {{ Request::is('pengusul/identitas-usulan*') ? 'active' : '' }}">
-                                <i class="nav-icon bi bi-card-list"></i>
+                                <i class="nav-icon bi bi-pencil-fill"></i>
                                 <p>
-                                    Pengajuan Usulan
+                                    Logbook
                                     <i class="nav-arrow bi bi-chevron-right"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('pengusul.identitas-usulan') }}" class="nav-link">
-                                        <p>Identitas Usulan</p>
+                                    <a href=" " class="nav-link">
+                                        <p>Logbook Kegiatan</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href=" " class="nav-link">
+                                        <p>Logbook Keuangan</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
 
                         <li class="nav-item">
-                            <a href="/pengusul/pelaksanaan/dashboard-pelaksanaan"
-                                class="nav-link "
-                                @if (!$data['pkm']->val_pt) style="pointer-events: none; opacity: 0.6;" @endif>
-                                <i class="nav-icon bi bi-file-earmark"></i>
-                                <p>Pelaksanaan Kegiatan</p>
+                            <a href="#"
+                                class="nav-link {{ Request::is('pengusul/identitas-usulan*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-journal-bookmark-fill"></i>
+                                <p>
+                                    Pelaksanaan Kegiatan
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href=" " class="nav-link">
+                                        <p>Laporan Kemajuan</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href=" " class="nav-link">
+                                        <p>Luaran Kemajuan</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href=" " class="nav-link">
+                                        <p>Laporan Akhir</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href=" " class="nav-link">
+                                        <p>Luaran Akhir</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-
                         <li class="nav-item">
-                            <form action="{{ route('pengusul.logout') }}" method="post">
-                                @csrf
-                                <button type="submit" class="nav-link">
-                                    <i class="nav-icon bi bi-box-arrow-left"></i>
-                                    <p>Logout</p>
-                                </button>
-                            </form>
-                        </li>
+                            <a href="#"
+                                class="nav-link {{ Request::is('pengusul/identitas-usulan*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-person-fill"></i>
+                                <p>
+                                    Profile
+                                </p>
+                            </a>
+
+
+                            <li class="nav-item mt-5"> <!-- Menambahkan jarak di atas item ini -->
+                                <form action="{{ route('pengusul.logout') }}" method="post" class="d-flex justify-content-center">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary w-100 d-flex align-items-center justify-content-center">
+                                        <span>Logout</span>
+                                    </button>
+                                </form>
+                            </li>
+
+
                     </ul>
                 </nav>
 
-                <!-- Bottom Components -->
-                <div class="bottom-components d-flex justify-content-between position-absolute w-100 p-4"
-                    style="bottom: 0;">
-                    <a href="#" class="nav-link text-center d-flex flex-column align-items-center">
-                        <i class="bi bi-chat fs-4"></i>
-                        <p class="mb-0">Pesan</p>
-                    </a>
-                    <a href="#" class="nav-link text-center d-flex flex-column align-items-center">
-                        <i class="bi bi-book fs-4"></i>
-                        <p class="mb-0">Panduan</p>
-                    </a>
-                    <a href="#" class="nav-link text-center d-flex flex-column align-items-center">
-                        <i class="bi bi-person fs-4"></i>
-                        <p class="mb-0">Pengguna</p>
-                    </a>
-                </div>
+
             </div>
         </aside>
 
