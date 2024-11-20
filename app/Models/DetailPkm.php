@@ -50,7 +50,7 @@ class DetailPkm extends Model
 
     public function pengesahan(): HasOne
     {
-        return $this->hasOne(Pengesahan::class, 'id_pkm', 'id_pkm');
+        return $this->hasOne(Pengesahan::class, 'id_pkm', 'id');
     }
 
     public function sosmed(): HasMany

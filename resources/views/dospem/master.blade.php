@@ -74,7 +74,7 @@
 
             <div class="sidebar-wrapper">
                 <div class="sidebar-info text-center p-3">
-                    <h5>{{ $data['dosen']->nama }}</h5> 
+                    <h5>{{ $data['dosen']->nama }}</h5>
                     <p>Dosen Perguruan Tinggi</p>
                     <p>[{{ $data['perguruanTinggi']->kode_pt }}] {{ $data['perguruanTinggi']->nama_pt }}</p>
                 </div>
@@ -110,8 +110,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('dosen-pendamping.dashboard') }}"
-                                class="nav-link">
+                            <a href="{{ route('dosen-pendamping.dashboard') }}" class="nav-link">
                                 <i class="nav-icon bi bi-calendar"></i>
                                 <p>Validasi Kegiatan</p>
                             </a>
@@ -136,7 +135,8 @@
                         <i class="bi bi-chat fs-4"></i>
                         <p class="mb-0">Pesan</p>
                     </a>
-                    <a href="#" class="nav-link text-center d-flex flex-column align-items-center">
+                    <a href="https://simbelmawa.kemdikbud.go.id/portal/wp-content/uploads/2024/02/1.-Panduan-Umum-PKM-2024.pdf"
+                        target="_blank" class="nav-link text-center d-flex flex-column align-items-center">
                         <i class="bi bi-book fs-4"></i>
                         <p class="mb-0">Panduan</p>
                     </a>

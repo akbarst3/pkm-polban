@@ -321,7 +321,7 @@
             const danaPtField = document.getElementById("dana_pt");
             const danaLainField = document.getElementById("dana_lain");
             const danaTotalField = document.getElementById("dana_total");
-            const instansiLainField = document.getElementById("instansi_lain"); // Tambahkan elemen instansi_lain
+            const instansiLainField = document.getElementById("instansi_lain");
 
             if (danaKemdikbudField.value) {
                 danaKemdikbudField.value = formatRupiah(removeFormat(danaKemdikbudField.value));

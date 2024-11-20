@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\PerguruanTinggi;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class DospemController extends Controller
 {
@@ -35,7 +36,9 @@ class DospemController extends Controller
     {
         $data = $this->getData();
         ['perguruanTinggi' => $pt] = $this->getData();
-        $pkms = DetailPkm::where('kode_pt', $pt->kode_pt)->get();
+        $pkms = DetailPkm::where('kode_pt', $pt->kode_pt)
+            ->whereHas('pengesahan')
+            ->get();
 
         $pengusuls = [];
         $skemas = [];
@@ -59,17 +62,55 @@ class DospemController extends Controller
             }
         }
 
-        return view('dospem/validasi-usulan', [
-            'data' => $data,
+        $viewData = [
+            'perguruanTinggi' => $pt,
             'pkms' => $pkms,
-            'title' => 'Dashboard Pimpinan',
             'pengusuls' => $pengusuls,
             'skemas' => $skemas,
             'nameDospems' => $nameDospems,
             'kodeDospems' => $kodeDospems,
             'valDospems' => $valDospems,
             'valPts' => $valPts
+        ];
+
+        return view('dospem/validasi-proposal', [
+            'data' => array_merge($data, ['viewData' => $viewData]),
+            'title' => 'Dashboard Pimpinan'
         ]);
+    }
+
+
+    public function showProposal($filename)
+    {
+        try {
+            $decodedFilename = base64_decode($filename);
+
+            if (!Storage::exists($decodedFilename)) {
+                return abort(404, 'File not found');
+            }
+
+            $extension = pathinfo($decodedFilename, PATHINFO_EXTENSION);
+            if (strtolower($extension) !== 'pdf') {
+                return abort(404, 'Invalid file type');
+            }
+
+            return response()->stream(
+                function () use ($decodedFilename) {
+                    $fileStream = Storage::readStream($decodedFilename);
+                    fpassthru($fileStream);
+                    if (is_resource($fileStream)) {
+                        fclose($fileStream);
+                    }
+                },
+                200,
+                [
+                    'Content-Type' => 'application/pdf',
+                    'Content-Disposition' => 'inline; filename="' . basename($decodedFilename) . '"',
+                ]
+            );
+        } catch (\Exception $e) {
+            return abort(500, 'Error accessing file');
+        }
     }
 
     public function validate(Request $request)
@@ -89,26 +130,18 @@ class DospemController extends Controller
         return redirect()->intended(route('dosen-pendamping.proposal'));
     }
 
-    public function validasiUsulanDisetujui(DetailPkm $pkm)
+    public function validasiUsulanDisetujui($id_pkm)
     {
         $data = $this->getData();
-        $skema = SkemaPkm::where('id', $pkm->id_skema)->first();
-        $pengusul = Mahasiswa::where('id_pkm', $pkm->id)->first();
-        $prodi = ProgramStudi::where('kode_prodi', $pengusul->kode_prodi)->first();
-        $dospem = Dosen::where('kode_dosen', $pkm->kode_dosen)->first();
+        $data['pkm'] = DetailPkm::findOrFail($id_pkm);
+        $data['skema'] = SkemaPkm::where('id', $data['pkm']->id_skema)->first();
+        $data['pengusul'] = Mahasiswa::where('id_pkm', $data['pkm']->id)->first();
+        $data['prodi'] = ProgramStudi::where('kode_prodi', $data['pengusul']->kode_prodi)->first();
+        $data['dospem'] = Dosen::where('kode_dosen', $data['pkm']->kode_dosen)->first();
 
-        return view('dospem/validasi-usulan-disetujui', [
+        return view('dospem/validasi-usulan', [
             'data' => $data,
             'title' => 'Dashboard Dosen Pendamping',
-            'judul' => $pkm->judul,
-            'nama' => $pengusul->nama,
-            'nim' => $pengusul->nim,
-            'namaProdi' => $prodi->nama_prodi,
-            'namaDospem' => $dospem->nama,
-            'nidn' => $dospem->kode_dosen,
-            'skema' => $skema->nama_skema,
-            'status' => $pkm->val_dospem,
-            'pkm_id' => $pkm->id
         ]);
     }
 }

@@ -80,18 +80,21 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
 });
 
 // Route untuk Dospem
-Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function() {
-    
+Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function () {
+
     Route::middleware('guest:dospem')->group(function () {
         Route::get('/login', [AuthDospem::class, 'create'])->name('login');
         Route::post('/login', [AuthDospem::class, 'login']);
     });
-    
+
     Route::middleware(['auth:dospem', 'session.timeout'])->group(function () {
         Route::get('/dashboard', [Dospem::class, 'index'])->name('dashboard');
         Route::get('/proposal', [Dospem::class, 'showData'])->name('proposal');
+        Route::get('/proposal/show/{filename}', [Dospem::class, 'showProposal'])
+            ->where('filename', '.*')
+            ->name('proposal.show');
+        Route::get('/validasi-usulan/{pkm}', [Dospem::class, 'validasiUsulanDisetujui'])->name('validasi-usulan');
         Route::post('/validate', [Dospem::class, 'validate'])->name('validate');
-        Route::get('/validasi-usulan-disetujui/{pkm}', [Dospem::class, 'validasiUsulanDisetujui'])->name('validasi-usulan-disetujui');
         Route::post('/logout', [AuthDospem::class, 'logout'])->name('logout');
     });
 });
@@ -113,17 +116,3 @@ Route::prefix('perguruan-tinggi')->name('perguruan-tinggi.')->group(function() {
         Route::post('/logout', [AuthPimpinan::class, 'logout'])->name('logout');
     });
 });
-
-// Route untuk Dospem
-Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function() {
-
-    Route::middleware('guest:pimpinan')->group(function () {
-        Route::get('/login', [AuthDospem::class, 'create'])->name('login');
-        Route::post('/login', [AuthDospem::class, 'login']);
-    });
-
-    Route::middleware(['auth:pimpinan', 'session.timeout'])->group(function () {
-        Route::post('/logout', [AuthDospem::class, 'logout'])->name('logout');
-    });
-});
-

@@ -22,8 +22,8 @@ return new class extends Migration
             $table->bigInteger('dana_pt')->nullable();
             $table->bigInteger('dana_lain')->nullable();
             $table->string('instansi_lain')->nullable();
-            $table->boolean('val_dospem')->default(false)->nullable();
-            $table->boolean('val_pt')->default(false)->nullable();
+            $table->boolean('val_dospem')->nullable();
+            $table->boolean('val_pt')->nullable();
             $table->string('proposal')->nullable();
             $table->string('lapkem')->nullable();
             $table->string('lapkhir')->nullable();

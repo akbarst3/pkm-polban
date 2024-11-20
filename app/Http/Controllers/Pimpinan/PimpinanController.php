@@ -34,13 +34,17 @@ class PimpinanController extends Controller
     {
         $data = $this->getData();
         ['perguruanTinggi' => $pt] = $this->getData();
-        $pkms = DetailPkm::where('kode_pt', $pt->kode_pt)->get();
 
-        $pengusuls = [];
-        $skemas = [];
-        $dospems = [];
-        $valDospems = [];
-        $valPts = [];
+        $pkms = DetailPkm::where('kode_pt', $pt->kode_pt)
+            ->where('val_dospem', true)
+            ->get();
+
+        $data['pkms'] = $pkms;
+        $data['pengusuls'] = [];
+        $data['skemas'] = [];
+        $data['dospems'] = [];
+        $data['valDospems'] = [];
+        $data['valPts'] = [];
 
         foreach ($pkms as $pkm) {
             $skema = SkemaPkm::where('id', $pkm->id_skema)->first();
@@ -48,25 +52,16 @@ class PimpinanController extends Controller
             $dospem = Dosen::where('kode_dosen', $pkm->kode_dosen)->first();
 
             if ($pengusul) {
-                $pengusuls[] = $pengusul;
-                $skemas[] = $skema->nama_skema;
-                $dospems[] = $dospem->nama;
-                $valDospems[] = $pkm->val_dospem;
-                $valPts[] = $pkm->val_pt;
+                $data['pengusuls'][] = $pengusul;
+                $data['skemas'][] = $skema->nama_skema;
+                $data['dospems'][] = $dospem->nama;
+                $data['valDospems'][] = $pkm->val_dospem;
+                $data['valPts'][] = $pkm->val_pt;
             }
         }
-
-        return view('pimpinan/validasi-pimpinan', [
-            'data' => $data,
-            'pkms' => $pkms,
-            'title' => 'Dashboard Pimpinan',
-            'pengusuls' => $pengusuls,
-            'skemas' => $skemas,
-            'dospems' => $dospems,
-            'valDospems' => $valDospems,
-            'valPts' => $valPts
-        ]);
+        return view('pimpinan/validasi-pimpinan', ['data' => $data, 'title' => 'Validasi Usulan PKM']);
     }
+
 
     public function validasi(Request $request)
     {
@@ -93,12 +88,20 @@ class PimpinanController extends Controller
     public function validasiAll(Request $request)
     {
         $request->validate(['val_pt' => 'required|boolean']);
+        $data = $this->getData();
 
-        ['perguruanTinggi' => $pt] = $this->getData();
-        $updatedCount = DetailPkm::where('kode_pt', $pt->kode_pt)->where('val_dospem', true)->update(['val_pt' => $request->val_pt]);
+        $updatedCount = DetailPkm::where('kode_pt', $data['perguruanTinggi']->kode_pt)
+            ->where('val_dospem', true)
+            ->whereNull('val_pt')
+            ->update(['val_pt' => $request->val_pt]);
 
         $action = $request->val_pt ? 'disetujui' : 'ditolak';
-        session()->flash('success', "$updatedCount proposal telah $action.");
+
+        if ($updatedCount > 0) {
+            session()->flash('success', "$updatedCount proposal telah $action.");
+        } else {
+            session()->flash('error', 'Tidak ada proposal yang dapat diperbarui.');
+        }
 
         return redirect()->back();
     }
@@ -106,9 +109,9 @@ class PimpinanController extends Controller
     public function resetValidasi()
     {
         ['perguruanTinggi' => $pt] = $this->getData();
-        $resetCount = DetailPkm::where('kode_pt', $pt->kode_pt)->update(['val_pt' => false]);
+        $resetCount = DetailPkm::where('kode_pt', $pt->kode_pt)->where('val_dospem', true)->update(['val_pt' => NULL]);
 
-        session()->flash('success', "$resetCount validasi pimpinan telah direset.");
+        session()->flash('success', "$resetCount usulan telah direset.");
 
         return redirect()->back();
     }
