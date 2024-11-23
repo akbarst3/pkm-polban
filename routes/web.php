@@ -75,7 +75,9 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::get('/pengusul/identitas-usulan/download-proposal', [Pengusul::class, 'downloadProposal'])->name('identitas-usulan.download-proposal');
         Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');
         Route::get('/pelaksanaan/dashboard-pelaksanaan', [Pelaksanaan::class, 'createDashboard'])->name('dashboard-pelaksanaan');
-
+        Route::get('/pelaksanaan/lap-kemajuan', [Pelaksanaan::class, 'kemajuan'])->name('lap-kemajuan');
+        Route::post('/pelaksanaan/lap-kemajuan/upload-file', [Pelaksanaan::class, 'uploadFile'])->name('lap-kemajuan.uploadFile');
+        Route::get('/pelaksanaan/lap-kemajuan/download-file/{id}', [Pelaksanaan::class, 'downloadFile'])->name('lap-kemajuan.downloadFile');
     });
 });
 
