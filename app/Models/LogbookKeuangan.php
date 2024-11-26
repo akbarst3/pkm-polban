@@ -15,6 +15,7 @@ class LogbookKeuangan extends Model
         'harga',
         'bukti',
         'id_pkm',
+        'jumlah',
     ];
     
     public function detailPkm(): BelongsTo

@@ -75,6 +75,13 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::get('/pelaksanaan/lap-kemajuan', [Pelaksanaan::class, 'kemajuan'])->name('lap-kemajuan');
         Route::post('/pelaksanaan/lap-kemajuan/upload-file', [Pelaksanaan::class, 'uploadFile'])->name('lap-kemajuan.uploadFile');
         Route::get('/pelaksanaan/lap-kemajuan/download-file/{id}', [Pelaksanaan::class, 'downloadFile'])->name('lap-kemajuan.downloadFile');
+        Route::get('/pelaksanaan/dashboard-logbook-keuangan', [Pelaksanaan::class, 'dashboardLogbookKeuangan'])->name('dashboard-logbook-keuangan');
+        Route::get('/pelaksanaan/form-tambah-logbook-keuangan', [Pelaksanaan::class, 'formTambahLogbookKeuangan'])->name('form-tambah-logbook-keuangan');
+        Route::post('/pelaksanaan/store-logbook-keuangan', [Pelaksanaan::class, 'storeLogbookKeuangan'])->name('store-logbook-keuangan');
+        Route::get('/pelaksanaan/download-bukti/{id}', [Pelaksanaan::class, 'downloadBukti'])->name('download-bukti');
+        Route::delete('/pelaksanaan/hapus-logbook-keuangan/{id}', [Pelaksanaan::class, 'hapusLogbookKeuangan'])->name('hapus-logbook-keuangan');
+        Route::get('/pelaksanaan/edit-logbook-keuangan/{id}', [Pelaksanaan::class, 'editLogbookKeuangan'])->name('edit-logbook-keuangan');
+        Route::put('/pelaksanaan/update-logbook-keuangan/{id}', [Pelaksanaan::class, 'updateLogbookKeuangan'])->name('update-logbook-keuangan');
     });
 });
 Route::get('/pelaksanaan/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->text('ket_item');
             $table->bigInteger('harga');
             $table->string('bukti');
+            $table->boolean('val_dospem')->nullable();
+            $table->bigInteger('jumlah');
 
             $table->foreign('id_pkm')->references('id')->on('detail_pkms');
             $table->timestamps();
