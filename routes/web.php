@@ -80,6 +80,9 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::get('/pelaksanaan/lap-kemajuan/download-file/{id}', [Pelaksanaan::class, 'downloadFile'])->name('lap-kemajuan.downloadFile');
     });
 });
+        Route::get('/pelaksanaan/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');
+        Route::patch('/pelaksanaan/upload-lapkhir', [Pelaksanaan::class, 'storeFile'])->name('upload-lapkhir');
+        Route::get('/pelaksanaan/laporan-akhir/download-lapkhir/{id}', [Pelaksanaan::class, 'downloadLapkhir'])->name('laporan-akhir.downloadLapkhir');
 
 // Route untuk Dospem
 Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function () {

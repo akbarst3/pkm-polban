@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pengusul;
 use Exception;
 use Throwable;
 use App\Models\Dosen;
+use App\Models\Pengusul;
 use App\Models\SkemaPkm;
 use App\Models\DetailPkm;
 use App\Models\Mahasiswa;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\PerguruanTinggi;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\LuaranPkm;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Carbon\Carbon;
@@ -29,10 +31,15 @@ class PelaksanaanController extends Controller
         $dosen = Dosen::where('kode_dosen', $pkm->kode_dosen)->first();
         $skema = SkemaPkm::where('id', $pkm->id_skema)->first();
         $anggota = Mahasiswa::where('id_pkm', $pkm->id)->where('nim', '!=', $nim)->get();
+<<<<<<< HEAD
         $valDospem = $pkm->val_dospem;
         $statusUpload = !empty($pkm->lapkem) ? 'Sudah diupload' : 'Belum diupload';
         $fileUrl = !empty($pkm->lapkem) ? asset('storage/lapkem/' . $pkm->lapkem) : null;
         $totalDana = $pkm->dana_kemdikbud + $pkm->dana_pt + $pkm->dana_lain;
+=======
+        $totalDana = $pkm->dana_kemdikbud + $pkm->dana_pt + $pkm->dana_lain;
+        $valDospem = $pkm->val_dospem;
+>>>>>>> 9b7fa86 (add: laporam akhir)
         return [
             'mahasiswa' => $mahasiswa,
             'pkm' => $pkm,
@@ -75,7 +82,7 @@ class PelaksanaanController extends Controller
             //$fileName = time() . '_' . $file->getClientOriginalName();
             $extension = $file->getClientOriginalExtension();
             $fileName = 'lapkem_' . uniqid() . '.' . $extension;
-            $filePath = 'private/lapkem/' . $fileName;  
+            $filePath = 'private/lapkem/' . $fileName;
             $file->storeAs('private/lapkem', $fileName);
 
             $pkm->lapkem = $filePath;
@@ -100,5 +107,45 @@ class PelaksanaanController extends Controller
         }
 
         return response()->download($filePath, basename($pkm->lapkem));
+    public function createLaporanAkhir()
+    {
+        $data = $this->getData();
+
+        return view('pengusul.pelaksanaan.laporan-akhir', ['data' => $data, 'title' => 'Laporan Akhir']);
+    }
+
+    public function storeFile(Request $request)
+    {
+        $request->validate([
+            'laporanAkhir' => 'required|mimes:pdf|max:5120',
+
+        ], [
+            'laporanAkhir.required' => 'File Laporan Akhir wajib diunggah.',
+            'laporanAkhir.mimes' => 'File Laporan Akhir harus berformat PDF.',
+            'laporanAkhir.max' => 'File Laporan Akhir tidak boleh lebih dari 5 MB.',
+
+        ]);
+        $mahasiswa = Mahasiswa::where('nim', Auth::guard('pengusul')->user()->nim)->first();
+        $pkm = DetailPkm::where('id', $mahasiswa->id_pkm)->first();
+        if ($request->hasFile('laporanAkhir')) {
+            // Simpan file di folder yang tepat
+            $filePath = $request->file('laporanAkhir')->store('private/laporan-akhir');
+            $pkm->update([
+                'lapkhir' => $filePath,
+            ]);
+        }
+        return redirect()->back()->with('success', 'File berhasil diupload!');
+    }
+    public function downloadLapkhir($id)
+    {
+        $pkm = DetailPkm::findOrFail($id);
+        if (!$pkm->lapkhir) {
+            return redirect()->back()->with('error', 'File tidak ditemukan!');
+        }
+        $filePath = storage_path('app/' . $pkm->lapkhir);
+        if (!file_exists($filePath)) {
+            return redirect()->back()->with('error', 'File tidak ditemukan!');
+        }
+        return response()->download($filePath, basename($pkm->lapkhir));
     }
 }

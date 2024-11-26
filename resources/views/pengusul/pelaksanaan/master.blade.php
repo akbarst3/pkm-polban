@@ -139,7 +139,7 @@
                             </ul>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href=" " class="nav-link">
+                                    <a href="{{ route('pengusul.laporan-akhir') }}" class="nav-link {{ request()->routeIs('pengusul.laporan-akhir') ? 'active' : '' }}">
                                         <p>Laporan Akhir</p>
                                     </a>
                                 </li>
