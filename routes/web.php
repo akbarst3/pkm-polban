@@ -82,11 +82,11 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::delete('/pelaksanaan/hapus-logbook-keuangan/{id}', [Pelaksanaan::class, 'hapusLogbookKeuangan'])->name('hapus-logbook-keuangan');
         Route::get('/pelaksanaan/edit-logbook-keuangan/{id}', [Pelaksanaan::class, 'editLogbookKeuangan'])->name('edit-logbook-keuangan');
         Route::put('/pelaksanaan/update-logbook-keuangan/{id}', [Pelaksanaan::class, 'updateLogbookKeuangan'])->name('update-logbook-keuangan');
+        Route::get('/pelaksanaan/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');
+        Route::patch('/pelaksanaan/upload-lapkhir', [Pelaksanaan::class, 'storeFile'])->name('upload-lapkhir');
+        Route::get('/pelaksanaan/laporan-akhir/download-lapkhir/{id}', [Pelaksanaan::class, 'downloadLapkhir'])->name('laporan-akhir.downloadLapkhir');
     });
 });
-Route::get('/pelaksanaan/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');
-Route::patch('/pelaksanaan/upload-lapkhir', [Pelaksanaan::class, 'storeFile'])->name('upload-lapkhir');
-Route::get('/pelaksanaan/laporan-akhir/download-lapkhir/{id}', [Pelaksanaan::class, 'downloadLapkhir'])->name('laporan-akhir.downloadLapkhir');
 
 // Route untuk Dospem
 Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function () {
