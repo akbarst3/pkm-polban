@@ -3,10 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Operator\AuthController as AuthOperator;
-use App\Http\Controllers\Operator\DashboardController as DashboardOperator;
-use App\Http\Controllers\Operator\UreviewerController;
-use App\Http\Controllers\Operator\UsulanController;
-use App\Http\Controllers\Operator\UsulanBaruController;
+use App\Http\Controllers\Operator\OperatorController as Operator;
 
 use App\Http\Controllers\Pengusul\AuthController as AuthPengusul;
 use App\Http\Controllers\Pengusul\PengusulController as Pengusul;
@@ -27,19 +24,19 @@ Route::get('/', function () {
 Route::prefix('operator')->name('operator.')->group(function () {
 
     Route::middleware(['auth:operator', 'session.timeout'])->group(function () {
-        Route::get('/dashboard', [DashboardOperator::class, 'index'])->name('dashboard');
-        Route::post('/dashboard', [DashboardOperator::class, 'storeFile'])->name('file');
+        Route::get('/dashboard', [Operator::class, 'index'])->name('dashboard');
+        Route::post('/dashboard', [Operator::class, 'storeFile'])->name('file');
 
         Route::middleware(['cek.surat'])->group(function () {
-            Route::get('/usulan-baru', [UsulanController::class, 'index'])->name('usulan.baru');
-            Route::get('/usulan-baru/{nim}', [UsulanController::class, 'viewData'])->name('usulan.baru.nim');
-            Route::delete('/usulan-baru/{id}', [UsulanController::class, 'deleteData'])->name('usulan.baru.delete');
-            Route::get('/identitas-usulan', [UsulanBaruController::class, 'index'])->name('identitas.usulan');
-            Route::post('/identitas-usulan/store', [UsulanBaruController::class, 'storeData'])->name('identitas-usulan.store');
-            Route::post('/identitas-usulan/find', [UsulanBaruController::class, 'findDosen'])->name('identitas.usulan.find');
+            Route::get('/usulan-baru', [Operator::class, 'index2'])->name('usulan.baru');
+            Route::get('/usulan-baru/{nim}', [Operator::class, 'viewData'])->name('usulan.baru.nim');
+            Route::delete('/usulan-baru/{id}', [Operator::class, 'deleteData'])->name('usulan.baru.delete');
+            Route::get('/identitas-usulan', [Operator::class, 'index1'])->name('identitas.usulan');
+            Route::post('/identitas-usulan/store', [Operator::class, 'storeData'])->name('identitas-usulan.store');
+            Route::post('/identitas-usulan/find', [Operator::class, 'findDosen'])->name('identitas.usulan.find');
             Route::view('/usulan-didanai', 'operator.usulan-didanai')->name('usulan.didanai');
             Route::view('/usulan-reviewer', 'operator.usulanReviewer')->name('usulan.reviewer');
-            Route::get('/identitas-reviewer', [UreviewerController::class, 'index'])->name('identitas.reviewer');
+            Route::get('/identitas-reviewer', [Operator::class, 'index2'])->name('identitas.reviewer');
             Route::post('/logout', [AuthOperator::class, 'logout'])->name('logout');
         });
     });
@@ -80,9 +77,9 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::get('/pelaksanaan/lap-kemajuan/download-file/{id}', [Pelaksanaan::class, 'downloadFile'])->name('lap-kemajuan.downloadFile');
     });
 });
-        Route::get('/pelaksanaan/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');
-        Route::patch('/pelaksanaan/upload-lapkhir', [Pelaksanaan::class, 'storeFile'])->name('upload-lapkhir');
-        Route::get('/pelaksanaan/laporan-akhir/download-lapkhir/{id}', [Pelaksanaan::class, 'downloadLapkhir'])->name('laporan-akhir.downloadLapkhir');
+Route::get('/pelaksanaan/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');
+Route::patch('/pelaksanaan/upload-lapkhir', [Pelaksanaan::class, 'storeFile'])->name('upload-lapkhir');
+Route::get('/pelaksanaan/laporan-akhir/download-lapkhir/{id}', [Pelaksanaan::class, 'downloadLapkhir'])->name('laporan-akhir.downloadLapkhir');
 
 // Route untuk Dospem
 Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function () {
@@ -105,7 +102,7 @@ Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function () 
 });
 
 // Route untuk Pimpinan
-Route::prefix('perguruan-tinggi')->name('perguruan-tinggi.')->group(function() {
+Route::prefix('perguruan-tinggi')->name('perguruan-tinggi.')->group(function () {
 
     Route::middleware('guest:pimpinan')->group(function () {
         Route::get('/login', [AuthPimpinan::class, 'create'])->name('login');

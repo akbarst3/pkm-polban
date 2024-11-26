@@ -96,19 +96,19 @@
                             @if (session('error'))
                                 <script>
                                     Swal.fire({
-                                    icon: 'info',
-                                    title: 'Tidak Bisa Akses Halaman!',
-                                    text: "{{ session('error') }}",
-                                    confirmButtonColor: '#003c72',
-                                    timer: 10000,
-                                    timerProgressBar: true,
-                                    showClass: {
-                                        popup: 'animate__animated animate__fadeInDown'
-                                    },
-                                    hideClass: {
-                                        popup: 'animate__animated animate__fadeOutUp'
-                                    }
-                                });
+                                        icon: 'info',
+                                        title: 'Tidak Bisa Akses Halaman!',
+                                        text: "{{ session('error') }}",
+                                        confirmButtonColor: '#003c72',
+                                        timer: 10000,
+                                        timerProgressBar: true,
+                                        showClass: {
+                                            popup: 'animate__animated animate__fadeInDown'
+                                        },
+                                        hideClass: {
+                                            popup: 'animate__animated animate__fadeOutUp'
+                                        }
+                                    });
                                 </script>
                             @endif
 
@@ -233,12 +233,11 @@
                                                         @endif
                                                     </td>
                                                     <td>PKM {{ $skema }}</td>
-                                                    <td>{{ $dataPkms[0]['judulCounts'][$idSkema] ?? 0 }}</td>
-                                                    <td>{{ $dataPkms[1]['proposalCounts'][$idSkema] ?? 0 }}</td>
-                                                    <td>{{ $dataPkms[2]['pengisianCounts'][$idSkema]['count'] ?? 0 }}</td>
-                                                    <td>{{ $dataPkms[3]['validasiCounts']['val_dospem'][$idSkema] ?? 0 }}
-                                                    </td>
-                                                    <td>{{ $dataPkms[3]['validasiCounts']['val_pt'][$idSkema] ?? 0 }}</td>
+                                                    <td>{{ $dataPkms['judulCounts'][$idSkema] ?? 0 }}</td>
+                                                    <td>{{ $dataPkms['pengisianCounts'][$idSkema] ?? 0 }}</td>
+                                                    <td>{{ $dataPkms['proposalCounts'][$idSkema] ?? 0 }}</td>
+                                                    <td>{{ $dataPkms['validasiCounts']['val_dospem'][$idSkema] ?? 0 }}</td>
+                                                    <td>{{ $dataPkms['validasiCounts']['val_pt'][$idSkema] ?? 0 }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

@@ -31,15 +31,10 @@ class PelaksanaanController extends Controller
         $dosen = Dosen::where('kode_dosen', $pkm->kode_dosen)->first();
         $skema = SkemaPkm::where('id', $pkm->id_skema)->first();
         $anggota = Mahasiswa::where('id_pkm', $pkm->id)->where('nim', '!=', $nim)->get();
-<<<<<<< HEAD
         $valDospem = $pkm->val_dospem;
         $statusUpload = !empty($pkm->lapkem) ? 'Sudah diupload' : 'Belum diupload';
         $fileUrl = !empty($pkm->lapkem) ? asset('storage/lapkem/' . $pkm->lapkem) : null;
         $totalDana = $pkm->dana_kemdikbud + $pkm->dana_pt + $pkm->dana_lain;
-=======
-        $totalDana = $pkm->dana_kemdikbud + $pkm->dana_pt + $pkm->dana_lain;
-        $valDospem = $pkm->val_dospem;
->>>>>>> 9b7fa86 (add: laporam akhir)
         return [
             'mahasiswa' => $mahasiswa,
             'pkm' => $pkm,
@@ -107,6 +102,7 @@ class PelaksanaanController extends Controller
         }
 
         return response()->download($filePath, basename($pkm->lapkem));
+    }
     public function createLaporanAkhir()
     {
         $data = $this->getData();
