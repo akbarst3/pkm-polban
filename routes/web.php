@@ -35,9 +35,7 @@ Route::prefix('operator')->name('operator.')->group(function () {
             Route::post('/identitas-usulan/store', [Operator::class, 'storeData'])->name('identitas-usulan.store');
             Route::post('/identitas-usulan/find', [Operator::class, 'findDosen'])->name('identitas.usulan.find');
             Route::view('/usulan-didanai', 'operator.usulan-didanai')->name('usulan.didanai');
-            Route::view('/usulan-reviewer', 'operator.usulanReviewer')->name('usulan.reviewer');
-            Route::get('/identitas-reviewer', [Operator::class, 'index2'])->name('identitas.reviewer');
-            Route::post('/logout', [AuthOperator::class, 'logout'])->name('logout');
+            Route::view('/usulan-reviewer', 'operator.usulanReviewer')->name('usulan.reviewer');            Route::post('/logout', [AuthOperator::class, 'logout'])->name('logout');
         });
     });
 
@@ -85,6 +83,13 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::get('/pelaksanaan/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');
         Route::patch('/pelaksanaan/upload-lapkhir', [Pelaksanaan::class, 'storeFile'])->name('upload-lapkhir');
         Route::get('/pelaksanaan/laporan-akhir/download-lapkhir/{id}', [Pelaksanaan::class, 'downloadLapkhir'])->name('laporan-akhir.downloadLapkhir');
+
+        Route::prefix('pelaksanaan')->name('pelaksanaan.')->group(function () {
+            Route::middleware(['pelaksanaan'])->group(function () {
+                Route::get('/dashboard-pelaksanaan', [Pelaksanaan::class, 'createDashboard'])->name('dashboard-pelaksanaan');
+                Route::get('/logbook-kegiatan', [Pelaksanaan::class, 'createLbkeg'])->name('logbook-kegiatan');
+            });
+        });
     });
 });
 
@@ -104,6 +109,15 @@ Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function () 
             ->name('proposal.show');
         Route::get('/validasi-usulan/{pkm}', [Dospem::class, 'validasiUsulanDisetujui'])->name('validasi-usulan');
         Route::post('/validate', [Dospem::class, 'validate'])->name('validate');
+        Route::get('/validasi-logbook', [Dospem::class, 'validasiLogbook'])->name('validasi-logbook');
+        Route::prefix('validasi-logbook')->name('validasi-logbook.')->group(function () {
+            Route::get('/logbook-kegiatan/{pkm}', [Dospem::class, 'validasiLogbookKegiatan'])->name('logbook-kegiatan');
+            Route::get('/logbook-keuangan/{pkm}', [Dospem::class, 'validasiLogbookKeuangan'])->name('logbook-keuangan');
+            Route::patch('/logbook-kegiatan/approve/{logbook}', [Dospem::class, 'approveLogbookKegiatan'])->name('logbook-kegiatan.approve');
+            Route::patch('/logbook-kegiatan/reject/{logbook}', [Dospem::class, 'rejectLogbookKegiatan'])->name('logbook-kegiatan.reject');
+            Route::patch('/logbook-keuangan/approve/{logbook}', [Dospem::class, 'approveLogbookKeuangan'])->name('logbook-keuangan.approve');
+            Route::patch('/logbook-keuangan/reject/{logbook}', [Dospem::class, 'rejectLogbookKeuangan'])->name('logbook-keuangan.reject');
+        });
         Route::post('/logout', [AuthDospem::class, 'logout'])->name('logout');
     });
 });

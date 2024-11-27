@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('id_skema');
             $table->string('kode_pt');
             $table->string('kode_dosen');
-            // $table->string('nim', 20);
             $table->string('judul');
             $table->bigInteger('dana_kemdikbud')->nullable();
             $table->bigInteger('dana_pt')->nullable();
@@ -27,11 +26,9 @@ return new class extends Migration
             $table->string('proposal')->nullable();
             $table->string('lapkem')->nullable();
             $table->string('lapkhir')->nullable();
-
             $table->foreign('id_skema')->references('id')->on('skema_pkms');
             $table->foreign('kode_pt')->references('kode_pt')->on('perguruan_tinggis');
             $table->foreign('kode_dosen')->references('kode_dosen')->on('dosens');
-            // $table->foreign('nim')->references('nim')->on('mahasiswas');
             $table->timestamps();
         });
     }

@@ -54,7 +54,7 @@ class PelaksanaanController extends Controller
         $data = $this->getData();
         return view('pengusul.pelaksanaan.dashboard-pelaksanaan', ['data' => $data, 'title' => 'Dashboard Pengusul']);
     }
-
+    
     public function kemajuan()
     {
         $data = $this->getData();

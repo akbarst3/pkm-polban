@@ -11,6 +11,9 @@ class Mahasiswa extends Model
 {
     use HasFactory;
     protected $primaryKey = 'nim';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'nim',
         'nama',
@@ -20,14 +23,15 @@ class Mahasiswa extends Model
     ];
 
     protected $casts = [
+        'nim' => 'string',
         'kode_prodi' => 'string'
     ];
+
 
     public function detailPkm(): BelongsTo
     {
         return $this->belongsTo(DetailPkm::class, 'id_pkm', 'id');
     }
-
     public function pengusul(): HasOne
     {
         return $this->hasOne(Pengusul::class, 'nim', 'nim');

@@ -82,7 +82,7 @@
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ route('pengusul.dashboard-pelaksanaan') }}"
+                            <a href="{{ route('pengusul.pelaksanaan.dashboard-pelaksanaan') }}"
                                 class="nav-link {{ Request::is('pengusul/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-house"></i>
                                 <p>Beranda</p>
@@ -100,7 +100,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href=" " class="nav-link">
+                                    <a href="{{ route('pengusul.pelaksanaan.logbook-kegiatan') }}" class="nav-link">
                                         <p>Logbook Kegiatan</p>
                                     </a>
                                 </li>

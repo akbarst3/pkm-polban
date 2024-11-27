@@ -15,6 +15,7 @@ class LogbookKegiatan extends Model
         'capaian',
         'waktu_pelaksanaan',
         'bukti',
+        'validasi',
         'id_pkm',
     ];
 

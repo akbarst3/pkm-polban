@@ -110,9 +110,9 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="/pengusul/pelaksanaan/dashboard-pelaksanaan"
+                            <a href="{{ route('pengusul.pelaksanaan.dashboard-pelaksanaan') }}"
                                 class="nav-link "
-                                @if (!$data['pkm']->val_pt) style="pointer-events: none; opacity: 0.6;" @endif>
+                                @if (!$data['pkm']->val_pt || $data['pkm']->id_skema == 9 || $data['pkm']->id_skema == 10) style="pointer-events: none; opacity: 0.6;" @endif>
                                 <i class="nav-icon bi bi-file-earmark"></i>
                                 <p>Pelaksanaan Kegiatan</p>
                             </a>

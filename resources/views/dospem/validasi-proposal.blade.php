@@ -84,8 +84,7 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('dosen-pendamping.validasi-usulan', ['pkm' => $data['viewData']['pkms'][$index]->id]) }}"
-                                        class="btn btn-primary btn-sm me-1"
-                                        @if ($data['viewData']['valPts']) style="pointer-events: none; opacity: 0.6;" @endif>
+                                        class="btn btn-primary btn-sm me-1">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                 </td>

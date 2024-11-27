@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CekSurat;
+use App\Http\Middleware\Pendanaan;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\SessionTimeout;
 use Illuminate\Session\Middleware\StartSession;
+use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\RedirectIfAuthenticated;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,7 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth' => Authenticate::class,
             'guest' => RedirectIfAuthenticated::class,
             'session.timeout' => SessionTimeout::class,
-            'cek.surat' => CekSurat::class
+            'cek.surat' => CekSurat::class,
+            'pelaksanaan' => Pendanaan::class
         ]);
         $middleware->prependToGroup('web', StartSession::class);
     })

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class DetailPkm extends Model
@@ -28,9 +27,9 @@ class DetailPkm extends Model
         'kode_dosen',
     ];
 
-    public function mahasiswas(): HasOne
+    public function mahasiswas(): HasMany
     {
-        return $this->HasOne(Mahasiswa::class, 'id_pkm', 'id_pkm');
+        return $this->HasMany(Mahasiswa::class, 'id_pkm', 'id');
     }
 
     public function lbkg(): HasMany
@@ -41,11 +40,6 @@ class DetailPkm extends Model
     public function lbkeu(): HasMany
     {
         return $this->hasMany(LogbookKegiatan::class, 'id_pkm', 'id_pkm');
-    }
-
-    public function pengusuls(): HasManyThrough
-    {
-        return $this->hasManyThrough(Pengusul::class, Mahasiswa::class, 'id_pkm', 'nim', 'id_pkm', 'nim');
     }
 
     public function pengesahan(): HasOne

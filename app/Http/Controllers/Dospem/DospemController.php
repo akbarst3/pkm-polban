@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Dospem;
 
+use Exception;
 use App\Models\Dosen;
 use App\Models\SkemaPkm;
 use App\Models\DetailPkm;
 use App\Models\Mahasiswa;
 use App\Models\ProgramStudi;
 use Illuminate\Http\Request;
+use App\Models\LogbookKegiatan;
+use App\Models\LogbookKeuangan;
 use App\Models\PerguruanTinggi;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DospemController extends Controller
 {
@@ -144,4 +148,95 @@ class DospemController extends Controller
             'title' => 'Dashboard Dosen Pendamping',
         ]);
     }
+
+    public function validasiLogbook()
+    {
+        $data = $this->getData();
+        $data['pkms'] = DetailPkm::where('kode_dosen', $data['dosen']->kode_dosen)
+            ->whereHas('pengesahan')
+            ->whereHas('mahasiswas.pengusul')
+            ->with(['mahasiswas' => function ($query) {
+                $query->whereHas('pengusul')->limit(1);
+            }, 'skema'])
+            ->get()
+            ->map(function ($detailPkm) {
+                $detailPkm->mahasiswa = $detailPkm->mahasiswas->first();
+                unset($detailPkm->mahasiswas);
+                return $detailPkm;
+            });
+        return view('dospem.validasi-logbook', ['data' => $data, 'title' => 'Validasi Logbook']);
+    }
+
+    public function validasiLogbookKegiatan($pkm)
+    {
+        $data = $this->getData();
+        $data['logbooks'] = LogbookKegiatan::where('id_pkm', $pkm)->get();
+        return view('dospem.logbook-kegiatan', ['data' => $data, 'title' => 'Validasi Logbook Kegiatan']);
+    }
+
+    public function validasiLogbookKeuangan($pkm)
+    {
+        $data = $this->getData();
+        $data['logbooks'] = LogbookKeuangan::where('id_pkm', $pkm)->get();
+        return view('dospem.logbook-keuangan', ['data' => $data, 'title' => 'Validasi Logbook Keuangan']);
+    }
+
+    public function approveLogbookKegiatan($logbook)
+{
+    try {
+        $logbookKegiatan = LogbookKegiatan::findOrFail($logbook);
+        $logbookKegiatan->update([
+            'validasi' => 1
+        ]);
+        return back()->with('success', 'Logbook berhasil diapprove');
+    } catch (ModelNotFoundException $e) {
+        return back()->with('error', 'Logbook tidak ditemukan');
+    } catch (Exception $e) {
+        return back()->with('error', 'Terjadi kesalahan saat mengapprove logbook: ' . $e->getMessage());
+    }
+}
+
+public function rejectLogbookKegiatan($logbook)
+{
+    try {
+        $logbookKegiatan = LogbookKegiatan::findOrFail($logbook);
+        $logbookKegiatan->update([
+            'validasi' => 0
+        ]);
+        return back()->with('error', 'Logbook ditolak');
+    } catch (ModelNotFoundException $e) {
+        return back()->with('error', 'Logbook tidak ditemukan');
+    } catch (Exception $e) {
+        return back()->with('error', 'Terjadi kesalahan saat menolak logbook: ' . $e->getMessage());
+    }
+}
+    public function approveLogbookKeuangan($logbook)
+{
+    try {
+        $logbookKeuangan = LogbookKeuangan::findOrFail($logbook);
+        $logbookKeuangan->update([
+            'validasi' => 1
+        ]);
+        return back()->with('success', 'Logbook berhasil diapprove');
+    } catch (ModelNotFoundException $e) {
+        return back()->with('error', 'Logbook tidak ditemukan');
+    } catch (Exception $e) {
+        return back()->with('error', 'Terjadi kesalahan saat mengapprove logbook: ' . $e->getMessage());
+    }
+}
+
+public function rejectLogbookKeuangan($logbook)
+{
+    try {
+        $logbookKeuangan = LogbookKeuangan::findOrFail($logbook);
+        $logbookKeuangan->update([
+            'validasi' => 0
+        ]);
+        return back()->with('error', 'Logbook ditolak');
+    } catch (ModelNotFoundException $e) {
+        return back()->with('error', 'Logbook tidak ditemukan');
+    } catch (Exception $e) {
+        return back()->with('error', 'Terjadi kesalahan saat menolak logbook: ' . $e->getMessage());
+    }
+}
 }

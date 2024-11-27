@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pengusuls', function (Blueprint $table) {
-            $table->string('nim')->unique();
-            $table->string('username')->primary();
+            $table->string('nim')->primary();
+            $table->string('username');
             $table->string('password_plain');
             $table->string('password');
             $table->string('alamat')->nullable();

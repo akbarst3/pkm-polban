@@ -95,10 +95,14 @@
                                             Anggota Kurang, <br>
                                         @endif
                                         @if ($pengusul->alamat == null)
-                                            Alamat, <br>
-                                            Email, <br>
-                                            Luaran, <br>
-                                            Dana Usulan <br>
+                                            Identitas pengusul, <br>
+                                        @endif
+                                        @if ($pengusul->dana_pt == null)
+                                            Pengajuan dana <br>
+                                        @endif
+                                        @if ($pengusul->jumlah_mahasiswa >= 3 || $pengusul->alamat != null || $pengusul->dana_pt != null)
+                                            <i
+                                                class="d-flex justify-content-center bi bi-check-circle-fill text-success custom-icon"></i>
                                         @endif
                                     </td>
                                     <td>
@@ -123,8 +127,8 @@
                                         <button class="btn btn-primary mb-2" onclick="viewData('{{ $pengusul->nim }}')">
                                             <i class="bi bi-person"></i>
                                         </button> <br>
-                                        <form action="{{ route('operator.usulan.baru.delete', $pengusul->nim) }}" method="POST"
-                                            style="display:inline;">
+                                        <form action="{{ route('operator.usulan.baru.delete', $pengusul->nim) }}"
+                                            method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" class="btn btn-danger">

@@ -13,10 +13,13 @@ class Pengusul extends Authenticatable
 
     protected $table = 'pengusuls';
     protected $guard = 'pengusul';
-    
-    protected $primaryKey = 'username';
+
+    protected $primaryKey = 'nim';
     public $incrementing = false;
     protected $keyType = 'string';
+    protected $casts = [
+        'nim' => 'string',
+    ];
 
     protected $fillable = [
         'nim',
@@ -39,19 +42,14 @@ class Pengusul extends Authenticatable
         'remember_token',
     ];
 
-    public function getAuthIdentifierName()
-    {
-        return 'username';
-    }
-
-    public function getAuthIdentifier()
-    {
-        return $this->username;
-    }
-
     public function getAuthPassword()
     {
-        return $this->password_hashed;
+        return $this->password;
+    }
+
+    public function setNimAttribute($value)
+    {
+        $this->attributes['nim'] = (string)$value;
     }
 
     public function mahasiswa(): BelongsTo

@@ -92,7 +92,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ Request::is('dospem/dashboard*') ? 'active' : '' }}">
+                            <a href="{{ route('dosen-pendamping.proposal') }}" class="nav-link {{ Request::is('dosen-pendamping/proposal') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-calendar"></i>
                                 <p>
                                     Validasi Usulan
@@ -110,9 +110,9 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('dosen-pendamping.dashboard') }}" class="nav-link">
+                            <a href="{{ route('dosen-pendamping.validasi-logbook') }}" class="nav-link {{ Request::is('dosen-pendamping/validasi-logbook') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-calendar"></i>
-                                <p>Validasi Kegiatan</p>
+                                <p>Validasi Logbook</p>
                             </a>
                         </li>
 

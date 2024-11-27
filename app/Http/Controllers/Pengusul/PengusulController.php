@@ -106,7 +106,7 @@ class PengusulController extends Controller
             'dana_kemdikbud' => 'required',
             'dana_pt' => 'required',
             'dana_lain' => 'nullable',
-            'instansi_lain' => 'required_if:dana_lain,!=,null|string',
+            'instansi_lain' => 'required_if:dana_lain,==,null'
         ], [
             'dana_kemdikbud.required' => 'Dana Kemdikbud perlu diisi',
             'dana_pt.required' => 'Dana Perguruan Tinggi perlu diisi',
