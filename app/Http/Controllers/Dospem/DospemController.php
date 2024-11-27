@@ -215,9 +215,9 @@ public function rejectLogbookKegiatan($logbook)
     try {
         $logbookKeuangan = LogbookKeuangan::findOrFail($logbook);
         $logbookKeuangan->update([
-            'validasi' => 1
-        ]);
-        return back()->with('success', 'Logbook berhasil diapprove');
+            'val_dospem' => 1
+        ]); 
+                    return back()->with('success', 'Logbook berhasil diapprove');
     } catch (ModelNotFoundException $e) {
         return back()->with('error', 'Logbook tidak ditemukan');
     } catch (Exception $e) {
@@ -230,7 +230,7 @@ public function rejectLogbookKeuangan($logbook)
     try {
         $logbookKeuangan = LogbookKeuangan::findOrFail($logbook);
         $logbookKeuangan->update([
-            'validasi' => 0
+            'val_dospem' => 0
         ]);
         return back()->with('error', 'Logbook ditolak');
     } catch (ModelNotFoundException $e) {

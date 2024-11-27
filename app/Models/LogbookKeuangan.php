@@ -16,6 +16,7 @@ class LogbookKeuangan extends Model
         'bukti',
         'id_pkm',
         'jumlah',
+        'val_dospem',
     ];
     
     public function detailPkm(): BelongsTo

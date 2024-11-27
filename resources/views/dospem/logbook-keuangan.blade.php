@@ -8,7 +8,7 @@
     <div class="container my-4">
         <div class="card shadow-sm">
             <div class="card-header bg-light">
-                <h6 class="mb-0 fw-bold">Log Book Kegiatan</h6>
+                <h6 class="mb-0 fw-bold">Log Book Keuangan</h6>
             </div>
 
             <!-- Tabel Log Book Kegiatan -->
@@ -31,14 +31,15 @@
                                     <td class="align-middle">{{ \Carbon\Carbon::parse($logbook->tanggal)->format('d-m-Y') }}
                                     </td>
                                     <td class="align-middle">{{ $logbook->ket_item }}</td>
-                                    <td class="align-middle">{{ $logbook->harga }}%</td>
-                                    <td class="align-middle">{{ $logbook->bukti }}</td>
+                                    <td class="align-middle">{{ $logbook->harga }}</td>
+                                    <td class="align-middle">{{ $logbook->jumlah }}</td>
+                                    {{-- <td class="align-middle">{{ $logbook->bukti }}</td> --}}
                                     <td class="align-middle">
                                         <a href=""><i class="bi bi-file-earmark-fill"
                                                 style="font-size: 35px;"></i></a>
                                     </td>
                                     <td class="align-middle">
-                                        @if ($logbook->validasi === null)
+                                        @if ($logbook->val_dospem === null)
                                             <form
                                                 action="{{ route('dosen-pendamping.validasi-logbook.logbook-keuangan.approve', $logbook->id) }}"
                                                 method="POST" style="display: inline;">
@@ -57,7 +58,7 @@
                                                     Tolak
                                                 </button>
                                             </form>
-                                        @elseif ($logbook->validasi)
+                                        @elseif ($logbook->val_dospem)
                                             <span class="badge p-2 bg-success">Disetujui</span>
                                         @else
                                             <span class="badge p-2 bg-danger">Ditolak</span>
