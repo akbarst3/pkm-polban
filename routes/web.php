@@ -51,8 +51,11 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::get('/login', [AuthPengusul::class, 'create'])->name('login');
         Route::post('/login', [AuthPengusul::class, 'login']);
     });
-
+    
     Route::middleware(['auth:pengusul', 'session.timeout'])->group(function () {
+        Route::get('/pelaksanaan_kegiatan/profile', [Pengusul::class, 'profile'])->name('pelaksanaan_kegiatan.profile');
+        Route::patch('/pelaksanaan_kegiatan/profile/update', [Pengusul::class, 'update'])->name('pelaksanaan_kegiatan.profile.update');
+        Route::get('/pelaksanaan_kegiatan/profile/show', [Pengusul::class, 'showProfile'])->name('pelaskanaan_kegiatan.profile.show');
         Route::get('/dashboard', [Pengusul::class, 'createDashboard'])->name('dashboard');
         Route::get('/identitas-usulan', [Pengusul::class, 'showData'])->name('identitas-usulan');
         Route::get('/edit-usulan', [Pengusul::class, 'showDetail'])->name('edit-usulan');
