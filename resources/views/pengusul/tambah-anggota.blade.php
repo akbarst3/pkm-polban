@@ -1,9 +1,9 @@
 @extends('pengusul/master')
 
 @section('konten')
-    <div class="m-5 p-4 bg-white rounded shadow-sm">
+    <div class="card m-5 p-4 bg-white rounded shadow-sm">
         <form
-            action="{{ $isEdit == false ? route('pengusul.edit-usulan.tambah-anggota') : route('pengusul.edit-usulan.edit-anggota', $data['anggota']->nim) }}"
+            action="{{ $isEdit == false ? route('pengusul.identitas-usulan.edit-usulan.tambah-anggota') : route('pengusul.identitas-usulan.edit-usulan.edit-anggota', $data['anggota']->nim) }}"
             method="POST" class="needs-validation" novalidate style="max-width: 70%; margin: 0;">
             @csrf
             @if ($isEdit == true)
@@ -37,7 +37,7 @@
                     <div class="col-md-9">
                         <div class="input-group">
                             <input type="text" class="form-control no-char" id="nim" name="nim"
-                                placeholder="Masukkan NIM" value="{{ $isEdit ? $data['anggota']->nim : '' }}" required>
+                                placeholder="Masukkan NIM" value="{{ $isEdit ? $data['anggota']->nim : '' }}" {{ $isEdit ? 'disabled' : '' }} required>
                             <small class="invalid-feedback">
                                 NIM wajib diisi.
                             </small>
@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mt-3">
-                    <a class="btn bg-secondary text-white" href="{{ route('pengusul.edit-usulan') }}"> Kembali
+                    <a class="btn bg-secondary text-white" href="{{ route('pengusul.identitas-usulan.edit-usulan') }}"> Kembali
                     </a>
                     <button class="btn bg-success text-white" type="submit" style="margin-left: 10px;">
                         Simpan

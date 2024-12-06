@@ -83,7 +83,7 @@
                         data-accordion="false">
                         <li class="nav-item">
                             <a href="{{ route('pengusul.pelaksanaan.dashboard-pelaksanaan') }}"
-                                class="nav-link {{ Request::is('pengusul/dashboard') ? 'active' : '' }}">
+                                class="nav-link {{ Request::is('pengusul/pelaksanaan/dashboard-pelaksanaan') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-house"></i>
                                 <p>Beranda</p>
                             </a>
@@ -91,7 +91,7 @@
 
                         <li class="nav-item">
                             <a href="#"
-                                class="nav-link {{ Request::is('pengusul/identitas-usulan*') ? 'active' : '' }}">
+                                class="nav-link {{ Request::is('pengusul/pelaksanaan/logbook**') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-pencil-fill"></i>
                                 <p>
                                     Logbook
@@ -100,14 +100,14 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('pengusul.pelaksanaan.logbook-kegiatan') }}" class="nav-link">
+                                    <a href="{{ route('pengusul.pelaksanaan.logbook-kegiatan.index') }}" class="nav-link">
                                         <p>Logbook Kegiatan</p>
                                     </a>
                                 </li>
                             </ul>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('pengusul.dashboard-logbook-keuangan') }}" class="nav-link">
+                                    <a href="{{ route('pengusul.pelaksanaan.logbook-keuangan') }}" class="nav-link">
                                         <p>Logbook Keuangan</p>
                                     </a>
                                 </li>
@@ -125,7 +125,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('pengusul.lap-kemajuan') }}" class="nav-link {{ request()->routeIs('pengusul.lap-kemajuan') ? 'active' : '' }}">
+                                    <a href="{{ route('pengusul.pelaksanaan.lap-kemajuan') }}" class="nav-link {{ request()->routeIs('pengusul.lap-kemajuan') ? 'active' : '' }}">
                                         <p>Laporan Kemajuan</p>
                                     </a>
                                 </li>
@@ -139,7 +139,7 @@
                             </ul>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('pengusul.laporan-akhir') }}" class="nav-link {{ request()->routeIs('pengusul.laporan-akhir') ? 'active' : '' }}">
+                                    <a href="{{ route('pengusul.pelaksanaan.laporan-akhir') }}" class="nav-link {{ request()->routeIs('pengusul.laporan-akhir') ? 'active' : '' }}">
                                         <p>Laporan Akhir</p>
                                     </a>
                                 </li>

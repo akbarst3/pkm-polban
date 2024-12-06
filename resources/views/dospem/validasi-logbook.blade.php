@@ -11,18 +11,18 @@
         </div>
 
         <!-- Table -->
-        <div class="card shadow-sm p-4">
+        <div class="card shadow rounded p-4">
             <h5>Daftar Usulan</h5>
 
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead class="table-light">
                         <tr>
-                            <th class="text-center align-middle">No.</th>
-                            <th class="text-center align-middle">Pengusul</th>
-                            <th class="text-center align-middle">Judul</th>
-                            <th class="text-center align-middle">Skema</th>
-                            <th class="text-center align-middle">Validasi Logbook</th>
+                            <th class="text-center align-middle" style="width: 2%">No.</th>
+                            <th class="text-center align-middle" style="width: 10%">Pengusul</th>
+                            <th class="text-center align-middle" style="width: 50%">Judul</th>
+                            <th class="text-center align-middle" style="width: 10%">Skema</th>
+                            <th class="text-center align-middle" style="width: 30%">Validasi Logbook</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,9 +34,16 @@
                                     {{ $pkm->judul }}<br>
                                 </td>
                                 <td class="text-center align-middle">{{ $pkm['skema']->nama_skema }}</td>
-                                <td class="text-center align-middle">
-                                    <a class="btn btn-secondary mx-4" href="{{ route('dosen-pendamping.validasi-logbook.logbook-kegiatan', $pkm->id) }}">Logbook Kegiatan</a>
-                                    <a class="btn btn-secondary mx-4" href="{{ route('dosen-pendamping.validasi-logbook.logbook-keuangan', $pkm->id) }}">Logbook Keuangan</a>
+                                <td class="text-center align-middle d-flex justify-content-center align-items-center"
+                                    style="height: 100px;">
+                                    <a class="btn btn-secondary me-2"
+                                        href="{{ route('dosen-pendamping.validasi-logbook.logbook-kegiatan', $pkm->id) }}" title="Logbook Kegiatan">
+                                        <i class="bi bi-journal-check"></i>
+                                    </a>
+                                    <a class="btn btn-secondary"
+                                        href="{{ route('dosen-pendamping.validasi-logbook.logbook-keuangan', $pkm->id) }}" title="Logbook Keuangan">
+                                        <i class="bi bi-receipt"></i>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach

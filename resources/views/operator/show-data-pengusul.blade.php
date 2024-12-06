@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Data Usulan</title>
-</head>
-
 @extends('operator.master')
 @section('konten')
     <div class="app-content-header">
@@ -17,7 +7,7 @@
                     <h3 class="mb-0">{{ $perguruanTinggi->nama_pt }}</h3>
                 </div>
             </div>
-            <div class="container my-4">
+            <div class="container my-4 p-4 rounded shadow bg-white">
                 <h5>DATA MAHASISWA</h5>
                 <form>
                     <div class="row">
@@ -144,15 +134,6 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="row mb-4">
-                        <div class="col-md-3 text-end">
-                            <p>Program Studi</p>
-                        </div>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" value="{{ $namaProdiDosen }}" disabled>
-                        </div>
-                    </div> --}}
-
                             <div class="row mb-4">
                                 <div class="col-md-3 text-end">
                                     <p>No HP</p>
@@ -197,9 +178,7 @@
                         </div>
                     </div>
                 </form>
-                <a href="{{ route('operator.usulan.baru') }}" class="btn btn-primary">Kembali</a>
+                <a href="{{ route('operator.daftar-usulan.') }}" class="btn btn-primary">Kembali</a>
             </div>
         </div>
     @endsection
-
-</html>

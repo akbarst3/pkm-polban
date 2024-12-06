@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('capaian');
             $table->integer('waktu_pelaksanaan');
             $table->string('bukti');
-
+            $table->boolean('val_dospem')->nullable();
             $table->foreign('id_pkm')->references('id')->on('detail_pkms');
             $table->timestamps();
         });

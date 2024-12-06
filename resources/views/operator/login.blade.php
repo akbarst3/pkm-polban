@@ -8,6 +8,7 @@
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 </head>
 
 <body class="d-flex align-items-center justify-content-center bg-light" style="height: 100vh;">

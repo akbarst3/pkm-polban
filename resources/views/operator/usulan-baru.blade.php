@@ -1,206 +1,327 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="public/css/style.css"> <!-- Pastikan jalur benar -->
-    <title>Usulan Baru</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        .custom-icon {
-            font-size: 1.5rem;
-        }
-    </style>
-</head>
-
-@extends('operator/master')
+@extends('operator.master')
 
 @section('konten')
-
-    <body class=" bg-secondary bg-opacity-50 ">
-        <div class="container">
-            <div class="breadcrumb-container col-12 ml-auto mr-2 p-3">
-            </div>
-            <div class="table-header col-11  ml-auto mr-5 text-left bg-primary mb-0 ">
-                <p class=" m-0 p-1 text-white">DAFTAR USULAN {{ strtoupper($perguruanTinggi->nama_pt) }}</p>
-            </div>
-
-            @if (session('success'))
-                <script>
-                    Swal.fire({
-                        title: 'Success!',
-                        text: "{{ session('success') }}",
-                        icon: 'success',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#003c72',
-                    });
-                </script>
-            @endif
-
-            <div class="container-md col-11 ml-auto mr-5 bg-white pt-2 pb-3 mt-0 ">
-                <!-- Filter Dropdowns -->
-                <div class="table-container">
-                    <div class="row align-items-end mb-3">
-                        <div class="col-md-4">
-                            <label for="skema-filter">Filter Skema:</label>
-                            <select class="form-control" id="skema-filter" required>
-                                <option value="" selected>--Semua Skema--</option>
-                                @foreach ($skema as $item)
-                                    <option value="{{ $item->nama_skema }}"> {{ $item->nama_skema }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-8">
-                            <a href="{{ route('operator.identitas.usulan') }}" class="btn btn-primary w-20">+ Data
-                                Baru</a>
-                        </div>
-                    </div>
-
-                    <table class="table table-striped table-bordered table-hover" id="data-table">
-                        <thead>
-                            <tr>
-                                <th class="text-center align-middle" scope="col">No</th>
-                                <th class="text-center align-middle" scope="col">Pengusul</th>
-                                <th class="text-center align-middle" scope="col">Judul</th>
-                                <th class="text-center align-middle w-1" scope="col">Skema</th>
-                                <th class="text-center align-middle" scope="col">Isian Kosong</th>
-                                <th class="text-center align-middle" scope="col">Val. Dosen</th>
-                                <th class="text-center align-middle" scope="col">Val. Pimpinan</th>
-                                <th class="text-center align-middle" scope="col">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($pengusuls as $index => $pengusul)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>
-                                        {{ $pengusul->nama_mahasiswa }}<br>
-                                        {{ $pengusul->nim }}<br>
-                                        {{ $pengusul->nama_prodi }} ({{ $pengusul->kode_prodi }})<br>
-                                        Angkatan {{ $pengusul->angkatan }}
-                                    </td>
-                                    <td>{{ $pengusul->judul_pkm }}</td>
-                                    <td>{{ $pengusul->nama_skema }}</td>
-                                    <td>
-                                        @if ($pengusul->jumlah_mahasiswa < 3)
-                                            Anggota Kurang, <br>
-                                        @endif
-                                        @if ($pengusul->alamat == null)
-                                            Identitas pengusul, <br>
-                                        @endif
-                                        @if ($pengusul->dana_pt == null)
-                                            Pengajuan dana <br>
-                                        @endif
-                                        @if ($pengusul->jumlah_mahasiswa >= 3 || $pengusul->alamat != null || $pengusul->dana_pt != null)
-                                            <i
-                                                class="d-flex justify-content-center bi bi-check-circle-fill text-success custom-icon"></i>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if (!$pengusul->val_dospem)
-                                            <i
-                                                class="d-flex justify-content-center bi bi-x-circle-fill text-danger custom-icon"></i>
-                                        @else
-                                            <i
-                                                class="d-flex justify-content-center bi bi-check-circle-fill text-success custom-icon"></i>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if (!$pengusul->val_pt)
-                                            <i
-                                                class="d-flex justify-content-center bi bi-x-circle-fill text-danger custom-icon"></i>
-                                        @else
-                                            <i
-                                                class="d-flex justify-content-center bi bi-check-circle-fill text-success custom-icon"></i>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-primary mb-2" onclick="viewData('{{ $pengusul->nim }}')">
-                                            <i class="bi bi-person"></i>
-                                        </button> <br>
-                                        <form action="{{ route('operator.usulan.baru.delete', $pengusul->nim) }}"
-                                            method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
+    <div class="app-content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 class="mb-0">{{ $perguruanTinggi->nama_pt }}</h3>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Optional JavaScript -->
-            <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-            <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-            </script>
-            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-            </script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-            </script>
-            <script>
-                function confirmDeletion(event) {
+    <div class="rounded shadow mx-4">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="p-4 bg-white rounded shadow-sm">
+                    <form action="{{ route('operator.daftar-usulan.usulan-baru.store') }}" method="POST" class="needs-validation"
+                        novalidate style="max-width: 70%; margin: 0;">
+                        @csrf
+                        <div class="mb-4">
+                            <h5>DATA MAHASISWA</h5>
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>Program Studi</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <select class="form-select" id="programStudi" name="programStudi" required>
+                                        <option value="" selected disabled>Pilih Program Studi</option>
+                                        @foreach ($prodi as $item)
+                                            <option value="{{ $item->kode_prodi }}"
+                                                {{ old('programStudi') == $item->kode_prodi ? 'selected' : '' }}>
+                                                {{ $item->nama_prodi }}</option>
+                                        @endforeach
+                                    </select>
+                                    <small class="invalid-feedback">
+                                        Program studi wajib dipilih.
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>NIM</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control no-char" id="nim" name="nim"
+                                            placeholder="Masukkan NIM" value="{{ old('nim') }}" required>
+                                        <small class="invalid-feedback">
+                                            NIM wajib diisi.
+                                        </small>
+                                    </div>
+                                    @error('nim')
+                                        <small class="error text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>Nama</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="namaMahasiswa" name="namaMahasiswa"
+                                            placeholder="Masukkan Nama" value="{{ old('namaMahasiswa') }}" required>
+                                        <div class="invalid-feedback">
+                                            Nama Mahasiswa wajib diisi.
+                                        </div>
+                                    </div>
+                                    @error('namaMahasiswa')
+                                        <small class="error text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>Tahun Masuk</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <select class="form-select" id="tahunMasuk" name="tahunMasuk" required>
+                                        <option value="" selected disabled>Pilih Tahun</option>
+                                        @for ($i = 2020; $i <= 2024; $i++)
+                                            <option value="{{ $i }}"
+                                                {{ old('tahunMasuk') == $i ? 'selected' : '' }}>{{ $i }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                    <small class="invalid-feedback">
+                                        Program studi wajib dipilih.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>DATA PROPOSAL USULAN</h5>
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>Judul</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <textarea class="form-control" id="judulProposal" name="judulProposal" rows="3" required>{{ old('judulProposal') }}</textarea>
+                                        <div class="invalid-feedback">
+                                            Judul wajib diisi.
+                                        </div>
+                                    </div>
+                                    @error('judulProposal')
+                                        <small class="error text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>Skema PKM</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <select class="form-select" id="skemaPKM" name="skemaPKM" required>
+                                        <option value="" selected disabled>Skema PKM</option>
+                                        @foreach ($skema as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ old('skemaPKM') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->nama_skema }}</option>
+                                        @endforeach
+                                    </select>
+                                    <small class="invalid-feedback">
+                                        Skema wajib dipilih.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>DOSEN PENDAMPING</h5>
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>NIDN</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control no-char" id="nidn" name="nidn"
+                                            value="{{ old('nidn') }}" required>
+                                        <button type="button" class="btn btn-primary cari"
+                                            style="border-radius: 5px;">Cari</button>
+                                        <small class="invalid-feedback">
+                                            NIDN dospem wajib diisi.
+                                        </small>
+                                    </div>
+                                    @error('nidn')
+                                        <small class="error text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>Nama Dosen</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="namaDosen" id="namaDosen"
+                                            value="{{ old('namaDosen') }}" disabled required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>Program Studi</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="programStudiDosen"
+                                            name="programStudiDosen" disabled required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>Nomor Hp</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="noHpDosen" name="noHpDosen"
+                                            disabled required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 mt-4">
+                                <div class="col-md-3 text-end">
+                                    <p>Email</p>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="emailDosen" name="emailDosen"
+                                            disabled required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-3">
+                            <a class="btn bg-secondary text-white" href="{{ route('operator.daftar-usulan.') }}"> Kembali
+                            </a>
+                            <button class="btn bg-success text-white" type="submit" style="margin-left: 10px;">
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                    @if (session()->has('error'))
+                        <script>
+                            Swal.fire({
+                                title: 'Perhatian!',
+                                text: "{{ session('error') }}",
+                                icon: 'warning',
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#003c72',
+                            });
+                        </script>
+                    @endif
+                </div> <!-- End of container -->
+            </div>
+        </div>
+    </div>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nidnInput = document.getElementById('nidn');
+            const cariButton = document.querySelector('.cari');
+            const namaDosenInput = document.getElementById('namaDosen');
+            const programStudiDosenInput = document.getElementById('programStudiDosen');
+            const noHpDosenInput = document.getElementById('noHpDosen');
+            const emailDosenInput = document.getElementById('emailDosen');
+            let isCari = false
+            const form = document.querySelector('.needs-validation')
+
+            nidnInput.addEventListener('input', function() {
+                namaDosenInput.value = '';
+                programStudiDosenInput.value = '';
+                noHpDosenInput.value = '';
+                emailDosenInput.value = '';
+            });
+
+            cariButton.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const nidn = nidnInput.value;
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', "{{ route('operator.daftar-usulan.usulan-baru.find') }}", true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        const data = JSON.parse(xhr.responseText);
+                        namaDosenInput.value = data.nama;
+                        programStudiDosenInput.value = data.program_studi;
+                        noHpDosenInput.value = data.no_hp;
+                        emailDosenInput.value = data.email;
+                    } else {
+                        if (xhr.status === 404) {
+                            const data = JSON.parse(xhr.responseText);
+                            Swal.fire({
+                                title: 'Error!',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#003c72',
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Oops!',
+                                text: "Something went wrong",
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#003c72',
+                            });
+                        }
+                    }
+                };
+
+                isCari = true;
+                xhr.send('nidn=' + nidn + '&_token={{ csrf_token() }}');
+            });
+
+            form.addEventListener('submit', function(event) {
+                if (!isCari) {
                     event.preventDefault();
-                    const form = event.target.closest('form');
                     Swal.fire({
-                        title: 'Apakah Anda yakin?',
-                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        title: 'Perhatian!',
+                        text: "Lakukan pencarian dosen terlebih dahulu!",
                         icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#003c72',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, hapus!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
+                        confirmButtonText: 'OK'
                     });
                 }
+            })
 
-                const deleteButtons = document.querySelectorAll('.btn-danger');
-                deleteButtons.forEach(button => {
-                    button.addEventListener('click', confirmDeletion);
+            (function() {
+                'use strict'
+                var forms = document.querySelectorAll('.needs-validation')
+                Array.prototype.slice.call(forms)
+                    .forEach(function(form) {
+                        form.addEventListener('submit', function(event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+            })()
+
+            document.querySelectorAll('.no-char').forEach(function(element) {
+                element.addEventListener('input', function(e) {
+                    this.value = this.value.replace(/[^0-9]/g, '');
                 });
-
-                function viewData(nim) {
-                    window.location.href = '/operator/usulan-baru/' + nim
-                }
-
-                $(document).ready(function() {
-                    var table = $('#data-table').DataTable({
-                        language: {
-                            url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json'
-                        }
-                    });
-
-                    $('#skema-filter').on('change', function() {
-                        var selectedSkema = $(this).val();
-                        table.column(3)
-                            .search(selectedSkema)
-                            .draw();
-                    });
-                });
-            </script>
-    </body>
+            });
+        });
+    </script>
 @endsection
-
-</html>

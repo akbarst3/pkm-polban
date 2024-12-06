@@ -147,7 +147,7 @@ class OperatorController extends Controller
         ];
 
         $namaSkema = SkemaPkm::pluck('nama_skema', 'id');
-        return view('operator.dashboard', compact('dataPkms', 'perguruanTinggi', 'statusFiles', 'namaSkema'));
+        return view('operator.dashboard', ['dataPkms' => $dataPkms, 'perguruanTinggi' => $perguruanTinggi, 'statusFiles'=> $statusFiles, 'namaSkema' => $namaSkema, 'title' => 'Dashboard Operator']);
     }
 
     public function index1()
@@ -156,7 +156,7 @@ class OperatorController extends Controller
         $prodi = ProgramStudi::where('kode_pt', $perguruanTinggi->kode_pt)->get();
         $skema = SkemaPkm::all();
         $statusFiles = $this->getDataFile();
-        return view('operator.identitas-usulan', compact('prodi', 'skema', 'perguruanTinggi', 'statusFiles'));
+        return view('operator.usulan-baru', ['prodi' => $prodi, 'skema' => $skema, 'perguruanTinggi' => $perguruanTinggi, 'statusFiles' => $statusFiles, 'title' => 'Usulan Baru']);
     }
 
     public function findDosen(Request $request)
@@ -256,7 +256,7 @@ class OperatorController extends Controller
 
             DB::commit();
             session()->flash('success', 'Data berhasil disimpan');
-            return redirect()->intended(route('operator.usulan.baru'));
+            return redirect()->intended(route('operator.daftar-usulan.'));
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
@@ -273,7 +273,7 @@ class OperatorController extends Controller
         $statusFiles = $this->getDataFile();
         $pengusuls = $this->showPengusul();
         $skema = SkemaPkm::all();
-        return view('operator.usulan-baru', compact('perguruanTinggi', 'skema', 'statusFiles', 'pengusuls'));
+        return view('operator.daftar-usulan', compact('perguruanTinggi', 'skema', 'statusFiles', 'pengusuls'));
     }
 
     public function viewData($nim)
@@ -301,7 +301,7 @@ class OperatorController extends Controller
             'dosen' => $dosen,
             'namaProdiDosen' => ProgramStudi::where('kode_prodi', $dosen->kode_prodi)->first()->nama_prodi,
         ];
-        return view('operator.show-data-pengusul', compact('data', 'perguruanTinggi', 'statusFiles'));
+        return view('operator.show-data-pengusul', ['data' => $data, 'perguruanTinggi' => $perguruanTinggi, 'statusFiles' => $statusFiles, 'title' => 'Data Usulan']);
     }
 
     public function showPengusul()
@@ -323,8 +323,8 @@ class OperatorController extends Controller
 
             $pkm = DetailPkm::where('id', $mahasiswa->id_pkm)->first();
             $pengusul->judul_pkm = $pkm->judul;
-            $pengusul->val_dospem = $pkm->val_dospem; // Tambahkan ini
-            $pengusul->val_pt = $pkm->val_pt; // Tambahkan ini
+            $pengusul->val_dospem = $pkm->val_dospem;
+            $pengusul->val_pt = $pkm->val_pt;
 
             $skema = SkemaPkm::where('id', $pkm->id_skema)->first();
             $pengusul->nama_skema = $skema->nama_skema;
@@ -348,4 +348,32 @@ class OperatorController extends Controller
         $pkm->delete();
         return back()->with('success', 'Data berhasil dihapus');
     }
-}
+
+    public function createDidanai() {
+        $perguruanTinggi = $this->getPt();
+        $statusFiles = $this->getDataFile();
+        $data['pkm8bidang'] = DetailPkm::where('kode_pt', $perguruanTinggi->kode_pt)
+                                        ->where('val_pt', true)
+                                        ->whereBetween('id_skema', [1, 8])
+                                        ->count();
+        $data['pkmAi'] = DetailPkm::where('kode_pt', $perguruanTinggi->kode_pt)
+                                        ->where('val_pt', true)
+                                        ->where('id_skema', 9)
+                                        ->count();
+        $data['pkmGft'] = DetailPkm::where('kode_pt', $perguruanTinggi->kode_pt)
+                                        ->where('val_pt', true)
+                                        ->where('id_skema', 10)
+                                        ->count();
+        $data['pkm'] = DetailPkm::where('kode_pt', $perguruanTinggi->kode_pt)->where('val_pt', true)->with('skema', 'mahasiswas.pengusul')->get()->map(function ($detailPkm) {
+            $detailPkm->mahasiswa = $detailPkm->mahasiswas->first();
+            unset($detailPkm->mahasiswas);
+            return $detailPkm;
+        });
+        // dd($data);
+        return view('operator.usulan-didanai', [
+            'title' => 'Usulan Didanai', 
+            'perguruanTinggi' => $perguruanTinggi, 
+            'statusFiles' => $statusFiles,
+            'data' => $data
+        ]);
+    }}

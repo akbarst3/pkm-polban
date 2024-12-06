@@ -1,7 +1,13 @@
 @extends('pengusul/pelaksanaan/master')
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
 @section('konten')
+    @php
+        use Carbon\Carbon;
+
+    @endphp
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -26,9 +32,7 @@
                         </div>
 
                         <form
-                            action="{{ isset($data['edit_mode'])
-                                ? route('pengusul.update-logbook-keuangan', $data['logbook']->id)
-                                : route('pengusul.store-logbook-keuangan') }}"
+                            action="{{ isset($data['edit_mode']) ? route('pengusul.pelaksanaan.update-logbook-keuangan', $data['logbook']->id) : route('pengusul.pelaksanaan.store-logbook-keuangan') }}"
                             method="POST" enctype="multipart/form-data">
                             @csrf
                             @if (isset($data['edit_mode']))
@@ -40,10 +44,7 @@
                                     <label class="form-label">Tanggal</label>
                                     <input type="text" id="tanggal" name="tanggal"
                                         class="form-control @error('tanggal') is-invalid @enderror" placeholder="DD-MM-YYYY"
-                                        value="{{ old(
-                                            'tanggal',
-                                            isset($data['logbook']) ? \Carbon\Carbon::parse($data['logbook']->tanggal)->format('d-m-Y') : '',
-                                        ) }}"
+                                        value="{{ old('tanggal', isset($data['logbook']) ? Carbon::parse($data['logbook']->tanggal)->format('d-m-Y') : '') }}"
                                         required>
                                     @error('tanggal')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -66,19 +67,14 @@
                                     <div class="input-group">
                                         <input type="text" id="harga-input" name="harga"
                                             class="form-control rupiah-input @error('harga') is-invalid @enderror"
-                                            value="{{ old('harga')
-                                                ? 'Rp ' . number_format(preg_replace('/[^0-9]/', '', old('harga')), 0, ',', '.')
-                                                : (isset($data['logbook'])
-                                                    ? 'Rp ' . number_format($data['logbook']->harga, 0, ',', '.')
-                                                    : '') }}"
+                                            value="{{ old('harga') ? 'Rp ' . number_format(preg_replace('/[^0-9]/', '', old('harga')), 0, ',', '.') : (isset($data['logbook']) ? 'Rp ' . number_format($data['logbook']->harga, 0, ',', '.') : '') }}"
                                             required oninput="calculateTotal()">
                                     </div>
                                     @error('harga')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                     <small class="form-text text-muted">
-                                        Maksimal pengisian: Rp.
-                                        {{ number_format($data['sisa_dana']) }}
+                                        Maksimal pengisian: Rp. {{ number_format($data['sisa_dana']) }}
                                     </small>
                                 </div>
 
@@ -119,7 +115,7 @@
                                     <button type="submit" class="btn btn-primary">
                                         {{ isset($data['edit_mode']) ? 'Perbarui' : 'Simpan' }} Logbook Keuangan
                                     </button>
-                                    <a href="{{ route('pengusul.dashboard-logbook-keuangan') }}"
+                                    <a href="{{ route('pengusul.pelaksanaan.logbook-keuangan') }}"
                                         class="btn btn-secondary">Kembali</a>
                                 </div>
                             </div>
@@ -134,8 +130,17 @@
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        $(document).ready(function() {
+            flatpickr("#tanggal", {
+                dateFormat: "d-m-Y",
+                allowInput: true,
+                onReady: function(selectedDates, dateStr, instance) {
+                    instance.setDate(new Date(), true); // Set default date to today
+                }
+            });
+        });
         document.addEventListener('DOMContentLoaded', function() {
             const hargaInput = document.getElementById('harga-input');
             const form = hargaInput.closest('form');
@@ -174,13 +179,5 @@
 
             document.getElementById('total-harga').value = formattedTotal;
         }
-
-        $(document).ready(function() {
-            $('#tanggal').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true
-            });
-        });
     </script>
 @endpush

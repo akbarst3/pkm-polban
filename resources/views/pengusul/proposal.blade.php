@@ -16,7 +16,7 @@
                                 Proposal sudah diupload
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('pengusul.identitas-usulan') }}" class="btn btn-secondary">Kembali</a>
+                                <a href="{{ route('pengusul.identitas-usulan.index') }}" class="btn btn-secondary">Kembali</a>
                             </div>
                         @else
                             <p class="mb-3">Pilih berkas proposal</p>
@@ -33,7 +33,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-end gap-2">
-                                    <a href="{{ route('pengusul.identitas-usulan') }}" class="btn btn-secondary">Kembali</a>
+                                    <a href="{{ route('pengusul.identitas-usulan.index') }}" class="btn btn-secondary">Kembali</a>
                                     <button type="submit" class="btn btn-success">Upload</button>
                                 </div>
                             </form>

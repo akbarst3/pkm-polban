@@ -2,7 +2,7 @@
     @section('konten')
         <div class="container-fluid mt-3 px-5">
             <h5>Beranda Pengusul Program Kreativitas Mahasiswa</h5>
-            <div class="card">
+            <div class="card shadow rounded">
                 <div class="card-header bg-primary text-white">
                     IDENTITAS PERSONAL
                 </div>

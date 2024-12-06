@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     <!-- Additional CSS -->
     @stack('styles')
@@ -92,7 +93,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('dosen-pendamping.proposal') }}" class="nav-link {{ Request::is('dosen-pendamping/proposal') ? 'active' : '' }}">
+                            <a href="#"
+                                class="nav-link {{ Request::is('dosen-pendamping/proposal') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-calendar"></i>
                                 <p>
                                     Validasi Usulan
@@ -110,7 +112,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('dosen-pendamping.validasi-logbook') }}" class="nav-link {{ Request::is('dosen-pendamping/validasi-logbook') ? 'active' : '' }}">
+                            <a href="{{ route('dosen-pendamping.validasi-logbook.index') }}"
+                                class="nav-link {{ Request::is('dosen-pendamping/validasi-logbook') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-calendar"></i>
                                 <p>Validasi Logbook</p>
                             </a>
@@ -129,12 +132,8 @@
                 </nav>
 
                 <!-- Bottom Components -->
-                <div class="bottom-components d-flex justify-content-between position-absolute w-100 p-4"
+                <div class="bottom-components d-flex justify-content-around position-absolute w-100 p-4"
                     style="bottom: 0;">
-                    <a href="#" class="nav-link text-center d-flex flex-column align-items-center">
-                        <i class="bi bi-chat fs-4"></i>
-                        <p class="mb-0">Pesan</p>
-                    </a>
                     <a href="https://simbelmawa.kemdikbud.go.id/portal/wp-content/uploads/2024/02/1.-Panduan-Umum-PKM-2024.pdf"
                         target="_blank" class="nav-link text-center d-flex flex-column align-items-center">
                         <i class="bi bi-book fs-4"></i>

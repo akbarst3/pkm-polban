@@ -88,7 +88,7 @@ class DospemController extends Controller
     {
         try {
             $decodedFilename = base64_decode($filename);
-
+            
             if (!Storage::exists($decodedFilename)) {
                 return abort(404, 'File not found');
             }
@@ -120,19 +120,26 @@ class DospemController extends Controller
     public function validate(Request $request)
     {
         $request->validate([
-            'val_dospem' => 'required|boolean',
-            'pkm_id' => 'required|exists:detail_pkms,id'
+            'pkm_id' => 'required|exists:detail_pkms,id',
+            'val_dospem' => 'nullable'
         ]);
-
+        
         $pkm = DetailPkm::findOrFail($request->pkm_id);
-
-        $pkm->update([
-            'val_dospem' => $request->val_dospem,
-        ]);
-        $message = $request->val_dospem ? 'Usulan disetujui.' : 'Usulan ditolak.';
+        
+        if ($request->val_dospem === 'null') {
+            $pkm->update([
+                'val_dospem' => null,
+            ]);
+            $message = 'Status dibatalkan.';
+        } else {
+            $pkm->update([
+                'val_dospem' => $request->val_dospem,
+            ]);
+            $message = $request->val_dospem ? 'Usulan disetujui.' : 'Usulan ditolak.';
+        }
+        
         session()->flash('success', $message);
-        return redirect()->intended(route('dosen-pendamping.proposal'));
-    }
+        return redirect()->intended(route('dosen-pendamping.proposal'));    }
 
     public function validasiUsulanDisetujui($id_pkm)
     {
@@ -154,6 +161,7 @@ class DospemController extends Controller
         $data = $this->getData();
         $data['pkms'] = DetailPkm::where('kode_dosen', $data['dosen']->kode_dosen)
             ->whereHas('pengesahan')
+            ->where('val_pt', true)
             ->whereHas('mahasiswas.pengusul')
             ->with(['mahasiswas' => function ($query) {
                 $query->whereHas('pengusul')->limit(1);

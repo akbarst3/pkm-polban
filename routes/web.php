@@ -28,15 +28,18 @@ Route::prefix('operator')->name('operator.')->group(function () {
         Route::post('/dashboard', [Operator::class, 'storeFile'])->name('file');
 
         Route::middleware(['cek.surat'])->group(function () {
-            Route::get('/usulan-baru', [Operator::class, 'index2'])->name('usulan.baru');
-            Route::get('/usulan-baru/{nim}', [Operator::class, 'viewData'])->name('usulan.baru.nim');
-            Route::delete('/usulan-baru/{id}', [Operator::class, 'deleteData'])->name('usulan.baru.delete');
-            Route::get('/identitas-usulan', [Operator::class, 'index1'])->name('identitas.usulan');
-            Route::post('/identitas-usulan/store', [Operator::class, 'storeData'])->name('identitas-usulan.store');
-            Route::post('/identitas-usulan/find', [Operator::class, 'findDosen'])->name('identitas.usulan.find');
-            Route::view('/usulan-didanai', 'operator.usulan-didanai')->name('usulan.didanai');
-            Route::view('/usulan-reviewer', 'operator.usulanReviewer')->name('usulan.reviewer');            Route::post('/logout', [AuthOperator::class, 'logout'])->name('logout');
-        });
+            
+            Route::prefix('daftar-usulan')->name('daftar-usulan.')->group(function () {
+                Route::get('/', [Operator::class, 'index2']);
+                Route::get('/usulan-baru', [Operator::class, 'index1'])->name('usulan-baru');
+                Route::get('/{nim}', [Operator::class, 'viewData'])->name('nim');
+                Route::delete('/{nim}', [Operator::class, 'deleteData'])->name('delete');
+                Route::post('/usulan-baru/store', [Operator::class, 'storeData'])->name('usulan-baru.store');
+                Route::post('/usulan-baru/find', [Operator::class, 'findDosen'])->name('usulan-baru.find');
+            });        
+            Route::get('/usulan-didanai', [Operator::class, 'createDidanai'])->name('usulan-didanai');
+            Route::post('/logout', [AuthOperator::class, 'logout'])->name('logout');
+        });    
     });
 
     Route::middleware(['guest:operator'])->group(function () {
@@ -57,42 +60,54 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
         Route::patch('/pelaksanaan_kegiatan/profile/update', [Pengusul::class, 'update'])->name('pelaksanaan_kegiatan.profile.update');
         Route::get('/pelaksanaan_kegiatan/profile/show', [Pengusul::class, 'showProfile'])->name('pelaskanaan_kegiatan.profile.show');
         Route::get('/dashboard', [Pengusul::class, 'createDashboard'])->name('dashboard');
-        Route::get('/identitas-usulan', [Pengusul::class, 'showData'])->name('identitas-usulan');
-        Route::get('/edit-usulan', [Pengusul::class, 'showDetail'])->name('edit-usulan');
-        Route::patch('/edit-usulan/edit-mhs/{id}', [Pengusul::class, 'editMhs'])->name('edit-usulan.edit-mhs');
-        Route::get('/identitas-usulan/pengesahan', [Pengusul::class, 'createPengesahan'])->name('identitas-usulan.pengesahan');
-        Route::post('/identitas-usulan/pengesahan', [Pengusul::class, 'storePengesahan']);
-        Route::patch('/edit-usulan/edit-pkm/{id}', [Pengusul::class, 'editPkm'])->name('edit-usulan.edit-pkm');
-        Route::get('/edit-usulan/tambah-anggota', [Pengusul::class, 'tambahAnggota'])->name('edit-usulan.tambah-anggota');
-        Route::post('/edit-usulan/tambah-anggota', [Pengusul::class, 'storeAnggota']);
-        Route::get('/edit-usulan/edit-anggota/{id}', [Pengusul::class, 'createEditAnggota'])->name('edit-usulan.edit-anggota');
-        Route::put('/edit-usulan/edit-anggota/{id}', [Pengusul::class, 'editAnggota']);
-        Route::delete('/edit-usulan/hapus-anggota/{id}', [Pengusul::class, 'destroyAnggota'])->name('edit-usulan.hapus-anggota');
-        Route::get('/identitas-usulan/proposal', [Pengusul::class, 'createProposal'])->name("identitas-usulan.proposal");
-        Route::patch('/identitas-usulan/proposal', [Pengusul::class, "storeProposal"]);
-        Route::get('/pengusul/identitas-usulan/download-proposal', [Pengusul::class, 'downloadProposal'])->name('identitas-usulan.download-proposal');
-        Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');
-        Route::get('/pelaksanaan/dashboard-pelaksanaan', [Pelaksanaan::class, 'createDashboard'])->name('dashboard-pelaksanaan');
-        Route::get('/pelaksanaan/lap-kemajuan', [Pelaksanaan::class, 'kemajuan'])->name('lap-kemajuan');
-        Route::post('/pelaksanaan/lap-kemajuan/upload-file', [Pelaksanaan::class, 'uploadFile'])->name('lap-kemajuan.uploadFile');
-        Route::get('/pelaksanaan/lap-kemajuan/download-file/{id}', [Pelaksanaan::class, 'downloadFile'])->name('lap-kemajuan.downloadFile');
-        Route::get('/pelaksanaan/dashboard-logbook-keuangan', [Pelaksanaan::class, 'dashboardLogbookKeuangan'])->name('dashboard-logbook-keuangan');
-        Route::get('/pelaksanaan/form-tambah-logbook-keuangan', [Pelaksanaan::class, 'formTambahLogbookKeuangan'])->name('form-tambah-logbook-keuangan');
-        Route::post('/pelaksanaan/store-logbook-keuangan', [Pelaksanaan::class, 'storeLogbookKeuangan'])->name('store-logbook-keuangan');
-        Route::get('/pelaksanaan/download-bukti/{id}', [Pelaksanaan::class, 'downloadBukti'])->name('download-bukti');
-        Route::delete('/pelaksanaan/hapus-logbook-keuangan/{id}', [Pelaksanaan::class, 'hapusLogbookKeuangan'])->name('hapus-logbook-keuangan');
-        Route::get('/pelaksanaan/edit-logbook-keuangan/{id}', [Pelaksanaan::class, 'editLogbookKeuangan'])->name('edit-logbook-keuangan');
-        Route::put('/pelaksanaan/update-logbook-keuangan/{id}', [Pelaksanaan::class, 'updateLogbookKeuangan'])->name('update-logbook-keuangan');
-        Route::get('/pelaksanaan/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');
-        Route::patch('/pelaksanaan/upload-lapkhir', [Pelaksanaan::class, 'storeFile'])->name('upload-lapkhir');
-        Route::get('/pelaksanaan/laporan-akhir/download-lapkhir/{id}', [Pelaksanaan::class, 'downloadLapkhir'])->name('laporan-akhir.downloadLapkhir');
-
+        Route::prefix('identitas-usulan')->name('identitas-usulan.')->group(function () {
+            Route::get('/', [Pengusul::class, 'showData'])->name('index');
+            Route::get('/edit-usulan', [Pengusul::class, 'showDetail'])->name('edit-usulan');
+            Route::patch('/edit-usulan/edit-mhs/{id}', [Pengusul::class, 'editMhs'])->name('edit-usulan.edit-mhs');
+            Route::get('/pengesahan', [Pengusul::class, 'createPengesahan'])->name('pengesahan');
+            Route::post('/pengesahan', [Pengusul::class, 'storePengesahan']);
+            Route::patch('/edit-usulan/edit-pkm/{id}', [Pengusul::class, 'editPkm'])->name('edit-usulan.edit-pkm');
+            Route::get('/edit-usulan/tambah-anggota', [Pengusul::class, 'tambahAnggota'])->name('edit-usulan.tambah-anggota');
+            Route::post('/edit-usulan/tambah-anggota', [Pengusul::class, 'storeAnggota']);
+            Route::get('/edit-usulan/edit-anggota/{id}', [Pengusul::class, 'createEditAnggota'])->name('edit-usulan.edit-anggota');
+            Route::put('/edit-usulan/edit-anggota/{id}', [Pengusul::class, 'editAnggota']);
+            Route::delete('/edit-usulan/hapus-anggota/{id}', [Pengusul::class, 'destroyAnggota'])->name('edit-usulan.hapus-anggota');
+            Route::get('/proposal', [Pengusul::class, 'createProposal'])->name("proposal");
+            Route::patch('/proposal', [Pengusul::class, "storeProposal"]);
+            Route::get('/download-proposal', [Pengusul::class, 'downloadProposal'])->name('download-proposal');
+        });
+        
         Route::prefix('pelaksanaan')->name('pelaksanaan.')->group(function () {
             Route::middleware(['pelaksanaan'])->group(function () {
                 Route::get('/dashboard-pelaksanaan', [Pelaksanaan::class, 'createDashboard'])->name('dashboard-pelaksanaan');
-                Route::get('/logbook-kegiatan', [Pelaksanaan::class, 'createLbkeg'])->name('logbook-kegiatan');
+                Route::prefix('logbook-kegiatan')->name('logbook-kegiatan.')->group(function () {
+                    Route::get('/', [Pelaksanaan::class, 'createLbkeg'])->name('index');
+                    Route::get('/tambah-logbook', [Pelaksanaan::class, 'formLbKeg'])->name('tambah-logbook');
+                    Route::post('/create', [Pelaksanaan::class, 'storeLbKeg'])->name('create');
+                    Route::get('/edit-logbook/{id}', [Pelaksanaan::class, 'editLbKeg'])->name('edit-logbook');
+                    Route::get('/private-files/{path}', [Pelaksanaan::class, 'showFile'])->where('path', '.*')->name('private-files');
+                    Route::patch('/update/{id}', [Pelaksanaan::class, 'updateLbKeg'])->name('update');
+                    Route::get('/download/{id}', [Pelaksanaan::class, 'downloadLbKeg'])->name('download');
+                    Route::delete('/delete/{id}', [Pelaksanaan::class, 'deleteLbKeg'])->name('delete');
+
+                });
+
+                Route::get('/logbook-keuangan', [Pelaksanaan::class, 'dashboardLogbookKeuangan'])->name('logbook-keuangan');
+                Route::get('/form-tambah-logbook-keuangan', [Pelaksanaan::class, 'formTambahLogbookKeuangan'])->name('form-tambah-logbook-keuangan');
+                Route::post('/store-logbook-keuangan', [Pelaksanaan::class, 'storeLogbookKeuangan'])->name('store-logbook-keuangan');
+                Route::get('/download-bukti/{id}', [Pelaksanaan::class, 'downloadBukti'])->name('download-bukti');
+                Route::delete('/hapus-logbook-keuangan/{id}', [Pelaksanaan::class, 'hapusLogbookKeuangan'])->name('hapus-logbook-keuangan');
+                Route::get('/edit-logbook-keuangan/{id}', [Pelaksanaan::class, 'editLogbookKeuangan'])->name('edit-logbook-keuangan');
+                Route::put('/update-logbook-keuangan/{id}', [Pelaksanaan::class, 'updateLogbookKeuangan'])->name('update-logbook-keuangan');
+                Route::get('/lap-kemajuan', [Pelaksanaan::class, 'kemajuan'])->name('lap-kemajuan');
+                Route::patch('/lap-kemajuan/upload-file', [Pelaksanaan::class, 'uploadFile'])->name('lap-kemajuan.uploadFile');
+                Route::get('/lap-kemajuan/download-file/{id}', [Pelaksanaan::class, 'downloadFile'])->name('lap-kemajuan.downloadFile');
+                Route::get('/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');
+                Route::patch('/upload-lapkhir/{id}', [Pelaksanaan::class, 'storeFile'])->name('upload-lapkhir');
+                Route::get('/laporan-akhir/download-lapkhir/{id}', [Pelaksanaan::class, 'downloadLapkhir'])->name('laporan-akhir.downloadLapkhir');
             });
         });
+        Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');
     });
 });
 
@@ -112,8 +127,8 @@ Route::prefix('dosen-pendamping')->name('dosen-pendamping.')->group(function () 
             ->name('proposal.show');
         Route::get('/validasi-usulan/{pkm}', [Dospem::class, 'validasiUsulanDisetujui'])->name('validasi-usulan');
         Route::post('/validate', [Dospem::class, 'validate'])->name('validate');
-        Route::get('/validasi-logbook', [Dospem::class, 'validasiLogbook'])->name('validasi-logbook');
         Route::prefix('validasi-logbook')->name('validasi-logbook.')->group(function () {
+            Route::get('/', [Dospem::class, 'validasiLogbook'])->name('index');
             Route::get('/logbook-kegiatan/{pkm}', [Dospem::class, 'validasiLogbookKegiatan'])->name('logbook-kegiatan');
             Route::get('/logbook-keuangan/{pkm}', [Dospem::class, 'validasiLogbookKeuangan'])->name('logbook-keuangan');
             Route::patch('/logbook-kegiatan/approve/{logbook}', [Dospem::class, 'approveLogbookKegiatan'])->name('logbook-kegiatan.approve');

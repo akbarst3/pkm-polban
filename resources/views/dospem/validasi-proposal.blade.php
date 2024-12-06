@@ -11,7 +11,7 @@
         </div>
 
         <!-- Table -->
-        <div class="card shadow-sm p-4">
+        <div class="card shadow rounded p-4">
             <h5>Daftar Usulan</h5>
 
             <div class="table-responsive">
@@ -23,7 +23,6 @@
                             <th>Judul</th>
                             <th>Skema</th>
                             <th>Proposal</th>
-                            <th>Pengesahan</th>
                             <th>Validasi Dosen Pendamping</th>
                             <th>Validasi Pimpinan</th>
                             <th>Aksi</th>
@@ -36,9 +35,6 @@
                                 <td>{{ $pengusul->nama }}</td>
                                 <td>
                                     {{ $data['viewData']['pkms'][$index]->judul ?? 'Judul tidak tersedia' }}<br>
-                                    <small>Pendamping:
-                                        {{ $data['viewData']['nameDospems'][$index] ?? 'Belum ditentukan' }}</small><br>
-                                    <small>({{ $data['viewData']['kodeDospems'][$index] ?? 'Belum ditentukan' }})</small>
                                 </td>
                                 <td>{{ $data['viewData']['skemas'][$index] ?? 'Tidak ada skema' }}</td>
                                 <td>
@@ -52,11 +48,6 @@
                                             <i class="bi bi-file-earmark-pdf"></i>
                                         </button>
                                     @endif
-                                </td>
-                                <td>
-                                    <button class="btn btn-link text-success">
-                                        <a class="text-success"><i class="bi bi-clipboard-check"></i></a>
-                                    </button>
                                 </td>
                                 <td>
                                     <span

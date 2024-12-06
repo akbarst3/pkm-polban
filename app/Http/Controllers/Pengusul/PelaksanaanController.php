@@ -7,13 +7,14 @@ use App\Models\Dosen;
 use App\Models\Pengusul;
 use App\Models\SkemaPkm;
 use App\Models\DetailPkm;
+use App\Models\LuaranPkm;
 use App\Models\Mahasiswa;
 use App\Models\ProgramStudi;
 use Illuminate\Http\Request;
+use App\Models\LogbookKegiatan;
 use App\Models\LogbookKeuangan;
 use App\Models\PerguruanTinggi;
 use App\Http\Controllers\Controller;
-use App\Models\LuaranPkm;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -24,7 +25,7 @@ class PelaksanaanController extends Controller
     {
         $nim = Auth::guard('pengusul')->user()->nim;
         $mahasiswa = Mahasiswa::where('nim', $nim)->first();
-        $pkm = DetailPkm::where('id', $mahasiswa->id_pkm)->first();
+        $pkm = DetailPkm::where('id', $mahasiswa->id_pkm)->with('skema')->first();
         $prodi = ProgramStudi::where('kode_prodi', sprintf('%05d', $mahasiswa->kode_prodi))->first();
         $perguruanTinggi = PerguruanTinggi::where('kode_pt', $pkm->kode_pt)->first();
         $dosen = Dosen::where('kode_dosen', $pkm->kode_dosen)->first();
@@ -52,9 +53,196 @@ class PelaksanaanController extends Controller
     public function createDashboard()
     {
         $data = $this->getData();
-        return view('pengusul.pelaksanaan.dashboard-pelaksanaan', ['data' => $data, 'title' => 'Dashboard Pengusul']);
+        return view('pengusul.pelaksanaan.dashboard-pelaksanaan', ['data' => $data, 'title' => 'Dashboard Pelaksanaan']);
     }
+
+    public function createLbkeg() {
+        $baseData = $this->getData();
+        $capaian = LogbookKegiatan::where('id_pkm', $baseData['pkm']->id)->avg('capaian') ?? 0;
+        $totalWaktu = LogbookKegiatan::where('id_pkm', $baseData['pkm']->id)->sum('waktu_pelaksanaan');;
+
+        $data = [
+            'pkm' => $baseData['pkm'],
+            'capaian' => $capaian,
+            'totalWaktu' => $totalWaktu,
+            'perguruanTinggi' => $baseData['perguruanTinggi'],
+            'mahasiswa' => $baseData['mahasiswa'],
+            'mahasiswas' => Mahasiswa::where('id_pkm', $baseData['pkm']->id)->get(),
+            'prodi' => $baseData['prodi'],
+            'dospem' => Dosen::where('kode_dosen', $baseData['pkm']->kode_dosen)->first(),
+            'logbook_kegiatan' => LogbookKegiatan::where('id_pkm', $baseData['pkm']->id)->get(),
+        ];
+
+        return view('pengusul.pelaksanaan.lb-kegiatan', ['data' => $data, 'title' => 'Logbook Kegiatan']);
+    }
+
+    public function formLbKeg() {
+        return view('pengusul.pelaksanaan.form-lb-kegiatan');
+    }
+
+    public function storeLbKeg(Request $request){
+        $request->validate([
+            'tanggal' => 'required|date',
+            'uraian' => 'required|string',
+            'capaian' => 'required|numeric|between:0,100',
+            'waktu' => 'required|numeric',
+            'bukti' => 'required|file|mimes:pdf,jpg,jpeg,doc,docx|max:1024',
+        ], [
+            'tanggal.required' => 'Tanggal tidak boleh kosong',
+            'tanggal.date' => 'Tanggal harus sesuai format',
+            'uraian.required' => 'Uraian harus diisi',
+            'uraian.string' => 'Uraian kegiatan harus berupa narasi',
+            'capaian.required' => 'Capaian kegiatan harus diisi',
+            'capaian.numeric' => 'Capaian kegiatan harus berupa angka (dalam %)',
+            'capaian.between' => 'Capaian kegiatan harus berada dalam rentang 0-100%',
+            'waktu.required' => 'Waktu kegiatan harus diisi',
+            'waktu.numeric' => 'Waktu kegiatan harus berupa angka (dalam menit)',
+            'bukti.required' => 'Bukti kegiatan harus diisi',
+            'bukti.mimes' => 'Bukti kegiatan harus berupa pdf, jpg, jpeg, doc, atau docx',
+            'bukti.max' => 'Bukti kegiatan tidak boleh lebih dari 1 MB',
+        ]);
     
+        ['pkm' => $pkm] = $this->getData();
+    
+        if ($request->hasFile('bukti')) {
+            try {
+                $file = $request->file('bukti');
+                $fileName = time() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('private/lb-kegiatan', $fileName);
+    
+                LogbookKegiatan::create([
+                    'id_pkm' => $pkm->id,
+                    'tanggal' => $request->tanggal,
+                    'uraian' => $request->uraian,
+                    'capaian' => $request->capaian,
+                    'waktu_pelaksanaan' => $request->waktu,
+                    'bukti' => 'private/lb-kegiatan/' . $fileName,
+                ]);
+    
+                return redirect(route('pengusul.pelaksanaan.logbook-kegiatan.index'))->with('success', 'Logbook kegiatan berhasil disimpan');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal menyimpan logbook kegiatan' . $e->getMessage());
+            }
+        }
+    }    
+
+    public function editLbKeg($id) {
+        $data['logbook'] = LogbookKegiatan::findOrFail($id);
+        $data['edit_mode'] = true;
+        return view('pengusul.pelaksanaan.form-lb-kegiatan', ['data' => $data]);
+    }
+
+    public function showFile($path)
+    {
+        if (!Storage::exists($path)) {
+            return abort(404, 'File not found');
+        }
+
+        $mimeTypes = [
+            'pdf' => 'application/pdf',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg'
+        ];
+
+        $fileExtension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $contentType = $mimeTypes[$fileExtension] ?? 'application/octet-stream';
+
+        return response()->stream(
+            function () use ($path) {
+                $fileStream = Storage::readStream($path);
+                fpassthru($fileStream);
+                if (is_resource($fileStream)) {
+                    fclose($fileStream);
+                }
+            },
+            200,
+            [
+                'Content-Type' => $contentType,
+                'Content-Disposition' => 'inline; filename="' . basename($path) . '"',
+            ]
+        );
+    }
+
+    public function updateLbKeg(Request $request, $id) {
+        $request->validate([
+            'tanggal' => 'required|date',
+            'uraian' => 'required|string',
+            'capaian' => 'required|numeric|between:0,100',
+            'waktu' => 'required|numeric',
+            'bukti' => 'nullable|file|mimes:pdf,jpg,jpeg,doc,docx|max:1024',
+        ], [
+            'tanggal.required' => 'Tanggal tidak boleh kosong',
+            'tanggal.date' => 'Tanggal harus sesuai format',
+            'uraian.required' => 'Uraian harus diisi',
+            'uraian.string' => 'Uraian kegiatan harus berupa narasi',
+            'capaian.required' => 'Capaian kegiatan harus diisi',
+            'capaian.numeric' => 'Capaian kegiatan harus berupa angka (dalam %)',
+            'capaian.between' => 'Capaian kegiatan harus berada dalam rentang 0-100%',
+            'waktu.required' => 'Waktu kegiatan harus diisi',
+            'waktu.numeric' => 'Waktu kegiatan harus berupa angka (dalam menit)',
+            'bukti.file' => 'Bukti kegiatan harus berupa file',
+            'bukti.mimes' => 'Bukti kegiatan harus berupa pdf, jpg, jpeg, doc, atau docx',
+            'bukti.max' => 'Bukti kegiatan tidak boleh lebih dari 1 MB',
+        ]);
+
+        try {
+            $logbook = LogbookKegiatan::findOrFail($id);
+
+            $dataToUpdate = [
+                'tanggal' => $request->tanggal,
+                'uraian' => $request->uraian,
+                'capaian' => $request->capaian,
+                'waktu_pelaksanaan' => $request->waktu,
+            ];
+
+            if ($request->hasFile('bukti')) {
+                if ($logbook->bukti) {
+                    Storage::delete($logbook->bukti);
+                }
+
+                $file = $request->file('bukti');
+                $fileName = time() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('private/lb-kegiatan', $fileName);
+                $dataToUpdate['bukti'] = 'private/lb-kegiatan/' . $fileName;
+            }
+            $logbook->update($dataToUpdate);
+            return redirect()->route('pengusul.pelaksanaan.logbook-kegiatan.index')->with('success', 'Logbook kegiatan berhasil diperbarui');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal memperbarui logbook kegiatan: ' . $th->getMessage());
+        }
+    }
+
+    public function downloadLbKeg($id) {
+        $logbook = LogbookKegiatan::findOrFail($id);
+
+        if (!$logbook->bukti) {
+            return redirect()->back()->with('error', 'File tidak ditemukan!');
+        }
+
+        $filePath = storage_path('app/' . $logbook->bukti);
+
+        if (!file_exists($filePath)) {
+            return redirect()->back()->with('error', 'File tidak ditemukan!');
+        }
+
+        return response()->download($filePath, basename($logbook->bukti));
+
+    }
+
+    public function deleteLbKeg($id) {
+        $logbook = LogbookKegiatan::findOrFail($id);
+
+        if (Storage::exists($logbook->bukti)) {
+            Storage::delete($logbook->bukti);
+        }
+
+        $logbook->delete();
+
+        return back()->with('success', 'Logbook keuangan berhasil dihapus');
+    }
+
     public function kemajuan()
     {
         $data = $this->getData();
@@ -105,11 +293,10 @@ class PelaksanaanController extends Controller
     public function createLaporanAkhir()
     {
         $data = $this->getData();
-
         return view('pengusul.pelaksanaan.laporan-akhir', ['data' => $data, 'title' => 'Laporan Akhir']);
     }
 
-    public function storeFile(Request $request)
+    public function storeFile(Request $request, $id)
     {
         $request->validate([
             'laporanAkhir' => 'required|mimes:pdf|max:5120',
@@ -120,10 +307,8 @@ class PelaksanaanController extends Controller
             'laporanAkhir.max' => 'File Laporan Akhir tidak boleh lebih dari 5 MB.',
 
         ]);
-        $mahasiswa = Mahasiswa::where('nim', Auth::guard('pengusul')->user()->nim)->first();
-        $pkm = DetailPkm::where('id', $mahasiswa->id_pkm)->first();
+        $pkm = DetailPkm::findOrFail($id);
         if ($request->hasFile('laporanAkhir')) {
-            // Simpan file di folder yang tepat
             $filePath = $request->file('laporanAkhir')->store('private/laporan-akhir');
             $pkm->update([
                 'lapkhir' => $filePath,
@@ -294,7 +479,7 @@ class PelaksanaanController extends Controller
             'val_dospem' => null,
             'jumlah' => $jumlah,
         ]);
-        return redirect()->route('pengusul.dashboard-logbook-keuangan')->with('success', 'Logbook Keuangan berhasil disimpan');
+        return redirect()->route('pengusul.pelaksanaan.logbook-keuangan')->with('success', 'Logbook Keuangan berhasil disimpan');
     }
 
     public function hapusLogbookKeuangan($id)
@@ -322,7 +507,7 @@ class PelaksanaanController extends Controller
         $logbook = LogbookKeuangan::findOrFail($id);
 
         if ($logbook->val_dospem !== null) {
-            return redirect()->route('pengusul.dashboard-logbook-keuangan')->with('error', 'Logbook tidak dapat diedit.');
+            return redirect()->route('pengusul.pelaksanaan.logbook-keuangan')->with('error', 'Logbook tidak dapat diedit.');
         }
 
         $logbook->tanggal = \Carbon\Carbon::parse($logbook->tanggal)->format('d-m-Y');
@@ -361,7 +546,7 @@ class PelaksanaanController extends Controller
         $logbook = LogbookKeuangan::findOrFail($id);
 
         if ($logbook->val_dospem !== null) {
-            return redirect()->route('pengusul.dashboard-logbook-keuangan')->with('error', 'Logbook tidak dapat diedit.');
+            return redirect()->route('pengusul.pelaksanaan.logbook-keuangan')->with('error', 'Logbook tidak dapat diedit.');
         }
 
         $total_penggunaan_sebelumnya = LogbookKeuangan::where('id_pkm', $pkm->id)->where('id', '!=', $id)->get()->sum(function ($item) {
@@ -448,7 +633,7 @@ class PelaksanaanController extends Controller
 
         $logbook->save();
 
-        return redirect()->route('pengusul.dashboard-logbook-keuangan')->with('success', 'Logbook Keuangan berhasil diperbarui');
+        return redirect()->route('pengusul.pelaksanaan.logbook-keuangan')->with('success', 'Logbook Keuangan berhasil diperbarui');
     }
 
     public function downloadBukti($id)

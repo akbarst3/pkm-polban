@@ -164,19 +164,29 @@ class PengusulController extends Controller
         $request->validate([
             'dana_kemdikbud' => 'required',
             'dana_pt' => 'required',
-            'dana_lain' => 'nullable',
-            'instansi_lain' => 'required_if:dana_lain,==,null'
+            'dana_lain' => ['nullable', function ($attribute, $value, $fail) use ($request) {
+                if (!is_null($request->instansi_lain) && is_null($value)) {
+                    $fail('Dana lain perlu diisi jika instansi lain diisi.');
+                }
+            }],
+            'instansi_lain' => ['nullable', function ($attribute, $value, $fail) use ($request) {
+                if (!is_null($request->dana_lain) && is_null($value)) {
+                    $fail('Instansi lain perlu diisi jika dana lain diisi.');
+                }
+            }],
         ], [
             'dana_kemdikbud.required' => 'Dana Kemdikbud perlu diisi',
             'dana_pt.required' => 'Dana Perguruan Tinggi perlu diisi',
-            'instansi_lain.required_if' => 'Nama instansi wajib diisi jika dana instansi lain diisi.',
         ]);
-
+        
         $dana_kemdikbud = (int) str_replace(['Rp', '.', ' '], '', $request->dana_kemdikbud);
         $dana_pt = (int) str_replace(['Rp', '.', ' '], '', $request->dana_pt);
         if ($request->dana_lain) {
             $dana_lain = (int) str_replace(['Rp', '.', ' '], '', $request->dana_lain);
+        } else {
+            $dana_lain = null;
         }
+        
 
         $pkm = DetailPkm::where('id', $id);
         $pkm->update([
@@ -248,7 +258,7 @@ class PengusulController extends Controller
             ]);
             DB::commit();
             session()->flash('success', 'Data berhasil disimpan');
-            return redirect()->intended(route('pengusul.edit-usulan'));
+            return redirect()->intended(route('pengusul.identitas-usulan.edit-usulan'));
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
@@ -328,7 +338,7 @@ class PengusulController extends Controller
             ]);
             DB::commit();
             session()->flash('success', 'Data berhasil disimpan');
-            return redirect()->intended(route('pengusul.edit-usulan'));
+            return redirect()->intended(route('pengusul.identitas-usulan.edit-usulan'));
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());

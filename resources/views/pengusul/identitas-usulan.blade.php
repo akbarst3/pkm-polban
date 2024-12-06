@@ -2,25 +2,25 @@
 @section('konten')
     <div class="container mt-4">
         <h4>Pengisian Identitas Mahasiswa Pengusul PKM</h4>
-        <div class="card mt-4 my-10">
+        <div class="card mt-4 my-10 shadow rounded">
             <div class="card-body ">
-                <h5 class="card-title">Daftar Usulan</h5>
+                <h5 class="card-title my-2">Daftar Usulan</h5>
                 <table class="table table-bordered text-center align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>No.</th>
-                            <th>Skema</th>
-                            <th>Judul</th>
-                            <th>Peran</th>
-                            <th>Edit</th>
-                            <th>Pengesahan</th>
-                            <th>Upload Proposal</th>
+                            <th style="width: 2%;">No.</th>
+                            <th style="width: 10%;">Skema</th>
+                            <th style="width: 50%;">Judul</th>
+                            <th style="width: 10%;">Peran</th>
+                            <th style="width: 5%;">Edit</th>
+                            <th style="width: 5%;">Pengesahan</th>
+                            <th style="width: 5%;">Upload Proposal</th>
                             @if ($data['pkm']->proposal)
-                                <th>Download Proposal</th>
+                                <th style="width: 5%;">Download Proposal</th>
                             @endif
-                            <th>Val. Dosen</th>
-                            <th>Val. Pimpinan</th>
-                            <th>Hasil Evaluasi</th>
+                            <th style="width: 5%;">Val. Dosen</th>
+                            <th style="width: 5%;">Val. Pimpinan</th>
+                            <th style="width: 5%;">Hasil Evaluasi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,7 +30,7 @@
                             <td>{{ $data['pkm']->judul }}</td>
                             <td>Ketua Kelompok</td>
                             <td>
-                                <a href="{{ route('pengusul.edit-usulan') }}">
+                                <a href="{{ route('pengusul.identitas-usulan.edit-usulan') }}">
                                     <button class="btn btn-outline-secondary">
                                         <img src="{{ asset('icons/edit-icon.png') }}" alt="Edit" width="20">
                                     </button>

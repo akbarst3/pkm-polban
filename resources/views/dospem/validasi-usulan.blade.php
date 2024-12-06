@@ -6,14 +6,11 @@
         <!-- Filter Tahun -->
         <div class="d-flex align-items-center mb-3">
             <label class="me-2" for="yearSelect">Tahun:</label>
-            <select id="yearSelect" class="form-select form-select-sm w-auto me-2">
-                <option selected>2024</option>
-                <option>2023</option>
-            </select>
+            <button class="btn" disabled>2024</button>
         </div>
 
         <!-- Data Usulan -->
-        <div class="card p-4">
+        <div class="card p-4 shadow rounded">
             <h5 class="text">Data Usulan</h5>
             <h6 class="text-center">Apakah Proposal Berikut Ini Akan Disetujui?</h6>
             <div class="row my-3">
@@ -50,8 +47,9 @@
                 <div class="col-2 text-end"><strong>Status Validasi Dosen</strong></div>
                 <div class="col-8">
                     <span id="statusBadge"
-                    class="badge {{ $data['pkm']->val_dospem === null ? 'bg-warning text-dark' : ($data['pkm']->val_dospem == 0 ? 'bg-danger' : 'bg-success') }}">
-                    {{ $data['pkm']->val_dospem === null ? 'Belum Disetujui' : ($data['pkm']->val_dospem == 0 ? 'Ditolak' : 'Disetujui') }}                    </span>
+                        class="badge {{ $data['pkm']->val_dospem === null ? 'bg-warning text-dark' : ($data['pkm']->val_dospem == 0 ? 'bg-danger' : 'bg-success') }}">
+                        {{ $data['pkm']->val_dospem === null ? 'Belum Disetujui' : ($data['pkm']->val_dospem == 0 ? 'Ditolak' : 'Disetujui') }}
+                    </span>
                 </div>
             </div>
 
@@ -62,17 +60,14 @@
                     <form action="{{ route('dosen-pendamping.validate') }}" method="POST" class="d-inline">
                         @csrf
                         <input type="hidden" name="pkm_id" value="{{ $data['pkm']->id }}">
-                        @if ($data['pkm']->val_dospem == 0)
-                        <button type="submit" name="val_dospem" value="1"
-                        class="btn btn-success mx-2">Setujui</button>
-                        @endif
-                        <button type="submit" name="val_dospem" value="0" class="btn btn-danger">
-                            @if ($data['pkm']->val_dospem == 1)
+                        @if (is_null($data['pkm']->val_dospem))
+                            <button type="submit" name="val_dospem" value="1" class="btn btn-success">Setujui</button>
+                            <button type="submit" name="val_dospem" value="0" class="btn btn-danger">Tolak</button>
+                        @else
+                            <button type="submit" name="val_dospem" value="null" class="btn btn-secondary">
                                 Batalkan
-                            @else
-                            Tolak
-                            @endif
-                        </button>
+                            </button>
+                        @endif
                     </form>
                 </div>
             </div>

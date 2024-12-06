@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     <!-- Additional CSS -->
     @stack('styles')
@@ -102,7 +103,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('pengusul.identitas-usulan') }}" class="nav-link">
+                                    <a href="{{ route('pengusul.identitas-usulan.index') }}" class="nav-link">
                                         <p>Identitas Usulan</p>
                                     </a>
                                 </li>
@@ -110,8 +111,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('pengusul.pelaksanaan.dashboard-pelaksanaan') }}"
-                                class="nav-link "
+                            <a href="{{ route('pengusul.pelaksanaan.dashboard-pelaksanaan') }}" class="nav-link "
                                 @if (!$data['pkm']->val_pt || $data['pkm']->id_skema == 9 || $data['pkm']->id_skema == 10) style="pointer-events: none; opacity: 0.6;" @endif>
                                 <i class="nav-icon bi bi-file-earmark"></i>
                                 <p>Pelaksanaan Kegiatan</p>
@@ -131,12 +131,8 @@
                 </nav>
 
                 <!-- Bottom Components -->
-                <div class="bottom-components d-flex justify-content-between position-absolute w-100 p-4"
+                <div class="bottom-components d-flex justify-content-around position-absolute w-100 p-4"
                     style="bottom: 0;">
-                    <a href="#" class="nav-link text-center d-flex flex-column align-items-center">
-                        <i class="bi bi-chat fs-4"></i>
-                        <p class="mb-0">Pesan</p>
-                    </a>
                     <a href="https://simbelmawa.kemdikbud.go.id/portal/wp-content/uploads/2024/02/1.-Panduan-Umum-PKM-2024.pdf"
                         target="_blank" class="nav-link text-center d-flex flex-column align-items-center">
                         <i class="bi bi-book fs-4"></i>

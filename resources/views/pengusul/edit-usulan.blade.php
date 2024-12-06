@@ -4,7 +4,7 @@
         <h3 class="mb-4">Edit Usulan : Judul PKM</h3>
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card shadow rounded">
                     <div class="card-header bg-primary text-white">Identitas Pengusul</div>
                     <div class="card-body">
                         <div class="row mb-3">
@@ -28,10 +28,10 @@
             </div>
             <div class="row d-flex align-items-stretch my-5">
                 <div class="col-md-6">
-                    <div class="card mb-4 h-100">
+                    <div class="card mb-4 h-100 shadow rounded">
                         <div class="card-header bg-primary text-white">Data Mahasiswa</div>
                         <div class="card-body">
-                            <form action="{{ route('pengusul.edit-usulan.edit-mhs', $data['mahasiswa']->nim) }}"
+                            <form action="{{ route('pengusul.identitas-usulan.edit-usulan.edit-mhs', $data['mahasiswa']->nim) }}"
                                 method="POST">
                                 @csrf
                                 @method('PATCH')
@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card mb-4 h-100">
+                    <div class="card mb-4 h-100 shadow rounded">
                         <div class="card-header bg-primary text-white">Data Dosen Pendamping</div>
                         <div class="card-body">
                             <div class="row mb-3">
@@ -127,10 +127,10 @@
 
         <div class="row">
             <div class="col-12">
-                <div class="card mb-4">
+                <div class="card mb-4 shadow rounded">
                     <div class="card-header bg-primary text-white">Data Usulan</div>
                     <div class="card-body">
-                        <form action="{{ route('pengusul.edit-usulan.edit-pkm', $data['pkm']->id) }}" method="POST">
+                        <form action="{{ route('pengusul.identitas-usulan.edit-usulan.edit-pkm', $data['pkm']->id) }}" method="POST">
                             @csrf
                             @method('PATCH')
                             <div class="form-group">
@@ -216,7 +216,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="card mb-4">
+                <div class="card mb-4 shadow rounded">
                     <div class="card-header bg-primary text-white">Anggota</div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -241,11 +241,11 @@
                                                 @if ($index != 0)
                                                     <div class="d-flex justify-content-start">
                                                         <a class="btn btn-primary btn-sm mx-2"
-                                                            href="{{ route('pengusul.edit-usulan.edit-anggota', $person->nim) }}">
+                                                            href="{{ route('pengusul.identitas-usulan.edit-usulan.edit-anggota', $person->nim) }}">
                                                             <i class="bi bi-pencil"></i>
                                                         </a>
                                                         <form
-                                                            action="{{ route('pengusul.edit-usulan.hapus-anggota', $person->nim) }}"
+                                                            action="{{ route('pengusul.identitas-usulan.edit-usulan.hapus-anggota', $person->nim) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('DELETE')
@@ -267,7 +267,7 @@
 
                             @if ($jumlahAnggota < 5)
                                 <button type="button" class="btn btn-primary" id="tambahAnggota">
-                                    <a href="{{ route('pengusul.edit-usulan.tambah-anggota') }}"
+                                    <a href="{{ route('pengusul.identitas-usulan.edit-usulan.tambah-anggota') }}"
                                         style="color:white; text-decoration: none;">+
                                         Tambah Anggota</a>
                                 </button>
@@ -285,7 +285,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="card mb-4">
+                <div class="card mb-4 shadow rounded">
                     <div class="card-header bg-primary text-white">Luaran</div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -307,7 +307,7 @@
                             </table>
                         </div>
                         <div class="mt-5 d-flex justify-content-end">
-                            <a href="{{ route('pengusul.identitas-usulan') }}" class="btn btn-secondary"> Kembali
+                            <a href="{{ route('pengusul.identitas-usulan.index') }}" class="btn btn-secondary"> Kembali
                             </a>
                         </div>
                     </div>
