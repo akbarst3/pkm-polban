@@ -14,10 +14,13 @@ use Illuminate\Http\Request;
 use App\Models\LogbookKegiatan;
 use App\Models\LogbookKeuangan;
 use App\Models\PerguruanTinggi;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use voku\helper\HtmlDomParser;
+
 
 class PelaksanaanController extends Controller
 {
@@ -72,7 +75,6 @@ class PelaksanaanController extends Controller
             'dospem' => Dosen::where('kode_dosen', $baseData['pkm']->kode_dosen)->first(),
             'logbook_kegiatan' => LogbookKegiatan::where('id_pkm', $baseData['pkm']->id)->get(),
         ];
-
         return view('pengusul.pelaksanaan.lb-kegiatan', ['data' => $data, 'title' => 'Logbook Kegiatan']);
     }
 
@@ -137,6 +139,9 @@ class PelaksanaanController extends Controller
         if (!Storage::exists($path)) {
             return abort(404, 'File not found');
         }
+
+        Log::info('File found: ' . $path);
+
 
         $mimeTypes = [
             'pdf' => 'application/pdf',
@@ -261,7 +266,6 @@ class PelaksanaanController extends Controller
 
         if ($request->hasFile('lapkem')) {
             $file = $request->file('lapkem');
-            //$fileName = time() . '_' . $file->getClientOriginalName();
             $extension = $file->getClientOriginalExtension();
             $fileName = 'lapkem_' . uniqid() . '.' . $extension;
             $filePath = 'private/lapkem/' . $fileName;
@@ -290,6 +294,14 @@ class PelaksanaanController extends Controller
 
         return response()->download($filePath, basename($pkm->lapkem));
     }
+
+    public function createLuaranKemajuan() {
+        $data = $this->getData();
+        $data['pkm'] = DetailPkm::where('id', $data['pkm']->id)->with('sosmed')->first();
+        return view('pengusul.pelaksanaan.luaran-kemajuan', ['data' => $data, 'title' => 'Luaran Kemajuan']);
+
+    }
+
     public function createLaporanAkhir()
     {
         $data = $this->getData();
@@ -669,4 +681,120 @@ class PelaksanaanController extends Controller
             return back()->with('error', 'Terjadi kesalahan saat mengunduh file');
         }
     }
+
+    public function createProfile()
+    {
+        ['mahasiswa' => $mahasiswa] = $this->getdata();
+        $data = Mahasiswa::where('nim', $mahasiswa->nim)->with('pengusul')->first();
+        return view('pengusul.pelaksanaan.profile', ['data' => $data, 'title' => 'Profile Pengusul']);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'no_ktp' => 'required|numeric',
+            'email' => 'required|email',
+            'jenis_kelamin' => 'required|in:L,P',
+            'tanggal_lahir' => 'required|date',
+            'tempat_lahir' => 'required|string',
+            'alamat' => 'required|string',
+            'kota' => 'required|string',
+            'kode_pos' => 'required|numeric',
+            'no_hp' => 'required|numeric',
+        ], [
+            'foto_profil.image' => 'File harus berupa gambar.',
+            'foto_profil.mimes' => 'Format gambar yang diizinkan hanya JPEG, PNG, dan JPG.',
+            'foto_profil.max' => 'Ukuran gambar maksimal 2MB.',
+            'no_ktp.required' => 'Nomor KTP harus diisi.',
+            'no_ktp.numeric' => 'Nomor KTP harus berupa angka.',
+            'email.required' => 'Email harus diisi.',
+            'email.email' => 'Email tidak valid.',
+            'jenis_kelamin.required' => 'Jenis kelamin harus dipilih.',
+            'jenis_kelamin.in' => 'Jenis kelamin harus berupa L atau P.',
+            'tanggal_lahir.required' => 'Tanggal lahir harus diisi.',
+            'tanggal_lahir.date' => 'Tanggal lahir harus berupa tanggal yang valid.',
+            'tempat_lahir.required' => 'Tempat lahir harus diisi.',
+            'alamat.required' => 'Alamat harus diisi.',
+            'kota.required' => 'Kota harus diisi.',
+            'kode_pos.required' => 'Kode pos harus diisi.',
+            'kode_pos.numeric' => 'Kode pos harus berupa angka.',
+            'no_hp.required' => 'Nomor ponsel harus diisi.',
+            'no_hp.numeric' => 'Nomor ponsel harus berupa angka.',
+        ]);
+        
+    
+        $pengusul = Pengusul::where('nim', Auth::guard('pengusul')->user()->nim)->first();
+    
+        try {
+            if ($request->hasFile('foto_profil')) {
+                if ($pengusul->foto_profil) {
+                    log::info('Foto Profil');
+                    Storage::delete($pengusul->foto_profil);
+                }
+                $file = $request->file('foto_profil');
+                $fileName = time() . '.' . $file->extension();
+                $file->storeAs('private/foto-profil', $fileName);
+                $pengusul->foto_profil = 'private/foto-profil/' . $fileName;
+            }
+        
+            $pengusul->update([
+                'no_ktp' => $request->no_ktp ?? $pengusul->no_ktp,
+                'email' => $request->email ?? $pengusul->email,
+                'jenis_kelamin' => $request->jenis_kelamin ?? $pengusul->jenis_kelamin,
+                'tanggal_lahir' => $request->tanggal_lahir ?? $pengusul->tanggal_lahir,
+                'tempat_lahir' => $request->tempat_lahir ?? $pengusul->tempat_lahir,
+                'alamat' => $request->alamat ?? $pengusul->alamat,
+                'kota' => $request->kota ?? $pengusul->kota,
+                'kode_pos' => $request->kode_pos ?? $pengusul->kode_pos,
+                'no_hp' => $request->no_hp ?? $pengusul->no_hp,
+                'telp_rumah' => $request->telp_rumah ?? $pengusul->telp_rumah,
+            ]);
+        
+            return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function openPhoto($path) {
+        Log::info('Requested photo path: ' . $path);
+    
+        if (empty($path)) {
+            Log::error('Empty photo path');
+            return abort(404, 'Path is empty');
+        }
+    
+        if (!Storage::exists($path)) {
+            Log::error('File not found: ' . $path);
+            return abort(404, 'File not found');
+        }
+
+        $mimeTypes = [
+            'pdf' => 'application/pdf',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg'
+        ];
+
+        $fileExtension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $contentType = $mimeTypes[$fileExtension] ?? 'application/octet-stream';
+
+        return response()->stream(
+            function () use ($path) {
+                $fileStream = Storage::readStream($path);
+                fpassthru($fileStream);
+                if (is_resource($fileStream)) {
+                    fclose($fileStream);
+                }
+            },
+            200,
+            [
+                'Content-Type' => $contentType,
+                'Content-Disposition' => 'inline; filename="' . basename($path) . '"',
+            ]
+        );
+    }
+    
 }

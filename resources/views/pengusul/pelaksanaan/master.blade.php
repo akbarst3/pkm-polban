@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/styles/overlayscrollbars.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Additional CSS -->
@@ -100,7 +101,8 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('pengusul.pelaksanaan.logbook-kegiatan.index') }}" class="nav-link">
+                                    <a href="{{ route('pengusul.pelaksanaan.logbook-kegiatan.index') }}"
+                                        class="nav-link">
                                         <p>Logbook Kegiatan</p>
                                     </a>
                                 </li>
@@ -125,21 +127,23 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('pengusul.pelaksanaan.lap-kemajuan') }}" class="nav-link {{ request()->routeIs('pengusul.lap-kemajuan') ? 'active' : '' }}">
+                                    <a href="{{ route('pengusul.pelaksanaan.lap-kemajuan') }}"
+                                        class="nav-link {{ request()->routeIs('pengusul.lap-kemajuan') ? 'active' : '' }}">
                                         <p>Laporan Kemajuan</p>
                                     </a>
                                 </li>
                             </ul>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href=" " class="nav-link">
+                                    <a href="{{ route('pengusul.pelaksanaan.luaran-kemajuan') }}" class="nav-link">
                                         <p>Luaran Kemajuan</p>
                                     </a>
                                 </li>
                             </ul>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('pengusul.pelaksanaan.laporan-akhir') }}" class="nav-link {{ request()->routeIs('pengusul.laporan-akhir') ? 'active' : '' }}">
+                                    <a href="{{ route('pengusul.pelaksanaan.laporan-akhir') }}"
+                                        class="nav-link {{ request()->routeIs('pengusul.laporan-akhir') ? 'active' : '' }}">
                                         <p>Laporan Akhir</p>
                                     </a>
                                 </li>
@@ -153,8 +157,8 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#"
-                                class="nav-link {{ Request::is('pengusul/identitas-usulan*') ? 'active' : '' }}">
+                            <a href="{{ route('pengusul.pelaksanaan.profile') }}"
+                                class="nav-link {{ Request::is('pengusul.pelaksanaan.profile*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-person-fill"></i>
                                 <p>
                                     Profile
@@ -162,14 +166,16 @@
                             </a>
 
 
-                            <li class="nav-item mt-5"> <!-- Menambahkan jarak di atas item ini -->
-                                <form action="{{ route('pengusul.logout') }}" method="post" class="d-flex justify-content-center">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary w-100 d-flex align-items-center justify-content-center">
-                                        <span>Logout</span>
-                                    </button>
-                                </form>
-                            </li>
+                        <li class="nav-item mt-5"> <!-- Menambahkan jarak di atas item ini -->
+                            <form action="{{ route('pengusul.logout') }}" method="post"
+                                class="d-flex justify-content-center">
+                                @csrf
+                                <button type="submit"
+                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center">
+                                    <span>Logout</span>
+                                </button>
+                            </form>
+                        </li>
 
 
                     </ul>

@@ -41,65 +41,6 @@ class PengusulController extends Controller
         return view('pengusul.dashboard', ['data' => $data, 'title' => 'Dashboard Pengusul']);
     }
 
-    public function profile()
-    {
-        $data = $this->getdata();
-        $data['mahasiswa'] = Mahasiswa::where('nim', $data['mahasiswa']->nim)->first();
-        $data['pengsul'] = Pengusul::where('nim', $data['mahasiswa']->nim)->first();
-        return view('pengusul/pelaksanaan_kegiatan/profile', ['data' => $data, 'title' => 'Profile']);
-    }
-
-    public function update(Request $request)
-    {
-        $validated = $request->validate([
-            'no_ktp' => 'required|string|max:255',
-            'email' => 'required|email',
-            'jenis_kelamin' => 'required|in:L,P',
-            'tanggal_lahir' => 'required|date',
-            'tempat_lahir' => 'required|string|max:255',
-            'alamat' => 'required|string|max:500',
-            'kota' => 'required|string|max:255',
-            'kode_pos' => 'required|numeric|digits:5',
-            'no_hp' => 'required|string|max:255',
-            'telp_rumah' => 'nullable|string|max:255',
-            'facebook' => 'nullable|url',
-            'youtube' => 'nullable|url',
-            'instagram' => 'nullable|url',
-            'tiktok' => 'nullable|url',
-        ]);
-        
-        
-        $pengusul = Pengusul::where('nim', Auth::guard('pengusul')->user()->nim)->first();
-    
-        $pengusul->update([
-            'no_ktp' => $validated['no_ktp'],
-            'email' => $validated['email'],
-            'jenis_kelamin' => $validated['jenis_kelamin'],
-            'tanggal_lahir' => $validated['tanggal_lahir'],
-            'tempat_lahir' => $validated['tempat_lahir'],
-            'alamat' => $validated['alamat'],
-            'kota' => $validated['kota'],
-            'kode_pos' => $validated['kode_pos'],
-            'no_hp' => $validated['no_hp'],
-            'telp_rumah' => $validated['telp_rumah'],
-            'facebook' => $validated['facebook'],
-            'youtube' => $validated['youtube'],
-            'instagram' => $validated['instagram'],
-            'tiktok' => $validated['tiktok'],
-        ]);
-
-        return redirect()->route('pengusul.pelaksanaan_kegiatan.profile')
-                        ->with('success', 'Profile updated successfully.');
-    }
-
-
-    public function showProfile()
-    {
-        $data = $this->getdata();
-
-        return view('pengusul.pelaksanaan_kegiatan.profile', ['data' => $data, 'title' => 'Profile']);
-    }
-
     public function showData()
     {
         $data = $this->getData();

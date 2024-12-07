@@ -1,13 +1,10 @@
 @extends('pengusul/pelaksanaan/master')
 @section('konten')
     <div class="container mt-2 ">
-        <div class="card shadow-sm ps-3 pt-3 pb-0 mb-3 mt-0 fw-bold">
+        <div class="card shadow rounded ps-3 pt-3 pb-0 mb-3 mt-0 fw-bold">
             <p class="">Laporan Kemajuan</p>
         </div>
-        {{-- <div class="alert alert-danger">
-            Upload Laporan Kemajuan dimulai pada tanggal <strong>19 Juli 2024</strong>, berakhir pada <strong>04 Agustus 2024</strong>
-        </div> --}}
-        <div class="card shadow-sm ps-3 pt-1 pb-1 fw-bold pe-3">
+        <div class="card shadow rounded ps-3 pt-1 pb-1 fw-bold pe-3">
             <p class="card-title ">{{ $data['pkm']->judul }}</p>
         </div>
         <div class="card shadow rounded">

@@ -56,9 +56,6 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
     });
     
     Route::middleware(['auth:pengusul', 'session.timeout'])->group(function () {
-        Route::get('/pelaksanaan_kegiatan/profile', [Pengusul::class, 'profile'])->name('pelaksanaan_kegiatan.profile');
-        Route::patch('/pelaksanaan_kegiatan/profile/update', [Pengusul::class, 'update'])->name('pelaksanaan_kegiatan.profile.update');
-        Route::get('/pelaksanaan_kegiatan/profile/show', [Pengusul::class, 'showProfile'])->name('pelaskanaan_kegiatan.profile.show');
         Route::get('/dashboard', [Pengusul::class, 'createDashboard'])->name('dashboard');
         Route::prefix('identitas-usulan')->name('identitas-usulan.')->group(function () {
             Route::get('/', [Pengusul::class, 'showData'])->name('index');
@@ -89,9 +86,8 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
                     Route::patch('/update/{id}', [Pelaksanaan::class, 'updateLbKeg'])->name('update');
                     Route::get('/download/{id}', [Pelaksanaan::class, 'downloadLbKeg'])->name('download');
                     Route::delete('/delete/{id}', [Pelaksanaan::class, 'deleteLbKeg'])->name('delete');
-
                 });
-
+                
                 Route::get('/logbook-keuangan', [Pelaksanaan::class, 'dashboardLogbookKeuangan'])->name('logbook-keuangan');
                 Route::get('/form-tambah-logbook-keuangan', [Pelaksanaan::class, 'formTambahLogbookKeuangan'])->name('form-tambah-logbook-keuangan');
                 Route::post('/store-logbook-keuangan', [Pelaksanaan::class, 'storeLogbookKeuangan'])->name('store-logbook-keuangan');
@@ -102,9 +98,13 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
                 Route::get('/lap-kemajuan', [Pelaksanaan::class, 'kemajuan'])->name('lap-kemajuan');
                 Route::patch('/lap-kemajuan/upload-file', [Pelaksanaan::class, 'uploadFile'])->name('lap-kemajuan.uploadFile');
                 Route::get('/lap-kemajuan/download-file/{id}', [Pelaksanaan::class, 'downloadFile'])->name('lap-kemajuan.downloadFile');
+                Route::get('/luaran-kemajuan', [Pelaksanaan::class, 'createLuaranKemajuan'])->name('luaran-kemajuan');
                 Route::get('/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');
                 Route::patch('/upload-lapkhir/{id}', [Pelaksanaan::class, 'storeFile'])->name('upload-lapkhir');
                 Route::get('/laporan-akhir/download-lapkhir/{id}', [Pelaksanaan::class, 'downloadLapkhir'])->name('laporan-akhir.downloadLapkhir');
+                Route::get('/profile', [Pelaksanaan::class, 'createProfile'])->name('profile');
+                Route::patch('/profile/update', [Pelaksanaan::class, 'updateProfile'])->name('profile.update');
+                Route::get('/profile/open-photo/{path}', [Pelaksanaan::class, 'openPhoto'])->where('path', '.*')->name('profile.open-photo');
             });
         });
         Route::post('/logout', [AuthPengusul::class, 'logout'])->name('logout');

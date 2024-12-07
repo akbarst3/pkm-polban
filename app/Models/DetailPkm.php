@@ -49,7 +49,7 @@ class DetailPkm extends Model
 
     public function sosmed(): HasMany
     {
-        return $this->hasMany(SosialMedia::class, 'id_pkm', 'id_pkm');
+        return $this->hasMany(SosialMedia::class, 'id_pkm', 'id');
     }
 
     public function skema(): BelongsTo

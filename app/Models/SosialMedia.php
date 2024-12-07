@@ -18,11 +18,11 @@ class SosialMedia extends Model
 
     public function tipe(): BelongsTo
     {
-        return $this->belongsTo(TipeSosmed::class, 'id_sosmed', 'id_sosmed');
+        return $this->belongsTo(TipeSosmed::class, 'id_sosmed', 'id');
     }
 
     public function detailPkm(): BelongsTo
     {
-        return $this->belongsTo(DetailPkm::class, 'id_pkm', 'id_pkm');
+        return $this->belongsTo(DetailPkm::class, 'id_pkm', 'id');
     }
 }

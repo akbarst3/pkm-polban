@@ -3,17 +3,17 @@
 @section('konten')
     <div class="container mt-4">
         <!-- Header Section -->
-        <div class="card shadow-sm ps-4 pt-3 pb-0 mb-3 fw-bold">
+        <div class="card shadow rounded ps-4 pt-3 pb-0 mb-3 fw-bold">
             <p>Laporan Akhir</p>
         </div>
 
         <!-- Title Section -->
-        <div class="card shadow-sm ps-4 pt-2 fw-bold pe-4 pb-1">
+        <div class="card shadow rounded ps-4 pt-2 fw-bold pe-4 pb-1">
             <p class="card-title">{{ $data['pkm']->judul }}</p>
         </div>
 
         <!-- Form Section -->
-        <div class="card shadow-sm p-4">
+        <div class="card shadow rounded p-4">
             <div class="row ps-4 pb-1 pt-3 pe-4">
                 <!-- Kolom Skema dan Tahun -->
                 <div class="col-md-4 mb-0 ps-4">
