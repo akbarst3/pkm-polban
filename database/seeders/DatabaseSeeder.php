@@ -103,17 +103,65 @@ class DatabaseSeeder extends Seeder
         LuaranPkm::create([
             'nama_luaran' => 'Artikel Gagasan',
         ]);
-
         ProgramStudi::create([
             'kode_prodi' => '56401',
             'nama_prodi' => 'D3-Teknik Informatika',
             'kode_pt' => '005004',
         ]);
+        ProgramStudi::create([
+            'kode_prodi' => '431011',
+            'nama_prodi' => 'D4-Teknik Informatika',
+            'kode_pt' => '005004',
+        ]);
+        ProgramStudi::create([
+            'kode_prodi' => '431001',
+            'nama_prodi' => 'D4-Teknik Perancangan Jalan dan Jembatan',
+            'kode_pt' => '005004',
+        ]);
+        ProgramStudi::create([
+            'kode_prodi' => '431002',
+            'nama_prodi' => 'D3-Teknik Perawatan dan Perbaikan Gedung',
+            'kode_pt' => '005004',
+        ]);
+        ProgramStudi::create([
+            'kode_prodi' => '431009',
+            'nama_prodi' => 'D4-Teknik Otomasi Industri',
+            'kode_pt' => '005004',
+        ]);
+        ProgramStudi::create([
+            'kode_prodi' => '431015',
+            'nama_prodi' => 'D4-Akuntansi',
+            'kode_pt' => '005004',
+        ]);
+        ProgramStudi::create([
+            'kode_prodi' => '431018',
+            'nama_prodi' => 'D3-Manajemen Pemasaran',
+            'kode_pt' => '005004',
+        ]);
+        ProgramStudi::create([
+            'kode_prodi' => '431026',
+            'nama_prodi' => 'D3-Administrasi Bisnis',
+            'kode_pt' => '005004',
+        ]);
         Dosen::create([
-            'kode_dosen' => '2214567',
+            'kode_dosen' => 'KO012N',
             'nama' => 'Jonner Hutahaean',
             'no_hp' => '089526154777',
             'email' => 'jonner@polban.ac.id',
+            'kode_prodi' => '56401',
+        ]);
+        Dosen::create([
+            'kode_dosen' => 'KO001N',
+            'nama' => 'Ade Chandra',
+            'no_hp' => '0899999999',
+            'email' => 'ade@polban.ac.id',
+            'kode_prodi' => '56401',
+        ]);
+        Dosen::create([
+            'kode_dosen' => 'KO013T',
+            'nama' => 'Yazid Amirul',
+            'no_hp' => '0888999999',
+            'email' => 'ade@polban.ac.id',
             'kode_prodi' => '56401',
         ]);
         SkemaLuaran::create([

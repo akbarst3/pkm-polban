@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     <!-- Additional CSS -->
     @stack('styles')
@@ -92,7 +93,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ Request::is('pimpinan/dashboard*') ? 'active' : '' }}">
+                            <a href="#"
+                                class="nav-link {{ Request::is('pimpinan/dashboard*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-calendar"></i>
                                 <p>
                                     Validasi Usulan

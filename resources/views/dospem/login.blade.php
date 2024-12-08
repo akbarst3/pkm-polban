@@ -78,6 +78,9 @@
                         </form>
                     </div>
                 </div>
+                <div class="mt-4 d-flex justify-content-end">
+                    <a href="/login" class="btn btn-secondary">Kembali</a>
+                </div>
             </div>
         </div>
     </div>
