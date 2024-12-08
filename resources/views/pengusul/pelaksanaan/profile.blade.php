@@ -16,7 +16,7 @@
                     <label for="foto_profil" class="w-100 h-100 d-flex justify-content-center align-items-center"
                         style="cursor: pointer;">
                         <img id="profileImage"
-                            src="{{ route('pengusul.pelaksanaan.profile.open-photo', ['path' => $data->pengusul->foto_profil ?? asset('images/person.png')]) }}"
+                            src="{{ $data->pengusul->foto_profil ? route('pengusul.pelaksanaan.profile.open-photo', ['path' => $data->pengusul->foto_profil]) : asset('images/person.png') }}"
                             alt="User Profile" class="w-100 h-100 object-fit-cover">
                     </label>
                 </div>
