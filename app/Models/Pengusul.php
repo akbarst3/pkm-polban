@@ -35,6 +35,8 @@ class Pengusul extends Authenticatable
         'jenis_kelamin',
         'tanggal_lahir',
         'tempat_lahir',
+        'foto_profil',
+        'kota',
     ];
 
     protected $hidden = [

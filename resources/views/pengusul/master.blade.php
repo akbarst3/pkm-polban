@@ -138,10 +138,6 @@
                         <i class="bi bi-book fs-4"></i>
                         <p class="mb-0">Panduan</p>
                     </a>
-                    <a href="#" class="nav-link text-center d-flex flex-column align-items-center">
-                        <i class="bi bi-person fs-4"></i>
-                        <p class="mb-0">Pengguna</p>
-                    </a>
                 </div>
             </div>
         </aside>

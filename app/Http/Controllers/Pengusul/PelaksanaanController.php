@@ -7,8 +7,9 @@ use App\Models\Dosen;
 use App\Models\Pengusul;
 use App\Models\SkemaPkm;
 use App\Models\DetailPkm;
-use App\Models\LuaranPkm;
 use App\Models\Mahasiswa;
+use App\Models\TipeSosmed;
+use App\Models\SosialMedia;
 use App\Models\ProgramStudi;
 use Illuminate\Http\Request;
 use App\Models\LogbookKegiatan;
@@ -19,7 +20,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use voku\helper\HtmlDomParser;
 
 
 class PelaksanaanController extends Controller
@@ -59,7 +59,8 @@ class PelaksanaanController extends Controller
         return view('pengusul.pelaksanaan.dashboard-pelaksanaan', ['data' => $data, 'title' => 'Dashboard Pelaksanaan']);
     }
 
-    public function createLbkeg() {
+    public function createLbkeg()
+    {
         $baseData = $this->getData();
         $capaian = LogbookKegiatan::where('id_pkm', $baseData['pkm']->id)->avg('capaian') ?? 0;
         $totalWaktu = LogbookKegiatan::where('id_pkm', $baseData['pkm']->id)->sum('waktu_pelaksanaan');;
@@ -78,11 +79,13 @@ class PelaksanaanController extends Controller
         return view('pengusul.pelaksanaan.lb-kegiatan', ['data' => $data, 'title' => 'Logbook Kegiatan']);
     }
 
-    public function formLbKeg() {
+    public function formLbKeg()
+    {
         return view('pengusul.pelaksanaan.form-lb-kegiatan');
     }
 
-    public function storeLbKeg(Request $request){
+    public function storeLbKeg(Request $request)
+    {
         $request->validate([
             'tanggal' => 'required|date',
             'uraian' => 'required|string',
@@ -103,15 +106,15 @@ class PelaksanaanController extends Controller
             'bukti.mimes' => 'Bukti kegiatan harus berupa pdf, jpg, jpeg, doc, atau docx',
             'bukti.max' => 'Bukti kegiatan tidak boleh lebih dari 1 MB',
         ]);
-    
+
         ['pkm' => $pkm] = $this->getData();
-    
+
         if ($request->hasFile('bukti')) {
             try {
                 $file = $request->file('bukti');
                 $fileName = time() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('private/lb-kegiatan', $fileName);
-    
+
                 LogbookKegiatan::create([
                     'id_pkm' => $pkm->id,
                     'tanggal' => $request->tanggal,
@@ -120,15 +123,16 @@ class PelaksanaanController extends Controller
                     'waktu_pelaksanaan' => $request->waktu,
                     'bukti' => 'private/lb-kegiatan/' . $fileName,
                 ]);
-    
+
                 return redirect(route('pengusul.pelaksanaan.logbook-kegiatan.index'))->with('success', 'Logbook kegiatan berhasil disimpan');
             } catch (\Exception $e) {
                 return redirect()->back()->with('error', 'Gagal menyimpan logbook kegiatan' . $e->getMessage());
             }
         }
-    }    
+    }
 
-    public function editLbKeg($id) {
+    public function editLbKeg($id)
+    {
         $data['logbook'] = LogbookKegiatan::findOrFail($id);
         $data['edit_mode'] = true;
         return view('pengusul.pelaksanaan.form-lb-kegiatan', ['data' => $data]);
@@ -170,7 +174,8 @@ class PelaksanaanController extends Controller
         );
     }
 
-    public function updateLbKeg(Request $request, $id) {
+    public function updateLbKeg(Request $request, $id)
+    {
         $request->validate([
             'tanggal' => 'required|date',
             'uraian' => 'required|string',
@@ -219,7 +224,8 @@ class PelaksanaanController extends Controller
         }
     }
 
-    public function downloadLbKeg($id) {
+    public function downloadLbKeg($id)
+    {
         $logbook = LogbookKegiatan::findOrFail($id);
 
         if (!$logbook->bukti) {
@@ -233,10 +239,10 @@ class PelaksanaanController extends Controller
         }
 
         return response()->download($filePath, basename($logbook->bukti));
-
     }
 
-    public function deleteLbKeg($id) {
+    public function deleteLbKeg($id)
+    {
         $logbook = LogbookKegiatan::findOrFail($id);
 
         if (Storage::exists($logbook->bukti)) {
@@ -295,11 +301,66 @@ class PelaksanaanController extends Controller
         return response()->download($filePath, basename($pkm->lapkem));
     }
 
-    public function createLuaranKemajuan() {
+    public function createLuaranKemajuan()
+    {
         $data = $this->getData();
-        $data['pkm'] = DetailPkm::where('id', $data['pkm']->id)->with('sosmed')->first();
-        return view('pengusul.pelaksanaan.luaran-kemajuan', ['data' => $data, 'title' => 'Luaran Kemajuan']);
+        $data['pkm'] = DetailPkm::where('id', $data['pkm']->id)->with('sosmed.tipe')->first();
 
+        $socialMediaData = [
+            'Youtube' => ['icon' => 'bi-youtube', 'link' => null, 'followers' => null, 'posts' => null],
+            'Instagram' => ['icon' => 'bi-instagram', 'link' => null, 'followers' => null, 'posts' => null],
+            'Tiktok' => ['icon' => 'bi-tiktok', 'link' => null, 'followers' => null, 'posts' => null],
+            'Facebook' => ['icon' => 'bi-facebook', 'link' => null, 'followers' => null, 'posts' => null]
+        ];
+
+        $sosmed = SosialMedia::where('id_pkm', $data['pkm']['id'])->with('tipe')->get();
+
+        foreach ($sosmed as $item) {
+            $name = $item->tipe->nama_sosmed;
+            if (isset($socialMediaData[$name])) {
+                $socialMediaData[$name] = [
+                    'icon' => $socialMediaData[$name]['icon'],
+                    'link' => $item->link_sosmed,
+                    'followers' => $item->follower,
+                    'posts' => $item->postingan
+                ];
+            }
+        }
+
+        $data['sosmed'] = $socialMediaData;
+
+        return view('pengusul.pelaksanaan.luaran-kemajuan', ['data' => $data, 'title' => 'Luaran Kemajuan']);
+    }
+
+    public function createLuaranAkhir()
+    {
+        $data = $this->getData();
+        $data['pkm'] = DetailPkm::where('id', $data['pkm']->id)->with('sosmed.tipe')->first();
+
+        $socialMediaData = [
+            'Youtube' => ['icon' => 'bi-youtube', 'link' => null, 'followers' => null, 'posts' => null],
+            'Instagram' => ['icon' => 'bi-instagram', 'link' => null, 'followers' => null, 'posts' => null],
+            'Tiktok' => ['icon' => 'bi-tiktok', 'link' => null, 'followers' => null, 'posts' => null],
+            'Facebook' => ['icon' => 'bi-facebook', 'link' => null, 'followers' => null, 'posts' => null]
+        ];
+
+        $sosmed = SosialMedia::where('id_pkm', $data['pkm']['id'])->with('tipe')->get();
+
+        foreach ($sosmed as $item) {
+            $name = $item->tipe->nama_sosmed;
+            if (isset($socialMediaData[$name])) {
+                $socialMediaData[$name] = [
+                    'icon' => $socialMediaData[$name]['icon'],
+                    'link' => $item->link_sosmed,
+                    'followers' => $item->follower,
+                    'posts' => $item->postingan
+                ];
+            }
+        }
+
+        $data['sosmed'] = $socialMediaData;
+
+        return view('pengusul.pelaksanaan.luaran-akhir', ['data' => $data, 'title' => 'Luaran Akhir']);
     }
 
     public function createLaporanAkhir()
@@ -340,7 +401,7 @@ class PelaksanaanController extends Controller
         }
         return response()->download($filePath, basename($pkm->lapkhir));
     }
-    
+
     public function dashboardLogbookKeuangan()
     {
         $baseData = $this->getData();
@@ -414,13 +475,13 @@ class PelaksanaanController extends Controller
         $baseData = $this->getData();
         $pkm = $baseData['pkm'];
         $dana_total = $pkm->dana_kemdikbud + $pkm->dana_pt + $pkm->dana_lain;
-        
+
         $logbook_keuangan = LogbookKeuangan::where('id_pkm', $pkm->id)->get();
         $total_penggunaan = $logbook_keuangan->sum(function ($logbook) {
             return $logbook->harga * $logbook->jumlah;
         });
         $sisa_dana = $dana_total - $total_penggunaan;
-        
+
         $jumlah = (int)str_replace(['Rp', '.', ' '], '', $request->jumlah);
         $harga = (int)str_replace(['Rp', '.', ' '], '', $request->harga);
 
@@ -722,10 +783,10 @@ class PelaksanaanController extends Controller
             'no_hp.required' => 'Nomor ponsel harus diisi.',
             'no_hp.numeric' => 'Nomor ponsel harus berupa angka.',
         ]);
-        
-    
+
+
         $pengusul = Pengusul::where('nim', Auth::guard('pengusul')->user()->nim)->first();
-    
+
         try {
             if ($request->hasFile('foto_profil')) {
                 if ($pengusul->foto_profil) {
@@ -737,7 +798,7 @@ class PelaksanaanController extends Controller
                 $file->storeAs('private/foto-profil', $fileName);
                 $pengusul->foto_profil = 'private/foto-profil/' . $fileName;
             }
-        
+
             $pengusul->update([
                 'no_ktp' => $request->no_ktp ?? $pengusul->no_ktp,
                 'email' => $request->email ?? $pengusul->email,
@@ -750,21 +811,22 @@ class PelaksanaanController extends Controller
                 'no_hp' => $request->no_hp ?? $pengusul->no_hp,
                 'telp_rumah' => $request->telp_rumah ?? $pengusul->telp_rumah,
             ]);
-        
+
             return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
-    public function openPhoto($path) {
+    public function openPhoto($path)
+    {
         Log::info('Requested photo path: ' . $path);
-    
+
         if (empty($path)) {
             Log::error('Empty photo path');
             return abort(404, 'Path is empty');
         }
-    
+
         if (!Storage::exists($path)) {
             Log::error('File not found: ' . $path);
             return abort(404, 'File not found');
@@ -796,5 +858,183 @@ class PelaksanaanController extends Controller
             ]
         );
     }
-    
+
+    public function storeSocialMedia(Request $request)
+    {
+        try {
+            $request->validate([
+                'youtube' => [
+                    'nullable',
+                    'url',
+                    'required_with:youtube_followers,youtube_posts'
+                ],
+                'youtube_followers' => 'nullable|numeric|min:0',
+                'youtube_posts' => 'nullable|numeric|min:0',
+
+                'instagram' => [
+                    'nullable',
+                    'url',
+                    'required_with:instagram_followers,instagram_posts'
+                ],
+                'instagram_followers' => 'nullable|numeric|min:0',
+                'instagram_posts' => 'nullable|numeric|min:0',
+
+                'facebook' => [
+                    'nullable',
+                    'url',
+                    'required_with:facebook_followers,facebook_posts'
+                ],
+                'facebook_followers' => 'nullable|numeric|min:0',
+                'facebook_posts' => 'nullable|numeric|min:0',
+
+                'tiktok' => [
+                    'nullable',
+                    'url',
+                    'required_with:tiktok_followers,tiktok_posts'
+                ],
+                'tiktok_followers' => 'nullable|numeric|min:0',
+                'tiktok_posts' => 'nullable|numeric|min:0'
+            ], [
+                'youtube.required_with' => 'URL YouTube harus diisi jika followers atau posts diisi',
+                'instagram.required_with' => 'URL Instagram harus diisi jika followers atau posts diisi',
+                'facebook.required_with' => 'URL Facebook harus diisi jika followers atau posts diisi',
+                'tiktok.required_with' => 'URL TikTok harus diisi jika followers atau posts diisi'
+            ]);
+
+            ['pkm' => $pkm] = $this->getData();
+            $id_pkm = $pkm->id;
+
+            $socialMediaTypes = TipeSosmed::pluck('id', 'nama_sosmed')->toArray();
+
+            $fieldMapping = [
+                'youtube' => 'YouTube',
+                'instagram' => 'Instagram',
+                'facebook' => 'Facebook',
+                'tiktok' => 'TikTok'
+            ];
+
+            foreach ($fieldMapping as $field => $sosmedName) {
+                $sosmedTypeId = null;
+                foreach ($socialMediaTypes as $key => $value) {
+                    if (strtolower($key) === strtolower($sosmedName)) {
+                        $sosmedTypeId = $value;
+                        break;
+                    }
+                }
+
+                if ($sosmedTypeId === null) {
+                    continue;
+                }
+
+                if ($request->filled($field)) {
+                    $socialMediaData = [
+                        'id_pkm' => $id_pkm,
+                        'id_sosmed' => $sosmedTypeId,
+                        'link_sosmed' => $request->input($field),
+                        'follower' => $request->filled($field . '_followers') ? $request->input($field . '_followers') : null,
+                        'postingan' => $request->filled($field . '_posts') ? $request->input($field . '_posts') : null
+                    ];
+
+                    $existingSocialMedia = SosialMedia::where('id_pkm', $id_pkm)->where('id_sosmed', $sosmedTypeId)->first();
+
+                    if ($existingSocialMedia) {
+                        $existingSocialMedia->update($socialMediaData);
+                    } else {
+                        SosialMedia::create($socialMediaData);
+                    }
+                }
+            }
+            return redirect()->back()->with('success', 'Data sosial media berhasil disimpan');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function updateSocialMedia(Request $request)
+    {
+        try {
+            $request->validate([
+                'youtube' => [
+                    'nullable',
+                    'url',
+                    'required_with:youtube_followers,youtube_posts'
+                ],
+                'youtube_followers' => 'nullable|numeric|min:0',
+                'youtube_posts' => 'nullable|numeric|min:0',
+
+                'instagram' => [
+                    'nullable',
+                    'url',
+                    'required_with:instagram_followers,instagram_posts'
+                ],
+                'instagram_followers' => 'nullable|numeric|min:0',
+                'instagram_posts' => 'nullable|numeric|min:0',
+
+                'facebook' => [
+                    'nullable',
+                    'url',
+                    'required_with:facebook_followers,facebook_posts'
+                ],
+                'facebook_followers' => 'nullable|numeric|min:0',
+                'facebook_posts' => 'nullable|numeric|min:0',
+
+                'tiktok' => [
+                    'nullable',
+                    'url',
+                    'required_with:tiktok_followers,tiktok_posts'
+                ],
+                'tiktok_followers' => 'nullable|numeric|min:0',
+                'tiktok_posts' => 'nullable|numeric|min:0'
+            ], [
+                'youtube.required_with' => 'URL YouTube harus diisi jika followers atau posts diisi',
+                'instagram.required_with' => 'URL Instagram harus diisi jika followers atau posts diisi',
+                'facebook.required_with' => 'URL Facebook harus diisi jika followers atau posts diisi',
+                'tiktok.required_with' => 'URL TikTok harus diisi jika followers atau posts diisi'
+            ]);
+
+            ['pkm' => $pkm] = $this->getData();
+            $id_pkm = $pkm->id;
+
+            $socialMediaTypes = TipeSosmed::pluck('id', 'nama_sosmed')->toArray();
+
+            $fieldMapping = [
+                'youtube' => 'YouTube',
+                'instagram' => 'Instagram',
+                'facebook' => 'Facebook',
+                'tiktok' => 'TikTok'
+            ];
+
+            foreach ($fieldMapping as $field => $sosmedName) {
+                $sosmedTypeId = null;
+                foreach ($socialMediaTypes as $key => $value) {
+                    if (strtolower($key) === strtolower($sosmedName)) {
+                        $sosmedTypeId = $value;
+                        break;
+                    }
+                }
+
+                if ($sosmedTypeId === null) {
+                    continue;
+                }
+
+                $existingSocialMedia = SosialMedia::where('id_pkm', $id_pkm)->where('id_sosmed', $sosmedTypeId)->first();
+
+                if ($request->filled($field)) {
+                    $socialMediaData = [
+                        'link_sosmed' => $request->input($field),
+                        'follower' => $request->filled($field . '_followers') ? $request->input($field . '_followers') : null,
+                        'postingan' => $request->filled($field . '_posts') ? $request->input($field . '_posts') : null
+                    ];
+
+                    if ($existingSocialMedia) {
+                        $existingSocialMedia->update($socialMediaData);
+                    }
+                }
+            }
+
+            return redirect()->back()->with('success', 'Data sosial media berhasil diperbarui');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }

@@ -11,6 +11,6 @@ class TipeSosmed extends Model
     use HasFactory;
 
     public function sosmed() : HasMany {
-        return $this->HasMany(SosialMedia::class);
+        return $this->HasMany(SosialMedia::class, 'id_sosmed', 'id');
     }
 }

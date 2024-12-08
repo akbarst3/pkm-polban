@@ -19,7 +19,7 @@
     </style>
     <div class="container mt-2 ">
         <div class="card shadow rounded ps-3 pt-3 pb-0 mb-3 mt-0 fw-bold">
-            <p class="">Luaran Kemajuan</p>
+            <p class="">Luaran Akhir</p>
         </div>
         <div class="card shadow rounded ps-3 pt-1 pb-1 fw-bold pe-3">
             <p class="card-title ">{{ $data['pkm']->judul }}</p>
@@ -145,7 +145,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('pengusul.pelaksanaan.store-social-media') }}" method="POST">
+                    <form action="{{ route('pengusul.pelaksanaan.update-social-media') }}" method="POST">
                         @csrf
                         @foreach ($data['sosmed'] as $name => $details)
                             @php

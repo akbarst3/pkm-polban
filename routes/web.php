@@ -96,9 +96,12 @@ Route::prefix('pengusul')->name('pengusul.')->group(function () {
                 Route::get('/edit-logbook-keuangan/{id}', [Pelaksanaan::class, 'editLogbookKeuangan'])->name('edit-logbook-keuangan');
                 Route::put('/update-logbook-keuangan/{id}', [Pelaksanaan::class, 'updateLogbookKeuangan'])->name('update-logbook-keuangan');
                 Route::get('/lap-kemajuan', [Pelaksanaan::class, 'kemajuan'])->name('lap-kemajuan');
-                Route::patch('/lap-kemajuan/upload-file', [Pelaksanaan::class, 'uploadFile'])->name('lap-kemajuan.uploadFile');
+                Route::post('/lap-kemajuan/upload-file', [Pelaksanaan::class, 'uploadFile'])->name('lap-kemajuan.uploadFile');
                 Route::get('/lap-kemajuan/download-file/{id}', [Pelaksanaan::class, 'downloadFile'])->name('lap-kemajuan.downloadFile');
                 Route::get('/luaran-kemajuan', [Pelaksanaan::class, 'createLuaranKemajuan'])->name('luaran-kemajuan');
+                Route::get('/luaran-akhir', [Pelaksanaan::class, 'createLuaranAkhir'])->name('luaran-akhir');
+                Route::post('/store-social-media', [Pelaksanaan::class, 'storeSocialMedia'])->name('store-social-media');
+                Route::post('/update-social-media', [Pelaksanaan::class, 'updateSocialMedia'])->name('update-social-media');
                 Route::get('/laporan-akhir', [Pelaksanaan::class, 'createLaporanAkhir'])->name('laporan-akhir');
                 Route::patch('/upload-lapkhir/{id}', [Pelaksanaan::class, 'storeFile'])->name('upload-lapkhir');
                 Route::get('/laporan-akhir/download-lapkhir/{id}', [Pelaksanaan::class, 'downloadLapkhir'])->name('laporan-akhir.downloadLapkhir');

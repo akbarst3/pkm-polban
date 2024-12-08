@@ -25,6 +25,8 @@ return new class extends Migration
             $table->char('jenis_kelamin', 1)->nullable();
             $table->date('tanggal_lahir')->nullable();
             $table->string('tempat_lahir')->nullable();
+            $table->string('foto_profil')->nullable();
+            $table->string('kota')->nullable();
             
             $table->foreign('nim')->references('nim')->on('mahasiswas');
             $table->rememberToken();

@@ -150,7 +150,7 @@
                             </ul>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href=" " class="nav-link">
+                                    <a href="{{ route('pengusul.pelaksanaan.luaran-akhir') }}" class="nav-link">
                                         <p>Luaran Akhir</p>
                                     </a>
                                 </li>

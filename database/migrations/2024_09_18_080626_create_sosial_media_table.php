@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('id_sosmed');
             $table->integer('id_pkm');
             $table->string('link_sosmed');
+            $table->bigInteger('follower')->nullable();
+            $table->bigInteger('postingan')->nullable();
 
             $table->foreign('id_pkm')->references('id')->on('detail_pkms');
             $table->foreign('id_sosmed')->references('id')->on('tipe_sosmeds');

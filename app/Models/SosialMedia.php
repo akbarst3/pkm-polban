@@ -14,6 +14,8 @@ class SosialMedia extends Model
         'id_sosmed',
         'id_pkm',
         'link_sosmed',
+        'follower',
+        'postingan',
     ];
 
     public function tipe(): BelongsTo
