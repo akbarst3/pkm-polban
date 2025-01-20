@@ -17,9 +17,11 @@ PKM Polban adalah aplikasi berbasis web yang dikembangkan untuk mengakomodasi ke
 - Pimpinan Perguruan Tinggi: Verifikasi proposal dan memantau kegiatan PKM.
 
 ## Tech Stack
-*Client:* Laravel Blade
-*Server:* Laravel
-*Database:* PostgreSQL
+**Client:** Laravel Blade
+
+**Server:** Laravel
+
+**Database:** PostgreSQL
 
 ## Authors
 [@akbarst3](https://www.github.com/akbarst3)
